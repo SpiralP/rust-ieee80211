@@ -7,7 +7,7 @@ pub struct EthernetFrame<'a> {
 }
 
 impl<'a> EthernetFrame<'a> {
-  pub fn from_bytes(bytes: &'a [u8]) -> EthernetFrame<'a> {
+  pub fn new(bytes: &'a [u8]) -> EthernetFrame<'a> {
     EthernetFrame { bytes }
   }
 
@@ -29,8 +29,8 @@ impl<'a> EthernetFrame<'a> {
 
   pub fn next_layer(&self) -> EthernetLayer {
     match self.type_() {
-      EthernetType::IPv4 => EthernetLayer::IPv4(IPv4Frame::from_bytes(&self.bytes[14..])),
-      EthernetType::IPv6 => EthernetLayer::IPv6(IPv6Frame::from_bytes(&self.bytes[14..])),
+      EthernetType::IPv4 => EthernetLayer::IPv4(IPv4Frame::new(&self.bytes[14..])),
+      EthernetType::IPv6 => EthernetLayer::IPv6(IPv6Frame::new(&self.bytes[14..])),
     }
   }
 }
@@ -60,7 +60,7 @@ mod tests {
 
   #[test]
   fn test_ethernet_ipv4_tcp_ack_packet() {
-    let ethernet_frame = EthernetFrame::from_bytes(&ETHERNET_IPV4_TCP_ACK_PACKET[..]);
+    let ethernet_frame = EthernetFrame::new(&ETHERNET_IPV4_TCP_ACK_PACKET[..]);
 
     assert_eq!(
       ethernet_frame.destination(),

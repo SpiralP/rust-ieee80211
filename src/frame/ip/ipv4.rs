@@ -5,7 +5,7 @@ pub struct IPv4Frame<'a> {
 }
 
 impl<'a> IPv4Frame<'a> {
-  pub fn from_bytes(bytes: &'a [u8]) -> IPv4Frame<'a> {
+  pub fn new(bytes: &'a [u8]) -> IPv4Frame<'a> {
     IPv4Frame { bytes }
   }
 
@@ -31,7 +31,7 @@ mod tests {
 
   #[test]
   fn test_ipv4() {
-    let ipv4_frame = IPv4Frame::from_bytes(&IPV4_TCP_ACK_PACKET[..]);
+    let ipv4_frame = IPv4Frame::new(&IPV4_TCP_ACK_PACKET[..]);
     assert_eq!(ipv4_frame.version(), IPVersion::IPv4);
   }
 }

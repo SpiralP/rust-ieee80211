@@ -5,7 +5,7 @@ pub struct IPv6Frame<'a> {
 }
 
 impl<'a> IPv6Frame<'a> {
-  pub fn from_bytes(bytes: &'a [u8]) -> IPv6Frame<'a> {
+  pub fn new(bytes: &'a [u8]) -> IPv6Frame<'a> {
     IPv6Frame { bytes }
   }
 
