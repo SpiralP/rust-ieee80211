@@ -126,7 +126,9 @@ impl<'a> IEEE802_11Frame<'a> {
     MacAddress::from_bytes(&self.bytes[16..22]).unwrap()
   }
   fn addr4(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes[22..28]).unwrap()
+    // only on Data Mesh types
+    // after frag/seq numbers
+    MacAddress::from_bytes(&self.bytes[24..30]).unwrap()
   }
 
   /// Receiver Address
@@ -215,13 +217,25 @@ impl<'a> IEEE802_11Frame<'a> {
     }
   }
 
-  pub fn fragment_number(&self) -> Option<u8> {
-    // TODO
-    None
+  fn frag_seq(&self) -> Option<u16> {
+    match self.type_() {
+      FrameType::Management | FrameType::Data => {
+        let n = u16::from(self.bytes[22]) | ((u16::from(self.bytes[23])) << 8);
+        Some(n)
+      }
+      _ => None,
+    }
   }
 
+  /// Fragment Number
+  pub fn fragment_number(&self) -> Option<u8> {
+    self
+      .frag_seq()
+      .map(|frag_seq| (frag_seq & 0b0000_1111) as u8)
+  }
+
+  /// Sequence Number
   pub fn sequence_number(&self) -> Option<u16> {
-    // TODO
-    None
+    self.frag_seq().map(|frag_seq| frag_seq >> 4)
   }
 }

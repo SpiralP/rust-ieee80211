@@ -36,6 +36,6 @@ fn test_ieee802_11_null_data_packet() {
     station_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),
 
     fragment_number: Some(0),
-    sequence_number: Some(64),
+    sequence_number: Some(63),
   });
 }

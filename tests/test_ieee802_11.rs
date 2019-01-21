@@ -121,31 +121,31 @@ fn test_test_item(test_item: TestItem) {
   }
 
   // TODO
-  // assert_eq!(
-  //   frame.fragment_number().is_some(),
-  //   test_item.fragment_number.is_some(),
-  //   "fragment_number.is_some()"
-  // );
-  // if test_item.fragment_number.is_some() {
-  //   assert_eq!(
-  //     frame.fragment_number().unwrap(),
-  //     test_item.fragment_number.unwrap(),
-  //     "fragment_number"
-  //   );
-  // }
+  assert_eq!(
+    frame.fragment_number().is_some(),
+    test_item.fragment_number.is_some(),
+    "fragment_number.is_some()"
+  );
+  if test_item.fragment_number.is_some() {
+    assert_eq!(
+      frame.fragment_number().unwrap(),
+      test_item.fragment_number.unwrap(),
+      "fragment_number"
+    );
+  }
 
-  // assert_eq!(
-  //   frame.sequence_number().is_some(),
-  //   test_item.sequence_number.is_some(),
-  //   "sequence_number.is_some()"
-  // );
-  // if test_item.sequence_number.is_some() {
-  //   assert_eq!(
-  //     frame.sequence_number().unwrap(),
-  //     test_item.sequence_number.unwrap(),
-  //     "sequence_number"
-  //   );
-  // }
+  assert_eq!(
+    frame.sequence_number().is_some(),
+    test_item.sequence_number.is_some(),
+    "sequence_number.is_some()"
+  );
+  if test_item.sequence_number.is_some() {
+    assert_eq!(
+      frame.sequence_number().unwrap(),
+      test_item.sequence_number.unwrap(),
+      "sequence_number"
+    );
+  }
 }
 
 include!("./ieee802_11_packets/beacon.rs");
