@@ -1,12 +1,12 @@
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum DSStatus {
-  /// 00 Not leaving DS or network is operating in AD-HOC mode
+  /// Not leaving DS or network is operating in AD-HOC mode
   NotLeavingDSOrADHOC,
-  /// 10 Frame from DS to a STA via AP
+  /// Frame from DS to a STA via AP
   FromDSToSTA,
-  /// 01 Frame from STA to DS via an AP
-  FromSTAtoDS,
-  /// 11 WDS (AP to AP) or Mesh (MP to MP) Frame
+  /// Frame from STA to DS via an AP
+  FromSTAToDS,
+  /// WDS (AP to AP) or Mesh (MP to MP) Frame
   WDSOrMesh,
 }
 
@@ -14,18 +14,19 @@ pub enum DSStatus {
 pub enum DurationID {
   /// Microseconds
   Duration(u16),
+  /// Association Identifier (AID)
   AssociationID(u16),
   Reserved,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub enum IEEE802_11FrameVersion {
+pub enum FrameVersion {
   Standard = 0,
   Reserved,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub enum IEEE802_11FrameType {
+pub enum FrameType {
   Management = 0,
   Control = 1,
   Data = 2,
@@ -33,7 +34,7 @@ pub enum IEEE802_11FrameType {
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-pub enum IEEE802_11FrameSubtype {
+pub enum FrameSubtype {
   Management(ManagementSubtype),
   Control(ControlSubtype),
   Data(DataSubtype),
@@ -70,6 +71,8 @@ pub enum ManagementSubtype {
   Action = 13,
   /// Action No Ack
   ActionNoAck = 14,
+  /// Aruba Management
+  Aruba = 15,
 }
 
 impl ManagementSubtype {
@@ -90,7 +93,7 @@ impl ManagementSubtype {
       12 => ManagementSubtype::Deauthentication,
       13 => ManagementSubtype::Action,
       14 => ManagementSubtype::ActionNoAck,
-      15 => ManagementSubtype::Reserved,
+      15 => ManagementSubtype::Aruba,
       _ => unreachable!(),
     }
   }
