@@ -1,10 +1,12 @@
 mod control;
 mod data;
+mod fragment_sequence;
 mod management;
 mod types;
 
 pub use self::control::*;
 pub use self::data::*;
+pub use self::fragment_sequence::*;
 pub use self::management::*;
 pub use self::types::*;
 use super::*;

@@ -15,6 +15,7 @@ impl<'a> FrameTrait<'a> for BeaconFrame<'a> {
   }
 }
 impl<'a> IEEE802_11FrameTrait<'a> for BeaconFrame<'a> {}
+impl<'a> FragmentSequenceTrait<'a> for BeaconFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for BeaconFrame<'a> {}
 impl<'a> FixedParametersTrait<'a> for BeaconFrame<'a> {}
 impl<'a> TaggedParametersTrait<'a> for BeaconFrame<'a> {}
