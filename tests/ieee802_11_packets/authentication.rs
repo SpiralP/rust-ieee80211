@@ -13,15 +13,7 @@ fn test_ieee802_11_authentication_packet() {
 
   test_test_item(TestItem {
     bytes: &IEEE802_11_AUTHENTICATION_PACKET,
-    subtype: FrameSubtype::Management(ManagementSubtype::Authentication),
-    ds_status: DSStatus::NotLeavingDSOrADHOC,
-
-    more_fragments: false,
-    retry: false,
-    pwr_mgt: false,
-    more_data: false,
-    protected: false,
-    order: false,
+    subtype: Some(FrameSubtype::Management(ManagementSubtype::Authentication)),
 
     duration_id: DurationID::Duration(258),
 
@@ -32,11 +24,10 @@ fn test_ieee802_11_authentication_packet() {
     source_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),
 
     bssid_address: Some("00:01:e3:41:bd:6e".parse().unwrap()),
-    station_address: None,
 
     fragment_number: Some(0),
     sequence_number: Some(13),
 
-    ssid: None,
+    ..Default::default()
   });
 }

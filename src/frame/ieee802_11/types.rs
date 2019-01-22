@@ -10,6 +10,12 @@ pub enum DSStatus {
   WDSOrMesh,
 }
 
+impl Default for DSStatus {
+  fn default() -> Self {
+    DSStatus::NotLeavingDSOrADHOC
+  }
+}
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum DurationID {
   /// Microseconds
@@ -17,6 +23,12 @@ pub enum DurationID {
   /// Association Identifier (AID)
   AssociationID(u16),
   Reserved,
+}
+
+impl Default for DurationID {
+  fn default() -> Self {
+    DurationID::Duration(0)
+  }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

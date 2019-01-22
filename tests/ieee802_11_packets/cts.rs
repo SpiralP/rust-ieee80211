@@ -8,30 +8,12 @@ fn test_ieee802_11_cts_packet() {
 
   test_test_item(TestItem {
     bytes: &IEEE802_11_CTS_PACKET,
-    subtype: FrameSubtype::Control(ControlSubtype::CTS),
-    ds_status: DSStatus::NotLeavingDSOrADHOC,
-
-    more_fragments: false,
-    retry: false,
-    pwr_mgt: false,
-    more_data: false,
-    protected: false,
-    order: false,
+    subtype: Some(FrameSubtype::Control(ControlSubtype::CTS)),
 
     duration_id: DurationID::Duration(104),
 
     receiver_address: "00:0c:41:82:b2:55".parse().unwrap(),
-    transmitter_address: None,
 
-    destination_address: None,
-    source_address: None,
-
-    bssid_address: None,
-    station_address: None,
-
-    fragment_number: None,
-    sequence_number: None,
-
-    ssid: None,
+    ..Default::default()
   });
 }

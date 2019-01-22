@@ -1,9 +1,10 @@
 use packet::ieee802_11::*;
 use packet::MacAddress;
 
+#[derive(Default)]
 struct TestItem<'a> {
   bytes: &'a [u8],
-  subtype: FrameSubtype,
+  subtype: Option<FrameSubtype>,
   ds_status: DSStatus,
 
   more_fragments: bool,
@@ -28,6 +29,10 @@ struct TestItem<'a> {
   sequence_number: Option<u16>,
 
   ssid: Option<Vec<u8>>,
+
+  timestamp: Option<u64>,
+  beacon_interval: Option<f64>,
+  capabilities_info: Option<CapabilitiesInfo>,
 }
 
 fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Option<T>, s: &str) {
@@ -43,7 +48,7 @@ fn test_test_item(test_item: TestItem) {
 
   assert_eq!(frame.version(), FrameVersion::Standard);
 
-  assert_eq!(frame.subtype(), test_item.subtype, "subtype");
+  assert_eq!(frame.subtype(), test_item.subtype.unwrap(), "subtype");
 
   assert_eq!(frame.ds_status(), test_item.ds_status, "ds_status");
 
@@ -100,6 +105,28 @@ fn test_test_item(test_item: TestItem) {
       };
 
       check(ssid, test_item.ssid, "ssid");
+
+      if let Some(layer) = layer.next_layer() {
+        if let ManagementFrameLayer::Beacon(beacon_frame) = layer {
+          assert_eq!(
+            beacon_frame.timestamp(),
+            test_item.timestamp.unwrap(),
+            "timestamp",
+          );
+
+          assert_eq!(
+            ((beacon_frame.beacon_interval() * 1_000_000f64).round()) as i64,
+            (test_item.beacon_interval.unwrap() * 1_000_000f64) as i64,
+            "beacon_interval",
+          );
+
+          assert_eq!(
+            beacon_frame.capabilities_info(),
+            test_item.capabilities_info.unwrap(),
+            "capabilities_info",
+          );
+        }
+      }
     }
     IEEE802_11FrameLayer::Control(layer) => {
       transmitter_address = layer.transmitter_address();

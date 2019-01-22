@@ -18,15 +18,7 @@ fn test_ieee802_11_probe_response() {
 
   test_test_item(TestItem {
     bytes: &IEEE802_11_PROBE_RESPONSE,
-    subtype: FrameSubtype::Management(ManagementSubtype::ProbeResponse),
-    ds_status: DSStatus::NotLeavingDSOrADHOC,
-
-    more_fragments: false,
-    retry: false,
-    pwr_mgt: false,
-    more_data: false,
-    protected: false,
-    order: false,
+    subtype: Some(FrameSubtype::Management(ManagementSubtype::ProbeResponse)),
 
     duration_id: DurationID::Duration(258),
 
@@ -37,11 +29,12 @@ fn test_ieee802_11_probe_response() {
     source_address: Some("00:01:e3:41:bd:6e".parse().unwrap()),
 
     bssid_address: Some("00:01:e3:41:bd:6e".parse().unwrap()),
-    station_address: None,
 
     fragment_number: Some(0),
     sequence_number: Some(430),
 
     ssid: Some(b"martinet3".to_vec()),
+
+    ..Default::default()
   });
 }

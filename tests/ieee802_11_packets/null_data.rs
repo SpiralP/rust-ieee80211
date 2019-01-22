@@ -14,15 +14,10 @@ fn test_ieee802_11_null_data_packet() {
 
   test_test_item(TestItem {
     bytes: &IEEE802_11_NULL_DATA_PACKET,
-    subtype: FrameSubtype::Data(DataSubtype::Null),
+    subtype: Some(FrameSubtype::Data(DataSubtype::Null)),
     ds_status: DSStatus::FromSTAToDS,
 
-    more_fragments: false,
-    retry: false,
-    pwr_mgt: true, //
-    more_data: false,
-    protected: false,
-    order: false,
+    pwr_mgt: true,
 
     duration_id: DurationID::Duration(258),
 
@@ -38,6 +33,6 @@ fn test_ieee802_11_null_data_packet() {
     fragment_number: Some(0),
     sequence_number: Some(63),
 
-    ssid: None,
+    ..Default::default()
   });
 }

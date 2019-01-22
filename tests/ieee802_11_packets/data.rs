@@ -21,15 +21,10 @@ fn test_ieee802_11_data_packet() {
 
   test_test_item(TestItem {
     bytes: &IEEE802_11_DATA_PACKET,
-    subtype: FrameSubtype::Data(DataSubtype::Data),
+    subtype: Some(FrameSubtype::Data(DataSubtype::Data)),
     ds_status: DSStatus::FromDSToSTA,
 
-    more_fragments: false,
-    retry: true, //
-    pwr_mgt: false,
-    more_data: false,
-    protected: false,
-    order: false,
+    retry: true,
 
     duration_id: DurationID::Duration(44),
 
@@ -45,6 +40,6 @@ fn test_ieee802_11_data_packet() {
     fragment_number: Some(0),
     sequence_number: Some(440),
 
-    ssid: None,
+    ..Default::default()
   });
 }
