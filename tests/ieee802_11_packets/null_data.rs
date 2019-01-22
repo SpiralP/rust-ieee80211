@@ -19,7 +19,7 @@ fn test_ieee802_11_null_data_packet() {
 
     more_fragments: false,
     retry: false,
-    pwr_mgt: true,
+    pwr_mgt: true, //
     more_data: false,
     protected: false,
     order: false,

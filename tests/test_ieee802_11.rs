@@ -173,3 +173,4 @@ include!("./ieee802_11_packets/block_ack_request.rs");
 
 // Data
 include!("./ieee802_11_packets/null_data.rs");
+include!("./ieee802_11_packets/data.rs");
