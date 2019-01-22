@@ -89,6 +89,7 @@ fn test_test_item(test_item: TestItem) {
         if let Some(layer) = layer.next_layer() {
           match layer {
             ManagementFrameLayer::Beacon(beacon_frame) => beacon_frame.ssid(),
+            ManagementFrameLayer::ProbeRequest(probe_request_frame) => probe_request_frame.ssid(),
             ManagementFrameLayer::ProbeResponse(probe_response_frame) => {
               probe_response_frame.ssid()
             }

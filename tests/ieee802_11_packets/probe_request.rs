@@ -39,6 +39,6 @@ fn test_ieee802_11_probe_request() {
     fragment_number: Some(0),
     sequence_number: Some(4),
 
-    ssid: None,
+    ssid: Some(b"martinet3".to_vec()),
   });
 }

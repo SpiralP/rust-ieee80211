@@ -1,14 +1,14 @@
 mod beacon;
-mod capabilities_info;
-mod fixed_tagged_params;
+mod fixed_parameters;
+mod probe_request;
 mod probe_response;
-mod tagged_params;
+mod tagged_parameters;
 
 pub use self::beacon::*;
-pub use self::capabilities_info::*;
-pub use self::fixed_tagged_params::*;
+pub use self::fixed_parameters::*;
+pub use self::probe_request::*;
 pub use self::probe_response::*;
-pub use self::tagged_params::*;
+pub use self::tagged_parameters::*;
 use super::*;
 
 pub struct ManagementFrame<'a> {
@@ -17,6 +17,7 @@ pub struct ManagementFrame<'a> {
 
 pub enum ManagementFrameLayer<'a> {
   Beacon(BeaconFrame<'a>),
+  ProbeRequest(ProbeRequestFrame<'a>),
   ProbeResponse(ProbeResponseFrame<'a>),
 }
 
@@ -38,6 +39,9 @@ impl<'a> ManagementFrame<'a> {
         ManagementSubtype::Beacon => {
           Some(ManagementFrameLayer::Beacon(BeaconFrame::new(&self.bytes)))
         }
+        ManagementSubtype::ProbeRequest => Some(ManagementFrameLayer::ProbeRequest(
+          ProbeRequestFrame::new(&self.bytes),
+        )),
         ManagementSubtype::ProbeResponse => Some(ManagementFrameLayer::ProbeResponse(
           ProbeResponseFrame::new(&self.bytes),
         )),

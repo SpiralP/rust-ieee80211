@@ -42,6 +42,6 @@ fn test_ieee802_11_beacon_packet() {
     fragment_number: Some(0),
     sequence_number: Some(3986),
 
-    ssid: Some(vec![0x6d, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x65, 0x74, 0x33]),
+    ssid: Some(b"martinet3".to_vec()),
   });
 }
