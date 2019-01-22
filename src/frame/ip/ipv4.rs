@@ -12,8 +12,7 @@ impl<'a> IPv4Frame<'a> {
   pub fn version(&self) -> IPVersion {
     match self.bytes[0] >> 4 {
       4 => IPVersion::IPv4,
-      6 => IPVersion::IPv6,
-      _ => panic!("other IPv4 version"),
+      _ => unreachable!(),
     }
   }
 }

@@ -156,9 +156,20 @@ fn test_test_item(test_item: TestItem) {
   );
 }
 
+// Management
 include!("./ieee802_11_packets/beacon.rs");
 include!("./ieee802_11_packets/authentication.rs");
-include!("./ieee802_11_packets/power_save_poll.rs");
-include!("./ieee802_11_packets/null_data.rs");
 include!("./ieee802_11_packets/probe_request.rs");
 include!("./ieee802_11_packets/probe_response.rs");
+
+// Control
+include!("./ieee802_11_packets/power_save_poll.rs");
+include!("./ieee802_11_packets/ack.rs");
+include!("./ieee802_11_packets/cts.rs");
+include!("./ieee802_11_packets/rts.rs");
+include!("./ieee802_11_packets/block_ack.rs");
+include!("./ieee802_11_packets/cf_end.rs");
+include!("./ieee802_11_packets/block_ack_request.rs");
+
+// Data
+include!("./ieee802_11_packets/null_data.rs");

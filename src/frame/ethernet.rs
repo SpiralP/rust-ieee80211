@@ -10,11 +10,11 @@ impl<'a> EthernetFrame<'a> {
     EthernetFrame { bytes }
   }
 
-  pub fn destination(&self) -> MacAddress {
+  pub fn destination_address(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes[0..6]).unwrap()
   }
 
-  pub fn source(&self) -> MacAddress {
+  pub fn source_address(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes[6..12]).unwrap()
   }
 
@@ -63,11 +63,11 @@ mod tests {
     let ethernet_frame = EthernetFrame::new(&ETHERNET_IPV4_TCP_ACK_PACKET[..]);
 
     assert_eq!(
-      ethernet_frame.destination(),
+      ethernet_frame.destination_address(),
       "00:00:c0:9f:a0:97".parse().unwrap()
     );
     assert_eq!(
-      ethernet_frame.source(),
+      ethernet_frame.source_address(),
       "00:a0:cc:3b:bf:fa".parse().unwrap()
     );
 

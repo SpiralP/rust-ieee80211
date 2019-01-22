@@ -139,11 +139,11 @@ pub enum ControlSubtype {
   /// Clear To Send
   CTS = 12,
   /// Acknowledgement
-  ACK = 13,
+  Ack = 13,
   /// Contention-Free-End
   CFEnd = 14,
   /// CF-End + CF-Ack
-  CFEndCFACK = 15,
+  CFEndCFAck = 15,
 }
 
 impl ControlSubtype {
@@ -156,9 +156,9 @@ impl ControlSubtype {
       10 => ControlSubtype::PSPoll,
       11 => ControlSubtype::RTS,
       12 => ControlSubtype::CTS,
-      13 => ControlSubtype::ACK,
+      13 => ControlSubtype::Ack,
       14 => ControlSubtype::CFEnd,
-      15 => ControlSubtype::CFEndCFACK,
+      15 => ControlSubtype::CFEndCFAck,
       _ => unreachable!(),
     }
   }

@@ -47,7 +47,7 @@ impl<'a> IEEE802_11FrameTrait<'a> for ControlFrame<'a> {
     match self.subtype() {
       FrameSubtype::Control(subtype) => match subtype {
         ControlSubtype::PSPoll => Some(self.addr1()),
-        ControlSubtype::CFEnd | ControlSubtype::CFEndCFACK => Some(self.addr2()),
+        ControlSubtype::CFEnd | ControlSubtype::CFEndCFAck => Some(self.addr2()),
         _ => None,
       },
       _ => unreachable!(),
