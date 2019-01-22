@@ -1,4 +1,5 @@
 use super::*;
+use byteorder::{ByteOrder, LittleEndian};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -16,7 +17,7 @@ impl TaggedParameters {
   pub fn add(&mut self, tag_number: u8, tag_data: &[u8]) {
     let tag_name = match tag_number {
       0 => TagName::SSID,
-      1 => TagName::Rates,
+      1 => TagName::SupportedRates,
       3 => TagName::DSParameter,
       5 => TagName::TrafficIndicationMap,
       7 => TagName::CountryInformation,
@@ -41,13 +42,192 @@ impl TaggedParameters {
   pub fn ssid(&self) -> Option<Vec<u8>> {
     self.get_bytes(TagName::SSID)
   }
+
+  pub fn supported_rates(&self) -> Option<Vec<f64>> {
+    self
+      .tags
+      .get(&TagName::SupportedRates)
+      .map(|supported_rates| {
+        let mut rates = Vec::new();
+        for rate in supported_rates {
+          let n = match rate {
+            0x82 => 1.0,
+            0x84 => 2.0,
+            0x8b => 5.5,
+            0x8c => 6.0, // B
+            0x12 => 9.0,
+            0x96 => 11.0,
+            0x98 => 12.0, // B
+            0x24 => 18.0,
+            0xa4 => 18.0, // B
+            0x30 => 24.0,
+            0xb0 => 24.0, // B
+            0x48 => 36.0,
+            0x60 => 48.0,
+            0x6c => 54.0,
+            _ => 0.0,
+          };
+
+          if n != 0.0 {
+            rates.push(n);
+          }
+        }
+
+        rates
+      })
+  }
+
+  pub fn channel(&self) -> Option<u8> {
+    self
+      .tags
+      .get(&TagName::DSParameter)
+      .map(|bytes| bytes[0])
+      // 5GHz
+      .or_else(|| self.tags.get(&TagName::HTInformation).map(|bytes| bytes[0]))
+  }
+
+  pub fn rsn(&self) -> Option<RSN> {
+    self.tags.get(&TagName::RSNInformation).map(|bytes| {
+      let mut rsn = RSN::default();
+
+      let mut i = 0;
+      let len = bytes.len();
+
+      let version = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+      rsn.version = version;
+      i += 2;
+      if i >= len {
+        return rsn;
+      }
+
+      if version != 1 {
+        unimplemented!();
+      }
+
+      let group_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
+      rsn.group_cipher_suite = Some(group_cipher_suite);
+      i += 4;
+      if i >= len {
+        return rsn;
+      }
+
+      let pairwise_cipher_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+      i += 2;
+      if i >= len {
+        return rsn;
+      }
+
+      for _ in 0..pairwise_cipher_suite_count {
+        let pairwise_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
+        rsn.pairwise_cipher_suites.push(pairwise_cipher_suite);
+        i += 4;
+        if i >= len {
+          return rsn;
+        }
+      }
+
+      let akm_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+      i += 2;
+      if i >= len {
+        return rsn;
+      }
+
+      for _ in 0..akm_suite_count {
+        let akm_suite = RSN::read_akm_suite(&bytes[i..(i + 4)]);
+        rsn.akm_suites.push(akm_suite);
+        i += 4;
+        if i >= len {
+          return rsn;
+        }
+      }
+
+      rsn
+    })
+  }
+}
+
+#[derive(Debug, Default, PartialEq)]
+pub struct RSN {
+  pub version: u16,
+  pub group_cipher_suite: Option<CipherSuite>,
+  pub pairwise_cipher_suites: Vec<CipherSuite>,
+  pub akm_suites: Vec<AKMSuite>,
+}
+
+impl RSN {
+  fn read_suite_oui_and_type(bytes: &[u8]) -> ([u8; 3], u8) {
+    let mut suite_oui = [0; 3];
+    suite_oui.clone_from_slice(&bytes[0..3]);
+    let suite_type = bytes[3];
+    (suite_oui, suite_type)
+  }
+
+  fn read_cipher_suite(bytes: &[u8]) -> CipherSuite {
+    let (_oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+
+    debug_assert_eq!(
+      _oui,
+      [0x00, 0x0f, 0xac],
+      "read_cipher_suite oui not IEEE802.11"
+    );
+
+    CipherSuite::from(type_)
+  }
+
+  fn read_akm_suite(bytes: &[u8]) -> AKMSuite {
+    let (_oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+
+    debug_assert_eq!(
+      _oui,
+      [0x00, 0x0f, 0xac],
+      "read_akm_suite oui not IEEE802.11"
+    );
+
+    AKMSuite::from(type_)
+  }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum CipherSuite {
+  WEP40 = 1,
+  TKIP = 2,
+  CCMP = 4, // AES (CCM)
+  WEP104 = 5,
+}
+impl CipherSuite {
+  fn from(type_: u8) -> Self {
+    match type_ {
+      1 => CipherSuite::WEP40,
+      2 => CipherSuite::TKIP,
+      4 => CipherSuite::CCMP, // AES (CCM)
+      5 => CipherSuite::WEP104,
+      _ => unimplemented!(),
+    }
+  }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum AKMSuite {
+  IEEE802_1X = 1,
+  PSK = 2,
+  FTOver802_1X = 3,
+}
+impl AKMSuite {
+  fn from(type_: u8) -> Self {
+    match type_ {
+      1 => AKMSuite::IEEE802_1X,
+      2 => AKMSuite::PSK,
+      3 => AKMSuite::FTOver802_1X,
+      _ => unimplemented!(),
+    }
+  }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq, Hash, Eq)]
 pub enum TagName {
   Other(u8),
   SSID,
-  Rates,
+  SupportedRates,
   DSParameter,
   TrafficIndicationMap,
   CountryInformation,
@@ -92,3 +272,29 @@ pub trait TaggedParametersTrait<'a>: FrameTrait<'a> {
     self.tagged_parameters().ssid()
   }
 }
+
+// ch freq
+// 36	5180
+// 40	5200
+// 44	5220
+// 48	5240
+// 52	5260
+// 56	5280
+// 60	5300
+// 64	5320
+// 100	5500
+// 104	5520
+// 108	5540
+// 112	5560
+// 116	5580
+// 120	5600
+// 124	5620
+// 128	5640
+// 132	5660
+// 136	5680
+// 140	5700
+// 149	5745
+// 153	5765
+// 157	5785
+// 161	5805
+// 165	5825

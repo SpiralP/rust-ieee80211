@@ -33,6 +33,10 @@ struct TestItem<'a> {
   timestamp: Option<u64>,
   beacon_interval: Option<f64>,
   capabilities_info: Option<CapabilitiesInfo>,
+
+  supported_rates: Option<Vec<f64>>,
+
+  rsn: Option<RSN>,
 }
 
 fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Option<T>, s: &str) {
@@ -125,6 +129,14 @@ fn test_test_item(test_item: TestItem) {
             test_item.capabilities_info.unwrap(),
             "capabilities_info",
           );
+
+          check(
+            beacon_frame.tagged_parameters().supported_rates(),
+            test_item.supported_rates,
+            "supported_rates",
+          );
+
+          check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
         }
       }
     }
@@ -188,6 +200,7 @@ include!("./ieee802_11_packets/beacon.rs");
 include!("./ieee802_11_packets/authentication.rs");
 include!("./ieee802_11_packets/probe_request.rs");
 include!("./ieee802_11_packets/probe_response.rs");
+include!("./ieee802_11_packets/beacon_ciphers.rs");
 
 // Control
 include!("./ieee802_11_packets/power_save_poll.rs");
