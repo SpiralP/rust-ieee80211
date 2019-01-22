@@ -1,5 +1,6 @@
 pub trait FixedParametersTrait<'a> {
   // Fixed Parameters (24..36) on Beacons
+  const FIXED_PARAMETERS_START: usize = 24;
 
   fn timestamp(&self) -> u64 {
     // let timestamp: u64 = bytes.read_u64::<LE>().unwrap();

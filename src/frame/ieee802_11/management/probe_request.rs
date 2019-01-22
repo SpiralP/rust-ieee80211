@@ -17,7 +17,5 @@ impl<'a> FrameTrait<'a> for ProbeRequestFrame<'a> {
 impl<'a> IEEE802_11FrameTrait<'a> for ProbeRequestFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for ProbeRequestFrame<'a> {}
 impl<'a> TaggedParametersTrait<'a> for ProbeRequestFrame<'a> {
-  fn _tagged_parameters_start(&self) -> usize {
-    24
-  }
+  const TAGGED_PARAMETERS_START: usize = 24;
 }

@@ -62,15 +62,12 @@ pub enum TagName {
 
 pub trait TaggedParametersTrait<'a>: FrameTrait<'a> {
   // Tagged Parameters (36..) on Beacon
-
-  fn _tagged_parameters_start(&self) -> usize {
-    36
-  }
+  const TAGGED_PARAMETERS_START: usize = 36;
 
   fn tagged_parameters(&self) -> TaggedParameters {
     let mut tagged_parameters = TaggedParameters::new();
 
-    let mut i = self._tagged_parameters_start();
+    let mut i = Self::TAGGED_PARAMETERS_START;
 
     let bytes = self.bytes();
     let len = bytes.len();
