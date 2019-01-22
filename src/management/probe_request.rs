@@ -14,7 +14,6 @@ impl<'a> FrameTrait<'a> for ProbeRequestFrame<'a> {
     self.bytes
   }
 }
-impl<'a> IEEE802_11FrameTrait<'a> for ProbeRequestFrame<'a> {}
 impl<'a> FragmentSequenceTrait<'a> for ProbeRequestFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for ProbeRequestFrame<'a> {}
 impl<'a> TaggedParametersTrait<'a> for ProbeRequestFrame<'a> {

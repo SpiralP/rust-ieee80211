@@ -1,10 +1,10 @@
-const IEEE802_11_AUTHENTICATION_PACKET: [u8; 30] = [
+const AUTHENTICATION_PACKET: [u8; 30] = [
   0xb0, 0x00, 0x02, 0x01, 0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0x00, 0x16, 0xbc, 0x3d, 0xaa, 0x57,
   0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0xd0, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00,
 ];
 
 #[test]
-fn test_ieee802_11_authentication_packet() {
+fn test_authentication_packet() {
   // Receiver address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
   // Destination address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
   // Transmitter address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
@@ -12,7 +12,7 @@ fn test_ieee802_11_authentication_packet() {
   // BSS Id: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_AUTHENTICATION_PACKET,
+    bytes: &AUTHENTICATION_PACKET,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::Authentication)),
 
     duration_id: DurationID::Duration(258),

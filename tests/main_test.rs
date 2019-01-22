@@ -1,5 +1,4 @@
-use packet::ieee802_11::*;
-use packet::MacAddress;
+use ieee802_11::*;
 
 #[derive(Default)]
 struct TestItem<'a> {
@@ -48,7 +47,7 @@ fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Op
 
 #[allow(clippy::cyclomatic_complexity)]
 fn test_test_item(test_item: TestItem) {
-  let frame = IEEE802_11Frame::new(&test_item.bytes);
+  let frame = Frame::new(&test_item.bytes);
 
   assert_eq!(frame.version(), FrameVersion::Standard);
 
@@ -84,7 +83,7 @@ fn test_test_item(test_item: TestItem) {
   let sequence_number;
 
   match &frame.next_layer() {
-    IEEE802_11FrameLayer::Management(layer) => {
+    FrameLayer::Management(layer) => {
       transmitter_address = layer.transmitter_address();
       destination_address = layer.destination_address();
       source_address = layer.source_address();
@@ -140,7 +139,7 @@ fn test_test_item(test_item: TestItem) {
         }
       }
     }
-    IEEE802_11FrameLayer::Control(layer) => {
+    FrameLayer::Control(layer) => {
       transmitter_address = layer.transmitter_address();
       destination_address = layer.destination_address();
       source_address = layer.source_address();
@@ -149,7 +148,7 @@ fn test_test_item(test_item: TestItem) {
       fragment_number = None;
       sequence_number = None;
     }
-    IEEE802_11FrameLayer::Data(layer) => {
+    FrameLayer::Data(layer) => {
       transmitter_address = layer.transmitter_address();
       destination_address = layer.destination_address();
       source_address = layer.source_address();
@@ -196,21 +195,21 @@ fn test_test_item(test_item: TestItem) {
 }
 
 // Management
-include!("./ieee802_11_packets/beacon.rs");
-include!("./ieee802_11_packets/authentication.rs");
-include!("./ieee802_11_packets/probe_request.rs");
-include!("./ieee802_11_packets/probe_response.rs");
-include!("./ieee802_11_packets/beacon_ciphers.rs");
+include!("./packets/beacon.rs");
+include!("./packets/authentication.rs");
+include!("./packets/probe_request.rs");
+include!("./packets/probe_response.rs");
+include!("./packets/beacon_ciphers.rs");
 
 // Control
-include!("./ieee802_11_packets/power_save_poll.rs");
-include!("./ieee802_11_packets/ack.rs");
-include!("./ieee802_11_packets/cts.rs");
-include!("./ieee802_11_packets/rts.rs");
-include!("./ieee802_11_packets/block_ack.rs");
-include!("./ieee802_11_packets/cf_end.rs");
-include!("./ieee802_11_packets/block_ack_request.rs");
+include!("./packets/power_save_poll.rs");
+include!("./packets/ack.rs");
+include!("./packets/cts.rs");
+include!("./packets/rts.rs");
+include!("./packets/block_ack.rs");
+include!("./packets/cf_end.rs");
+include!("./packets/block_ack_request.rs");
 
 // Data
-include!("./ieee802_11_packets/null_data.rs");
-include!("./ieee802_11_packets/data.rs");
+include!("./packets/null_data.rs");
+include!("./packets/data.rs");

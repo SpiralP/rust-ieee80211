@@ -1,4 +1,4 @@
-const IEEE802_11_BEACON_PACKET: [u8; 110] = [
+const BEACON_PACKET: [u8; 110] = [
   0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e,
   0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0x10, 0xf0, 0x84, 0x21, 0x1a, 0x69, 0x02, 0x00, 0x00, 0x00,
   0x64, 0x00, 0x11, 0x04, 0x00, 0x09, 0x6d, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x65, 0x74, 0x33, 0x01,
@@ -9,7 +9,7 @@ const IEEE802_11_BEACON_PACKET: [u8; 110] = [
 ];
 
 #[test]
-fn test_ieee802_11_beacon_packet() {
+fn test_beacon_packet() {
   // Receiver address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Destination address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Transmitter address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
@@ -17,7 +17,7 @@ fn test_ieee802_11_beacon_packet() {
   // BSS Id: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_BEACON_PACKET,
+    bytes: &BEACON_PACKET,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::Beacon)),
 
     receiver_address: "FF:FF:FF:FF:FF:FF".parse().unwrap(),

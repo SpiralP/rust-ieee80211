@@ -1,4 +1,4 @@
-const IEEE802_11_PROBE_RESPONSE: [u8; 104] = [
+const PROBE_RESPONSE: [u8; 104] = [
   0x50, 0x00, 0x02, 0x01, 0x00, 0x16, 0xbc, 0x3d, 0xaa, 0x57, 0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e,
   0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0xe0, 0x1a, 0xde, 0x84, 0xba, 0x6b, 0x02, 0x00, 0x00, 0x00,
   0x64, 0x00, 0x11, 0x04, 0x00, 0x09, 0x6d, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x65, 0x74, 0x33, 0x01,
@@ -9,7 +9,7 @@ const IEEE802_11_PROBE_RESPONSE: [u8; 104] = [
 ];
 
 #[test]
-fn test_ieee802_11_probe_response() {
+fn test_probe_response() {
   // Receiver address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
   // Destination address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
   // Transmitter address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
@@ -17,7 +17,7 @@ fn test_ieee802_11_probe_response() {
   // BSS Id: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_PROBE_RESPONSE,
+    bytes: &PROBE_RESPONSE,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::ProbeResponse)),
 
     duration_id: DurationID::Duration(258),

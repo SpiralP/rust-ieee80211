@@ -1,4 +1,4 @@
-const IEEE802_11_DATA_PACKET: [u8; 131] = [
+const DATA_PACKET: [u8; 131] = [
   0x08, 0x0a, 0x2c, 0x00, 0x00, 0x16, 0xbc, 0x3d, 0xaa, 0x57, 0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e,
   0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0x80, 0x1b, 0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00, 0x88, 0x8e,
   0x01, 0x03, 0x00, 0x5f, 0xfe, 0x00, 0x89, 0x00, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -11,7 +11,7 @@ const IEEE802_11_DATA_PACKET: [u8; 131] = [
 ];
 
 #[test]
-fn test_ieee802_11_data_packet() {
+fn test_data_packet() {
   // Receiver address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
   // Transmitter address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
   // Destination address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
@@ -20,7 +20,7 @@ fn test_ieee802_11_data_packet() {
   // STA address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_DATA_PACKET,
+    bytes: &DATA_PACKET,
     subtype: Some(FrameSubtype::Data(DataSubtype::Data)),
     ds_status: DSStatus::FromDSToSTA,
 

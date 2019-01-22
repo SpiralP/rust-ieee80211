@@ -1,4 +1,4 @@
-const IEEE802_11_PROBE_REQUEST: [u8; 54] = [
+const PROBE_REQUEST: [u8; 54] = [
   0x40, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x16, 0xbc, 0x3d, 0xaa, 0x57,
   0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x40, 0x00, 0x00, 0x09, 0x6d, 0x61, 0x72, 0x74, 0x69, 0x6e,
   0x65, 0x74, 0x33, 0x01, 0x08, 0x82, 0x84, 0x8b, 0x96, 0x0c, 0x12, 0x18, 0x24, 0x03, 0x01, 0x0d,
@@ -6,7 +6,7 @@ const IEEE802_11_PROBE_REQUEST: [u8; 54] = [
 ];
 
 #[test]
-fn test_ieee802_11_probe_request() {
+fn test_probe_request() {
   // Receiver address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Destination address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Transmitter address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
@@ -14,7 +14,7 @@ fn test_ieee802_11_probe_request() {
   // BSS Id: Broadcast (ff:ff:ff:ff:ff:ff)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_PROBE_REQUEST,
+    bytes: &PROBE_REQUEST,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::ProbeRequest)),
 
     receiver_address: "ff:ff:ff:ff:ff:ff".parse().unwrap(),

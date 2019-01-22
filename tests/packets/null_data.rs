@@ -1,10 +1,10 @@
-const IEEE802_11_NULL_DATA_PACKET: [u8; 24] = [
+const NULL_DATA_PACKET: [u8; 24] = [
   0x48, 0x11, 0x02, 0x01, 0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0x00, 0x16, 0xbc, 0x3d, 0xaa, 0x57,
   0x00, 0x01, 0xe3, 0x41, 0xbd, 0x6e, 0xf0, 0x03,
 ];
 
 #[test]
-fn test_ieee802_11_null_data_packet() {
+fn test_null_data_packet() {
   // Receiver address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
   // Transmitter address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
   // Destination address: Siemens_41:bd:6e (00:01:e3:41:bd:6e)
@@ -13,7 +13,7 @@ fn test_ieee802_11_null_data_packet() {
   // STA address: NokiaDan_3d:aa:57 (00:16:bc:3d:aa:57)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_NULL_DATA_PACKET,
+    bytes: &NULL_DATA_PACKET,
     subtype: Some(FrameSubtype::Data(DataSubtype::Null)),
     ds_status: DSStatus::FromSTAToDS,
 

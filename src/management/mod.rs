@@ -51,12 +51,12 @@ impl<'a> ManagementFrame<'a> {
     }
   }
 }
+
 impl<'a> FrameTrait<'a> for ManagementFrame<'a> {
   fn bytes(&self) -> &'a [u8] {
     self.bytes
   }
-}
-impl<'a> IEEE802_11FrameTrait<'a> for ManagementFrame<'a> {
+
   fn transmitter_address(&self) -> Option<MacAddress> {
     Some(self.addr2())
   }

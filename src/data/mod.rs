@@ -24,12 +24,12 @@ impl<'a> DataFrame<'a> {
     MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
   }
 }
+
 impl<'a> FrameTrait<'a> for DataFrame<'a> {
   fn bytes(&self) -> &'a [u8] {
     self.bytes
   }
-}
-impl<'a> IEEE802_11FrameTrait<'a> for DataFrame<'a> {
+
   fn transmitter_address(&self) -> Option<MacAddress> {
     Some(self.addr2())
   }
@@ -73,20 +73,4 @@ impl<'a> IEEE802_11FrameTrait<'a> for DataFrame<'a> {
     }
   }
 }
-impl<'a> DataFrameTrait<'a> for DataFrame<'a> {}
-
-pub trait DataFrameTrait<'a>: IEEE802_11FrameTrait<'a> {
-  fn frag_seq(&self) -> u16 {
-    u16::from(self.bytes()[22]) | ((u16::from(self.bytes()[23])) << 8)
-  }
-
-  /// Fragment Number
-  fn fragment_number(&self) -> u8 {
-    (self.frag_seq() & 0b0000_1111) as u8
-  }
-
-  /// Sequence Number
-  fn sequence_number(&self) -> u16 {
-    self.frag_seq() >> 4
-  }
-}
+impl<'a> FragmentSequenceTrait<'a> for DataFrame<'a> {}

@@ -1,4 +1,4 @@
-const IEEE802_11_BEACON_CIPHERS_PACKET: [u8; 140] = [
+const BEACON_CIPHERS_PACKET: [u8; 140] = [
   0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x0c, 0x41, 0x82, 0xb2, 0x55,
   0x00, 0x0c, 0x41, 0x82, 0xb2, 0x55, 0x50, 0xf8, 0x89, 0xf1, 0xd4, 0x1b, 0x01, 0x00, 0x00, 0x00,
   0x64, 0x00, 0x11, 0x04, 0x00, 0x07, 0x43, 0x6f, 0x68, 0x65, 0x72, 0x65, 0x72, 0x01, 0x08, 0x82,
@@ -11,7 +11,7 @@ const IEEE802_11_BEACON_CIPHERS_PACKET: [u8; 140] = [
 ];
 
 #[test]
-fn test_ieee802_11_beacon_ciphers_packet() {
+fn test_beacon_ciphers_packet() {
   // Receiver address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Destination address: Broadcast (ff:ff:ff:ff:ff:ff)
   // Transmitter address: Cisco-Li_82:b2:55 (00:0c:41:82:b2:55)
@@ -19,7 +19,7 @@ fn test_ieee802_11_beacon_ciphers_packet() {
   // BSS Id: Cisco-Li_82:b2:55 (00:0c:41:82:b2:55)
 
   test_test_item(TestItem {
-    bytes: &IEEE802_11_BEACON_CIPHERS_PACKET,
+    bytes: &BEACON_CIPHERS_PACKET,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::Beacon)),
 
     receiver_address: "FF:FF:FF:FF:FF:FF".parse().unwrap(),
