@@ -6,3 +6,11 @@ edition = "2018"
 
 [dependencies]
 eui48 = "0.4.1"
+
+[dev-dependencies]
+criterion = "0.2.8"
+
+
+[[bench]]
+name = "main_benchmark"
+harness = false

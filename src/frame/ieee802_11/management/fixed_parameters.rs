@@ -1,5 +1,3 @@
-use super::*;
-
 pub trait FixedParametersTrait<'a> {
   // Fixed Parameters (24..36) on Beacons
 
