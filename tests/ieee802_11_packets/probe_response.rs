@@ -41,5 +41,7 @@ fn test_ieee802_11_probe_response() {
 
     fragment_number: Some(0),
     sequence_number: Some(430),
+
+    ssid: Some(vec![0x6d, 0x61, 0x72, 0x74, 0x69, 0x6e, 0x65, 0x74, 0x33]),
   });
 }

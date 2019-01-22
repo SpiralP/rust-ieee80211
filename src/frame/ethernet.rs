@@ -1,5 +1,4 @@
 use super::ip::{IPv4Frame, IPv6Frame};
-use byteorder::{NetworkEndian, ReadBytesExt};
 use eui48::MacAddress;
 
 pub struct EthernetFrame<'a> {
@@ -20,7 +19,8 @@ impl<'a> EthernetFrame<'a> {
   }
 
   pub fn type_(&self) -> EthernetType {
-    match (&self.bytes[12..14]).read_u16::<NetworkEndian>().unwrap() {
+    let n: u16 = u16::from(self.bytes[13]) | (u16::from(self.bytes[12]) << 8);
+    match n {
       0x0800 => EthernetType::IPv4,
       0x86DD => EthernetType::IPv6,
       _ => unreachable!(),

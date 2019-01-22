@@ -33,5 +33,7 @@ fn test_ieee802_11_power_save_poll_packet() {
 
     fragment_number: None,
     sequence_number: None,
+
+    ssid: None,
   });
 }

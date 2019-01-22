@@ -36,5 +36,7 @@ fn test_ieee802_11_authentication_packet() {
 
     fragment_number: Some(0),
     sequence_number: Some(13),
+
+    ssid: None,
   });
 }

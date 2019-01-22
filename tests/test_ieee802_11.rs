@@ -26,11 +26,22 @@ struct TestItem<'a> {
 
   fragment_number: Option<u8>,
   sequence_number: Option<u16>,
+
+  ssid: Option<Vec<u8>>,
+}
+
+fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Option<T>, s: &str) {
+  assert_eq!(original.is_some(), test.is_some(), "{}.is_some()", s);
+  if test.is_some() {
+    assert_eq!(original.unwrap(), test.unwrap(), "{}", s);
+  }
 }
 
 #[allow(clippy::cyclomatic_complexity)]
 fn test_test_item(test_item: TestItem) {
   let frame = IEEE802_11Frame::new(&test_item.bytes);
+
+  assert_eq!(frame.version(), FrameVersion::Standard);
 
   assert_eq!(frame.subtype(), test_item.subtype, "subtype");
 
@@ -55,97 +66,93 @@ fn test_test_item(test_item: TestItem) {
     "receiver_address"
   );
 
-  assert_eq!(
-    frame.transmitter_address().is_some(),
-    test_item.transmitter_address.is_some(),
-    "transmitter_address.is_some()"
-  );
-  if test_item.transmitter_address.is_some() {
-    assert_eq!(
-      frame.transmitter_address().unwrap(),
-      test_item.transmitter_address.unwrap(),
-      "transmitter_address"
-    );
+  let transmitter_address;
+  let destination_address;
+  let source_address;
+  let bssid_address;
+  let station_address;
+  let fragment_number;
+  let sequence_number;
+
+  match &frame.next_layer() {
+    IEEE802_11FrameLayer::Management(layer) => {
+      transmitter_address = layer.transmitter_address();
+      destination_address = layer.destination_address();
+      source_address = layer.source_address();
+      bssid_address = layer.bssid_address();
+      station_address = layer.station_address();
+
+      fragment_number = Some(layer.fragment_number());
+      sequence_number = Some(layer.sequence_number());
+
+      let ssid = {
+        if let Some(layer) = layer.next_layer() {
+          match layer {
+            ManagementFrameLayer::Beacon(beacon_frame) => beacon_frame.ssid(),
+            ManagementFrameLayer::ProbeResponse(probe_response_frame) => {
+              probe_response_frame.ssid()
+            }
+          }
+        } else {
+          None
+        }
+      };
+
+      check(ssid, test_item.ssid, "ssid");
+    }
+    IEEE802_11FrameLayer::Control(layer) => {
+      transmitter_address = layer.transmitter_address();
+      destination_address = layer.destination_address();
+      source_address = layer.source_address();
+      bssid_address = layer.bssid_address();
+      station_address = layer.station_address();
+      fragment_number = None;
+      sequence_number = None;
+    }
+    IEEE802_11FrameLayer::Data(layer) => {
+      transmitter_address = layer.transmitter_address();
+      destination_address = layer.destination_address();
+      source_address = layer.source_address();
+      bssid_address = layer.bssid_address();
+      station_address = layer.station_address();
+      fragment_number = Some(layer.fragment_number());
+      sequence_number = Some(layer.sequence_number());
+    }
   }
 
-  assert_eq!(
-    frame.bssid_address().is_some(),
-    test_item.bssid_address.is_some(),
-    "bssid_address.is_some()"
+  check(
+    transmitter_address,
+    test_item.transmitter_address,
+    "transmitter_address",
   );
-  if test_item.bssid_address.is_some() {
-    assert_eq!(
-      frame.bssid_address().unwrap(),
-      test_item.bssid_address.unwrap(),
-      "bssid_address"
-    );
-  }
 
-  assert_eq!(
-    frame.station_address().is_some(),
-    test_item.station_address.is_some(),
-    "station_address.is_some()"
+  check(
+    destination_address,
+    test_item.destination_address,
+    "destination_address",
   );
-  if test_item.station_address.is_some() {
-    assert_eq!(
-      frame.station_address().unwrap(),
-      test_item.station_address.unwrap(),
-      "station_address"
-    );
-  }
 
-  assert_eq!(
-    frame.source_address().is_some(),
-    test_item.source_address.is_some(),
-    "source_address.is_some()"
-  );
-  if test_item.source_address.is_some() {
-    assert_eq!(
-      frame.source_address().unwrap(),
-      test_item.source_address.unwrap(),
-      "source_address"
-    );
-  }
+  check(source_address, test_item.source_address, "source_address");
 
-  assert_eq!(
-    frame.destination_address().is_some(),
-    test_item.destination_address.is_some(),
-    "destination_address.is_some()"
-  );
-  if test_item.destination_address.is_some() {
-    assert_eq!(
-      frame.destination_address().unwrap(),
-      test_item.destination_address.unwrap(),
-      "destination_address"
-    );
-  }
+  check(bssid_address, test_item.bssid_address, "bssid_address");
 
-  // TODO
-  assert_eq!(
-    frame.fragment_number().is_some(),
-    test_item.fragment_number.is_some(),
-    "fragment_number.is_some()"
+  check(
+    station_address,
+    test_item.station_address,
+    "station_address",
   );
-  if test_item.fragment_number.is_some() {
-    assert_eq!(
-      frame.fragment_number().unwrap(),
-      test_item.fragment_number.unwrap(),
-      "fragment_number"
-    );
-  }
 
-  assert_eq!(
-    frame.sequence_number().is_some(),
-    test_item.sequence_number.is_some(),
-    "sequence_number.is_some()"
+  check(
+    fragment_number,
+    test_item.fragment_number,
+    "fragment_number",
   );
-  if test_item.sequence_number.is_some() {
-    assert_eq!(
-      frame.sequence_number().unwrap(),
-      test_item.sequence_number.unwrap(),
-      "sequence_number"
-    );
-  }
+
+  check(
+    sequence_number,
+    test_item.sequence_number,
+    "sequence_number",
+  );
 }
 
 include!("./ieee802_11_packets/beacon.rs");

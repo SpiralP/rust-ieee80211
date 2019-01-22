@@ -1,61 +1,82 @@
+mod control;
+mod data;
+mod management;
 mod types;
 
+pub use self::control::*;
+pub use self::data::*;
+pub use self::management::*;
 pub use self::types::*;
+use super::*;
 use eui48::MacAddress;
 
 pub struct IEEE802_11Frame<'a> {
   bytes: &'a [u8],
 }
 
+pub enum IEEE802_11FrameLayer<'a> {
+  Management(ManagementFrame<'a>),
+  Control(ControlFrame<'a>),
+  Data(DataFrame<'a>),
+}
+
 impl<'a> IEEE802_11Frame<'a> {
-  pub fn new(bytes: &'a [u8]) -> IEEE802_11Frame<'a> {
-    IEEE802_11Frame { bytes }
+  pub fn new(bytes: &'a [u8]) -> Self {
+    Self { bytes }
   }
 
-  pub fn version(&self) -> FrameVersion {
-    match self.bytes[0] & 0b0000_0011 {
+  pub fn next_layer(&self) -> IEEE802_11FrameLayer<'a> {
+    match self.type_() {
+      FrameType::Management => {
+        IEEE802_11FrameLayer::Management(ManagementFrame::new(&self.bytes()))
+      }
+      FrameType::Control => IEEE802_11FrameLayer::Control(ControlFrame::new(&self.bytes())),
+      FrameType::Data => IEEE802_11FrameLayer::Data(DataFrame::new(&self.bytes())),
+      _ => unimplemented!(),
+    }
+  }
+}
+impl<'a> FrameTrait<'a> for IEEE802_11Frame<'a> {
+  fn bytes(&self) -> &'a [u8] {
+    self.bytes
+  }
+}
+impl<'a> IEEE802_11FrameTrait<'a> for IEEE802_11Frame<'a> {}
+
+pub trait IEEE802_11FrameTrait<'a>: FrameTrait<'a> {
+  fn version(&self) -> FrameVersion {
+    match self.bytes()[0] & 0b0000_0011 {
       0 => FrameVersion::Standard,
       _ => unreachable!(),
     }
   }
 
   /// Main IEEE 802.11 Frame Type
-  pub fn type_(&self) -> FrameType {
-    // TODO transmute to enum?
-    match (self.bytes[0] & 0b0000_1100) >> 2 {
-      0 => FrameType::Management,
-      1 => FrameType::Control,
-      2 => FrameType::Data,
-      3 => FrameType::Extension,
-      _ => unreachable!(),
-    }
+  fn type_(&self) -> FrameType {
+    FrameType::from((self.bytes()[0] & 0b0000_1100) >> 2)
   }
 
   /// IEEE 802.11 Frame Subtype
-  pub fn subtype(&self) -> FrameSubtype {
-    let subtype = (self.bytes[0] & 0b1111_0000) >> 4;
-    match self.type_() {
-      FrameType::Management => FrameSubtype::Management(ManagementSubtype::from(subtype)),
-      FrameType::Control => FrameSubtype::Control(ControlSubtype::from(subtype)),
-      FrameType::Data => FrameSubtype::Data(DataSubtype::from(subtype)),
-      FrameType::Extension => FrameSubtype::Extension,
-    }
+  fn subtype(&self) -> FrameSubtype {
+    let subtype = (self.bytes()[0] & 0b1111_0000) >> 4;
+
+    FrameSubtype::from(self.type_(), subtype)
   }
 
   // flags
 
   /// to Distribution System
-  pub fn to_ds(&self) -> bool {
-    self.bytes[1] & 0b0000_0001 != 0
+  fn to_ds(&self) -> bool {
+    self.bytes()[1] & 0b0000_0001 != 0
   }
 
   /// from Distribution System
   #[allow(clippy::wrong_self_convention)]
-  pub fn from_ds(&self) -> bool {
-    self.bytes[1] & 0b0000_0010 != 0
+  fn from_ds(&self) -> bool {
+    self.bytes()[1] & 0b0000_0010 != 0
   }
 
-  pub fn ds_status(&self) -> DSStatus {
+  fn ds_status(&self) -> DSStatus {
     match (self.from_ds(), self.to_ds()) {
       // 00 Not leaving DS or network is operating in AD-HOC mode
       (false, false) => DSStatus::NotLeavingDSOrADHOC,
@@ -70,172 +91,91 @@ impl<'a> IEEE802_11Frame<'a> {
 
   /// 0: This is the last fragment
   /// 1: More fragments follow
-  pub fn more_fragments(&self) -> bool {
-    (self.bytes[1] & 0b0000_0100) != 0
+  fn more_fragments(&self) -> bool {
+    (self.bytes()[1] & 0b0000_0100) != 0
   }
 
   /// 0: Frame is not being retransmitted
   /// 1: Frame is being retransmitted
-  pub fn retry(&self) -> bool {
-    (self.bytes[1] & 0b0000_1000) != 0
+  fn retry(&self) -> bool {
+    (self.bytes()[1] & 0b0000_1000) != 0
   }
 
   /// 0: STA will stay up
   /// 1: STA will go to sleep
-  pub fn pwr_mgt(&self) -> bool {
-    (self.bytes[1] & 0b0001_0000) != 0
+  fn pwr_mgt(&self) -> bool {
+    (self.bytes()[1] & 0b0001_0000) != 0
   }
 
   /// 0: No data buffered
   /// 1: Data is buffered for STA at AP
-  pub fn more_data(&self) -> bool {
-    (self.bytes[1] & 0b0010_0000) != 0
+  fn more_data(&self) -> bool {
+    (self.bytes()[1] & 0b0010_0000) != 0
   }
 
   /// 0: Data is not protected
   /// 1: Data is protected
-  pub fn protected(&self) -> bool {
-    (self.bytes[1] & 0b0100_0000) != 0
+  fn protected(&self) -> bool {
+    (self.bytes()[1] & 0b0100_0000) != 0
   }
 
   /// 0: Not strictly ordered
   /// 1: Strictly ordered
-  pub fn order(&self) -> bool {
-    (self.bytes[1] & 0b1000_0000) != 0
+  fn order(&self) -> bool {
+    (self.bytes()[1] & 0b1000_0000) != 0
   }
 
   /// Duration or Association Identifier
-  pub fn duration_or_id(&self) -> DurationID {
-    if (self.bytes[3] & 0b1000_0000) != 0 {
-      let n = u16::from(self.bytes[2]) | ((u16::from(self.bytes[3]) & 0b0011_1111) << 8);
+  fn duration_or_id(&self) -> DurationID {
+    if (self.bytes()[3] & 0b1000_0000) != 0 {
+      let n = u16::from(self.bytes()[2]) | ((u16::from(self.bytes()[3]) & 0b0011_1111) << 8);
       // TODO valid range 1-2007, use Reserved
       DurationID::AssociationID(n)
     } else {
-      let n = u16::from(self.bytes[2]) | ((u16::from(self.bytes[3]) & 0b0111_1111) << 8);
+      let n = u16::from(self.bytes()[2]) | ((u16::from(self.bytes()[3]) & 0b0111_1111) << 8);
       DurationID::Duration(n)
     }
   }
 
+  // Addressing
+
   fn addr1(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes[4..10]).unwrap()
-  }
-  fn addr2(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes[10..16]).unwrap()
-  }
-  fn addr3(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes[16..22]).unwrap()
-  }
-  fn addr4(&self) -> MacAddress {
-    // only on Data Mesh types
-    // after frag/seq numbers
-    MacAddress::from_bytes(&self.bytes[24..30]).unwrap()
+    MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
 
   /// Receiver Address
   /// Who this packet is destined for wirelessly.
   /// Address 1
-  pub fn receiver_address(&self) -> MacAddress {
+  fn receiver_address(&self) -> MacAddress {
     self.addr1()
   }
 
   /// Transmitter Address
   /// Who this packet came from wirelessly.
-  pub fn transmitter_address(&self) -> Option<MacAddress> {
-    match self.subtype() {
-      FrameSubtype::Management(_) | FrameSubtype::Data(_) => Some(self.addr2()),
-      FrameSubtype::Control(subtype) => match subtype {
-        ControlSubtype::BlockAckRequest
-        | ControlSubtype::BlockAck
-        | ControlSubtype::PSPoll
-        | ControlSubtype::RTS => Some(self.addr2()),
-        _ => None,
-      },
-      _ => None,
-    }
+  fn transmitter_address(&self) -> Option<MacAddress> {
+    None
   }
 
   /// Destination Address
   /// Who the packet is destined for.
-  pub fn destination_address(&self) -> Option<MacAddress> {
-    match self.type_() {
-      FrameType::Control => None,
-      FrameType::Data => match self.ds_status() {
-        DSStatus::FromSTAToDS => Some(self.addr3()),
-        DSStatus::WDSOrMesh => Some(self.addr3()),
-        _ => None,
-      },
-      // fall back to receiver
-      _ => Some(self.receiver_address()),
-    }
+  fn destination_address(&self) -> Option<MacAddress> {
+    Some(self.receiver_address())
   }
 
   /// Source Address
   /// Who the packet came from.
-  pub fn source_address(&self) -> Option<MacAddress> {
-    match self.type_() {
-      FrameType::Control => None,
-      FrameType::Data => match self.ds_status() {
-        DSStatus::FromDSToSTA => Some(self.addr3()),
-        DSStatus::FromSTAToDS => Some(self.addr2()),
-        DSStatus::WDSOrMesh => Some(self.addr4()),
-        _ => None,
-      },
-      // fall back to transmitter?
-      _ => self.transmitter_address(),
-    }
+  fn source_address(&self) -> Option<MacAddress> {
+    self.transmitter_address()
   }
 
   /// Basic Service Set Address (BSSID)
   /// Basic Service Set ID for Multicast.
-  pub fn bssid_address(&self) -> Option<MacAddress> {
-    match self.subtype() {
-      FrameSubtype::Management(_) => Some(self.addr3()),
-      FrameSubtype::Data(_) => match self.ds_status() {
-        DSStatus::FromDSToSTA => Some(self.addr2()),
-        DSStatus::FromSTAToDS => Some(self.addr1()),
-        DSStatus::NotLeavingDSOrADHOC => Some(self.addr3()),
-        _ => None,
-      },
-      FrameSubtype::Control(subtype) => match subtype {
-        ControlSubtype::PSPoll => Some(self.addr1()),
-        ControlSubtype::CFEnd | ControlSubtype::CFEndCFACK => Some(self.addr2()),
-        _ => None,
-      },
-      _ => None,
-    }
+  fn bssid_address(&self) -> Option<MacAddress> {
+    None
   }
 
   /// Station Address
-  pub fn station_address(&self) -> Option<MacAddress> {
-    match self.type_() {
-      FrameType::Data => match self.ds_status() {
-        DSStatus::FromDSToSTA => Some(self.addr1()),
-        DSStatus::FromSTAToDS => Some(self.addr2()),
-        _ => None,
-      },
-      _ => None,
-    }
-  }
-
-  fn frag_seq(&self) -> Option<u16> {
-    match self.type_() {
-      FrameType::Management | FrameType::Data => {
-        let n = u16::from(self.bytes[22]) | ((u16::from(self.bytes[23])) << 8);
-        Some(n)
-      }
-      _ => None,
-    }
-  }
-
-  /// Fragment Number
-  pub fn fragment_number(&self) -> Option<u8> {
-    self
-      .frag_seq()
-      .map(|frag_seq| (frag_seq & 0b0000_1111) as u8)
-  }
-
-  /// Sequence Number
-  pub fn sequence_number(&self) -> Option<u16> {
-    self.frag_seq().map(|frag_seq| frag_seq >> 4)
+  fn station_address(&self) -> Option<MacAddress> {
+    None
   }
 }

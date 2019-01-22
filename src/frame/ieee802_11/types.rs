@@ -27,10 +27,22 @@ pub enum FrameVersion {
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum FrameType {
-  Management = 0,
-  Control = 1,
-  Data = 2,
-  Extension = 3,
+  Management, // 0
+  Control,    // 1
+  Data,       // 2
+  Extension,  // 3
+}
+
+impl FrameType {
+  pub fn from(n: u8) -> Self {
+    match n {
+      0 => FrameType::Management,
+      1 => FrameType::Control,
+      2 => FrameType::Data,
+      3 => FrameType::Extension,
+      _ => unreachable!(),
+    }
+  }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -41,42 +53,53 @@ pub enum FrameSubtype {
   Extension,
 }
 
+impl FrameSubtype {
+  pub fn from(type_: FrameType, subtype: u8) -> Self {
+    match type_ {
+      FrameType::Management => FrameSubtype::Management(ManagementSubtype::from(subtype)),
+      FrameType::Control => FrameSubtype::Control(ControlSubtype::from(subtype)),
+      FrameType::Data => FrameSubtype::Data(DataSubtype::from(subtype)),
+      FrameType::Extension => FrameSubtype::Extension,
+    }
+  }
+}
+
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum ManagementSubtype {
   /// Association Request
-  AssociationRequest = 0,
+  AssociationRequest, // 0
   /// Association Response
-  AssociationResponse = 1,
+  AssociationResponse, // 1
   /// Reassociation Request
-  ReassociationRequest = 2,
+  ReassociationRequest, // 2
   /// Reassociation Response
-  ReassociationResponse = 3,
+  ReassociationResponse, // 3
   /// Probe Request
-  ProbeRequest = 4,
+  ProbeRequest, // 4
   /// Probe Response
-  ProbeResponse = 5,
+  ProbeResponse, // 5
   /// 6-7, 15 Reserved
   Reserved,
   /// Beacon
-  Beacon = 8,
+  Beacon, // 8
   /// Announcement Traffic Indication Message
-  ATIM = 9,
+  ATIM, // 9
   /// Disassociation
-  Disassociation = 10,
+  Disassociation, // 10
   /// Authentication
-  Authentication = 11,
+  Authentication, // 11
   /// Deauthentication
-  Deauthentication = 12,
+  Deauthentication, // 12
   /// Action
-  Action = 13,
+  Action, // 13
   /// Action No Ack
-  ActionNoAck = 14,
+  ActionNoAck, // 14
   /// Aruba Management
-  Aruba = 15,
+  Aruba, // 15
 }
 
 impl ManagementSubtype {
-  pub fn from(n: u8) -> ManagementSubtype {
+  pub fn from(n: u8) -> Self {
     match n {
       0 => ManagementSubtype::AssociationRequest,
       1 => ManagementSubtype::AssociationResponse,

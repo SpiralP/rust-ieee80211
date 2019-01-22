@@ -37,5 +37,7 @@ fn test_ieee802_11_null_data_packet() {
 
     fragment_number: Some(0),
     sequence_number: Some(63),
+
+    ssid: None,
   });
 }
