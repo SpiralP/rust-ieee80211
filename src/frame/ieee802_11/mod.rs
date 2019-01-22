@@ -34,7 +34,6 @@ impl<'a> IEEE802_11Frame<'a> {
       }
       FrameType::Control => IEEE802_11FrameLayer::Control(ControlFrame::new(&self.bytes())),
       FrameType::Data => IEEE802_11FrameLayer::Data(DataFrame::new(&self.bytes())),
-      _ => unimplemented!(),
     }
   }
 }

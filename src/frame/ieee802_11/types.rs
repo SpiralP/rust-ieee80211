@@ -42,7 +42,6 @@ pub enum FrameType {
   Management, // 0
   Control,    // 1
   Data,       // 2
-  Extension,  // 3
 }
 
 impl FrameType {
@@ -51,7 +50,6 @@ impl FrameType {
       0 => FrameType::Management,
       1 => FrameType::Control,
       2 => FrameType::Data,
-      3 => FrameType::Extension,
       _ => unreachable!(),
     }
   }
@@ -62,7 +60,6 @@ pub enum FrameSubtype {
   Management(ManagementSubtype),
   Control(ControlSubtype),
   Data(DataSubtype),
-  Extension,
 }
 
 impl FrameSubtype {
@@ -71,7 +68,6 @@ impl FrameSubtype {
       FrameType::Management => FrameSubtype::Management(ManagementSubtype::from(subtype)),
       FrameType::Control => FrameSubtype::Control(ControlSubtype::from(subtype)),
       FrameType::Data => FrameSubtype::Data(DataSubtype::from(subtype)),
-      FrameType::Extension => FrameSubtype::Extension,
     }
   }
 }
