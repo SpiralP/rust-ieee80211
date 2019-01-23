@@ -86,72 +86,126 @@ impl TaggedParameters {
       .or_else(|| self.tags.get(&TagName::HTInformation).map(|bytes| bytes[0]))
   }
 
-  pub fn rsn(&self) -> Option<RSN> {
-    self.tags.get(&TagName::RSNInformation).map(|bytes| {
-      let mut rsn = RSN::default();
-
+  pub fn rsn(&self) -> Option<RSNVersion> {
+    self.tags.get(&TagName::RSNInformation).and_then(|bytes| {
       let mut i = 0;
       let len = bytes.len();
 
-      let version = LittleEndian::read_u16(&bytes[i..(i + 2)]);
-      rsn.version = version;
-      i += 2;
-      if i >= len {
-        return rsn;
+      if (i + 1) >= len {
+        return None;
       }
-
-      if version != 1 {
-        unimplemented!("RSN version is {} != 1", version);
-      }
-
-      let group_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
-      rsn.group_cipher_suite = Some(group_cipher_suite);
-      i += 4;
-      if i >= len {
-        return rsn;
-      }
-
-      let pairwise_cipher_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
-      i += 2;
-      if i >= len {
-        return rsn;
-      }
-
-      for _ in 0..pairwise_cipher_suite_count {
-        let pairwise_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
-        rsn.pairwise_cipher_suites.push(pairwise_cipher_suite);
-        i += 4;
-        if i >= len {
-          return rsn;
+      let version = LittleEndian::read_u16(&bytes[i..=(i + 1)]);
+      Some(match version {
+        1 => {
+          i += 2;
+          RSNVersion::Standard(make_std_rsn(&bytes[i..]))
         }
-      }
-
-      let akm_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
-      i += 2;
-      if i >= len {
-        return rsn;
-      }
-
-      for _ in 0..akm_suite_count {
-        let akm_suite = RSN::read_akm_suite(&bytes[i..(i + 4)]);
-        rsn.akm_suites.push(akm_suite);
-        i += 4;
-        if i >= len {
-          return rsn;
-        }
-      }
-
-      rsn
+        other => RSNVersion::Reserved(other),
+      })
     })
   }
 }
 
+fn make_std_rsn(bytes: &[u8]) -> RSN {
+  let mut i = 0;
+  let len = bytes.len();
+
+  let mut rsn = RSN::default();
+
+  if (i + 4) > len {
+    return rsn;
+  }
+  let group_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
+  rsn.group_cipher_suite = Some(group_cipher_suite);
+  i += 4;
+
+  if (i + 2) > len {
+    return rsn;
+  }
+  let pairwise_cipher_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+  i += 2;
+
+  for _ in 0..pairwise_cipher_suite_count {
+    if (i + 4) > len {
+      return rsn;
+    }
+    let pairwise_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
+    rsn.pairwise_cipher_suites.push(pairwise_cipher_suite);
+    i += 4;
+  }
+
+  if (i + 2) > len {
+    return rsn;
+  }
+  let akm_suite_count = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+  i += 2;
+
+  for _ in 0..akm_suite_count {
+    if (i + 4) > len {
+      return rsn;
+    }
+    let akm_suite = RSN::read_akm_suite(&bytes[i..(i + 4)]);
+    rsn.akm_suites.push(akm_suite);
+    i += 4;
+  }
+
+  if (i + 2) > len {
+    return rsn;
+  }
+  let b = LittleEndian::read_u16(&bytes[i..(i + 2)]);
+  rsn.capabilities = Some(RSNCapabilities {
+    pre_auth: (b & 0b0000_0000_0000_0001) != 0,
+    pairwise: (b & 0b0000_0000_0000_0010) != 0,
+    ptksa_replay_counter_value: ((b & 0b0000_0000_0000_1100) >> 2) as u8,
+    gtksa_replay_counter_value: ((b & 0b0000_0000_0011_0000) >> 4) as u8,
+    management_frame_protection_required: (b & 0b0000_0000_0100_0000) != 0,
+    management_frame_protection_capable: (b & 0b0000_0000_1000_0000) != 0,
+    joint_multi_band_rsna: (b & 0b0000_0001_0000_0000) != 0,
+    peerkey: (b & 0b0000_0010_0000_0000) != 0,
+  });
+
+  rsn
+}
+
+#[derive(Debug, PartialEq)]
+pub struct RSNCapabilities {
+  /// 0: RSN Pre-Auth capabilities: Transmitter does not support pre-authentication
+  pub pre_auth: bool,
+  /// 0: RSN No Pairwise capabilities: Transmitter can support WEP default key 0 simultaneously with Pairwise key
+  pub pairwise: bool,
+
+  // {0x00, "1 replay counter per PTKSA/GTKSA/STAKeySA"},
+  // {0x01, "2 replay counters per PTKSA/GTKSA/STAKeySA"},
+  // {0x02, "4 replay counters per PTKSA/GTKSA/STAKeySA"},
+  // {0x03, "16 replay counters per PTKSA/GTKSA/STAKeySA"},
+  pub ptksa_replay_counter_value: u8,
+  pub gtksa_replay_counter_value: u8,
+
+  /// Management Frame Protection Required
+  pub management_frame_protection_required: bool,
+
+  /// Management Frame Protection Capable
+  pub management_frame_protection_capable: bool,
+
+  /// Joint Multi-band RSNA
+  pub joint_multi_band_rsna: bool,
+
+  /// PeerKey Enabled
+  pub peerkey: bool,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum RSNVersion {
+  Standard(RSN), // 1
+  Reserved(u16),
+}
+
 #[derive(Debug, Default, PartialEq)]
 pub struct RSN {
-  pub version: u16,
   pub group_cipher_suite: Option<CipherSuite>,
   pub pairwise_cipher_suites: Vec<CipherSuite>,
   pub akm_suites: Vec<AKMSuite>,
+  pub capabilities: Option<RSNCapabilities>,
 }
 
 impl RSN {
@@ -163,62 +217,112 @@ impl RSN {
   }
 
   fn read_cipher_suite(bytes: &[u8]) -> CipherSuite {
-    let (_oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+    let (oui, type_) = RSN::read_suite_oui_and_type(&bytes);
 
-    debug_assert_eq!(
-      _oui,
-      [0x00, 0x0f, 0xac],
-      "read_cipher_suite oui not IEEE802.11"
-    );
-
-    CipherSuite::from(type_)
+    CipherSuite::from(oui, type_)
   }
 
   fn read_akm_suite(bytes: &[u8]) -> AKMSuite {
-    let (_oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+    let (oui, type_) = RSN::read_suite_oui_and_type(&bytes);
 
-    debug_assert_eq!(
-      _oui,
-      [0x00, 0x0f, 0xac],
-      "read_akm_suite oui not IEEE802.11"
-    );
-
-    AKMSuite::from(type_)
+    AKMSuite::from(oui, type_)
   }
 }
 
 #[derive(Debug, PartialEq)]
 pub enum CipherSuite {
-  WEP40 = 1,
-  TKIP = 2,
-  CCMP = 4, // AES (CCM)
-  WEP104 = 5,
+  Standard(CipherSuiteType),
+  Vendor([u8; 3], u8),
 }
 impl CipherSuite {
+  fn from(oui: [u8; 3], type_: u8) -> Self {
+    match oui {
+      [0x00, 0x0f, 0xac] => CipherSuite::Standard(CipherSuiteType::from(type_)),
+      other => CipherSuite::Vendor(other, type_),
+    }
+  }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum CipherSuiteType {
+  UseGroupCipherSuite, // 0
+  WEP40,               // 1
+  TKIP,                // 2
+  Reserved(u8),        // 3 Reserved
+  CCMP,                // 4 // AES (CCM)
+  WEP104,              // 5
+  BIP,                 // 6
+  GroupAddressedTrafficNotAllowed, // 7
+                       // 8-255 Reserved
+}
+impl CipherSuiteType {
   fn from(type_: u8) -> Self {
     match type_ {
-      1 => CipherSuite::WEP40,
-      2 => CipherSuite::TKIP,
-      4 => CipherSuite::CCMP, // AES (CCM)
-      5 => CipherSuite::WEP104,
-      other => unimplemented!("Cipher Suite {}", other),
+      1 => CipherSuiteType::WEP40,
+      2 => CipherSuiteType::TKIP,
+      4 => CipherSuiteType::CCMP,
+      5 => CipherSuiteType::WEP104,
+      6 => CipherSuiteType::BIP,
+      7 => CipherSuiteType::GroupAddressedTrafficNotAllowed,
+      other => CipherSuiteType::Reserved(other),
     }
   }
 }
 
 #[derive(Debug, PartialEq)]
 pub enum AKMSuite {
-  IEEE802_1X = 1,
-  PSK = 2,
-  FTOver802_1X = 3,
+  Standard(AKMSuiteType),
+  Vendor([u8; 3], u8),
 }
 impl AKMSuite {
+  fn from(oui: [u8; 3], type_: u8) -> Self {
+    match oui {
+      [0x00, 0x0f, 0xac] => AKMSuite::Standard(AKMSuiteType::from(type_)),
+      other => AKMSuite::Vendor(other, type_),
+    }
+  }
+}
+
+/// Authentication and Key Management Suite
+#[derive(Debug, PartialEq)]
+pub enum AKMSuiteType {
+  Reserved(u8), // 0 Reserved
+
+  /// IEEE 802.1X with RSNA default
+  IEEE802_1X, // 1
+  /// Pre-Shared-Key
+  PSK, // 2
+  /// FT auth negotiated over IEEE 802.1X
+  FTOver802_1X, // 3
+  /// FT auth using PSK
+  FTPSK, // 4
+
+  /// IEEE 802.1X with SHA256 Key Derivation
+  IEEE802_1XSHA, // 5
+  /// PSK with SHA256 Key Derivation
+  PSKSHA, // 6
+  /// TPK Handshake
+  TDLS, // 7
+  /// SAE with SHA256
+  SAE, // 8
+  /// FT auth over SAE with SHA256
+  FTOverSAE, // 9
+
+             //  10-255 Reserved
+}
+impl AKMSuiteType {
   fn from(type_: u8) -> Self {
     match type_ {
-      1 => AKMSuite::IEEE802_1X,
-      2 => AKMSuite::PSK,
-      3 => AKMSuite::FTOver802_1X,
-      other => unimplemented!("AKM Suite {}", other),
+      1 => AKMSuiteType::IEEE802_1X,
+      2 => AKMSuiteType::PSK,
+      3 => AKMSuiteType::FTOver802_1X,
+      4 => AKMSuiteType::FTPSK,
+      5 => AKMSuiteType::IEEE802_1XSHA,
+      6 => AKMSuiteType::PSKSHA,
+      7 => AKMSuiteType::TDLS,
+      8 => AKMSuiteType::SAE,
+      9 => AKMSuiteType::FTOverSAE,
+      other => AKMSuiteType::Reserved(other),
     }
   }
 }

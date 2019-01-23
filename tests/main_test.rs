@@ -35,7 +35,9 @@ struct TestItem<'a> {
 
   supported_rates: Option<Vec<f64>>,
 
-  rsn: Option<RSN>,
+  rsn: Option<RSNVersion>,
+
+  channel: Option<u8>,
 }
 
 fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Option<T>, s: &str) {
@@ -136,6 +138,12 @@ fn test_test_item(test_item: TestItem) {
           );
 
           check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
+
+          check(
+            beacon_frame.tagged_parameters().channel(),
+            test_item.channel,
+            "channel",
+          );
         }
       }
     }

@@ -58,6 +58,8 @@ fn test_beacon_packet() {
 
     supported_rates: Some(vec![1.0, 2.0, 5.5, 11.0, 18.0, 24.0, 36.0, 54.0]),
 
+    channel: Some(11),
+
     ..Default::default()
   });
 }

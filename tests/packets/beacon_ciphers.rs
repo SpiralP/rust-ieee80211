@@ -58,12 +58,26 @@ fn test_beacon_ciphers_packet() {
 
     supported_rates: Some(vec![1.0, 2.0, 5.5, 11.0, 18.0, 24.0, 36.0, 54.0]),
 
-    rsn: Some(RSN {
-      version: 1,
-      group_cipher_suite: Some(CipherSuite::TKIP),
-      pairwise_cipher_suites: vec![CipherSuite::CCMP, CipherSuite::TKIP],
-      akm_suites: vec![AKMSuite::PSK],
-    }),
+    rsn: Some(RSNVersion::Standard(RSN {
+      group_cipher_suite: Some(CipherSuite::Standard(CipherSuiteType::TKIP)),
+      pairwise_cipher_suites: vec![
+        CipherSuite::Standard(CipherSuiteType::CCMP),
+        CipherSuite::Standard(CipherSuiteType::TKIP),
+      ],
+      akm_suites: vec![AKMSuite::Standard(AKMSuiteType::PSK)],
+      capabilities: Some(RSNCapabilities {
+        pre_auth: false,
+        pairwise: false,
+        ptksa_replay_counter_value: 0,
+        gtksa_replay_counter_value: 0,
+        management_frame_protection_required: false,
+        management_frame_protection_capable: false,
+        joint_multi_band_rsna: false,
+        peerkey: false,
+      }),
+    })),
+
+    channel: Some(1),
 
     ..Default::default()
   });
