@@ -27,11 +27,12 @@ impl<'a> Frame<'a> {
     Self { bytes }
   }
 
-  pub fn next_layer(&self) -> FrameLayer<'a> {
+  pub fn next_layer(&self) -> Option<FrameLayer<'a>> {
     match self.type_() {
-      FrameType::Management => FrameLayer::Management(ManagementFrame::new(&self.bytes())),
-      FrameType::Control => FrameLayer::Control(ControlFrame::new(&self.bytes())),
-      FrameType::Data => FrameLayer::Data(DataFrame::new(&self.bytes())),
+      FrameType::Management => Some(FrameLayer::Management(ManagementFrame::new(&self.bytes()))),
+      FrameType::Control => Some(FrameLayer::Control(ControlFrame::new(&self.bytes()))),
+      FrameType::Data => Some(FrameLayer::Data(DataFrame::new(&self.bytes()))),
+      _ => None,
     }
   }
 }
@@ -45,10 +46,7 @@ pub trait FrameTrait<'a> {
   fn bytes(&self) -> &'a [u8];
 
   fn version(&self) -> FrameVersion {
-    match self.bytes()[0] & 0b0000_0011 {
-      0 => FrameVersion::Standard,
-      _ => unreachable!(),
-    }
+    FrameVersion::from(self.bytes()[0] & 0b0000_0011)
   }
 
   /// Main IEEE 802.11 Frame Type
@@ -129,8 +127,12 @@ pub trait FrameTrait<'a> {
   fn duration_or_id(&self) -> DurationID {
     if (self.bytes()[3] & 0b1000_0000) != 0 {
       let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0011_1111_1111_1111;
-      // TODO valid range 1-2007, use Reserved
-      DurationID::AssociationID(n)
+      // valid range 1-2007
+      if n < 1 || n > 2007 {
+        DurationID::Reserved(n)
+      } else {
+        DurationID::AssociationID(n)
+      }
     } else {
       let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0111_1111_1111_1111;
       DurationID::Duration(n)

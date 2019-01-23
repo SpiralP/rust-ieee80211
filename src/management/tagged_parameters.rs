@@ -101,7 +101,7 @@ impl TaggedParameters {
       }
 
       if version != 1 {
-        unimplemented!();
+        unimplemented!("RSN version is {} != 1", version);
       }
 
       let group_cipher_suite = RSN::read_cipher_suite(&bytes[i..(i + 4)]);
@@ -201,7 +201,7 @@ impl CipherSuite {
       2 => CipherSuite::TKIP,
       4 => CipherSuite::CCMP, // AES (CCM)
       5 => CipherSuite::WEP104,
-      _ => unimplemented!(),
+      other => unimplemented!("Cipher Suite {}", other),
     }
   }
 }
@@ -218,7 +218,7 @@ impl AKMSuite {
       1 => AKMSuite::IEEE802_1X,
       2 => AKMSuite::PSK,
       3 => AKMSuite::FTOver802_1X,
-      _ => unimplemented!(),
+      other => unimplemented!("AKM Suite {}", other),
     }
   }
 }

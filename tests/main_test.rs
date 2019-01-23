@@ -82,7 +82,7 @@ fn test_test_item(test_item: TestItem) {
   let fragment_number;
   let sequence_number;
 
-  match &frame.next_layer() {
+  match &frame.next_layer().expect("first layer") {
     FrameLayer::Management(layer) => {
       transmitter_address = layer.transmitter_address();
       destination_address = layer.destination_address();
