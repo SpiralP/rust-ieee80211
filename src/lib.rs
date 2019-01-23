@@ -9,6 +9,7 @@ pub use self::data::*;
 pub use self::fragment_sequence::*;
 pub use self::management::*;
 pub use self::types::*;
+use byteorder::{ByteOrder, LittleEndian};
 pub use eui48::MacAddress;
 
 pub struct Frame<'a> {
@@ -127,11 +128,11 @@ pub trait FrameTrait<'a> {
   /// Duration or Association Identifier
   fn duration_or_id(&self) -> DurationID {
     if (self.bytes()[3] & 0b1000_0000) != 0 {
-      let n = u16::from(self.bytes()[2]) | ((u16::from(self.bytes()[3]) & 0b0011_1111) << 8);
+      let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0011_1111_1111_1111;
       // TODO valid range 1-2007, use Reserved
       DurationID::AssociationID(n)
     } else {
-      let n = u16::from(self.bytes()[2]) | ((u16::from(self.bytes()[3]) & 0b0111_1111) << 8);
+      let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0111_1111_1111_1111;
       DurationID::Duration(n)
     }
   }

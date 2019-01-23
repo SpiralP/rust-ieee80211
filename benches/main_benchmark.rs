@@ -48,6 +48,36 @@ fn criterion_benchmark(c: &mut Criterion) {
       }
     })
   });
+
+  c.bench_function("byteorder LittleEndian::read_u16", |b| {
+    use byteorder::*;
+
+    const BYTES: [u8; 2] = [0x12, 0x34];
+
+    assert_eq!(LittleEndian::read_u16(&BYTES), 0x3412u16);
+
+    b.iter(|| {
+      //
+      LittleEndian::read_u16(&BYTES)
+    })
+  });
+
+  c.bench_function("manual LittleEndian read_u16", |b| {
+    const BYTES: [u8; 2] = [0x12, 0x34];
+
+    {
+      let left = u16::from(BYTES[1]);
+      let right = u16::from(BYTES[0]);
+
+      assert_eq!((right | (left << 8)), 0x3412u16);
+    }
+
+    b.iter(|| {
+      let left = u16::from(BYTES[1]);
+      let right = u16::from(BYTES[0]);
+      (right | (left << 8))
+    })
+  });
 }
 
 criterion_group!(benches, criterion_benchmark);

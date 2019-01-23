@@ -1,4 +1,5 @@
 use super::*;
+use byteorder::{ByteOrder, LittleEndian};
 
 pub trait FragmentSequenceTrait<'a>: FrameTrait<'a> {
   const FRAGMENT_SEQUENCE_START: usize = 22;
@@ -10,8 +11,8 @@ pub trait FragmentSequenceTrait<'a>: FrameTrait<'a> {
 
   /// Sequence Number
   fn sequence_number(&self) -> u16 {
-    let left = u16::from(self.bytes()[Self::FRAGMENT_SEQUENCE_START + 1]);
-    let right = u16::from(self.bytes()[Self::FRAGMENT_SEQUENCE_START]);
-    (right | (left << 8)) >> 4
+    LittleEndian::read_u16(
+      &self.bytes()[Self::FRAGMENT_SEQUENCE_START..(Self::FRAGMENT_SEQUENCE_START + 2)],
+    ) >> 4
   }
 }
