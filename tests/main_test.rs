@@ -1,4 +1,4 @@
-use ieee802_11::*;
+use ieee80211::*;
 
 #[derive(Default)]
 struct TestItem<'a> {
