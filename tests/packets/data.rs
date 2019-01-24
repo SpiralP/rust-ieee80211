@@ -22,11 +22,11 @@ fn test_data_packet() {
   test_test_item(TestItem {
     bytes: &DATA_PACKET,
     subtype: Some(FrameSubtype::Data(DataSubtype::Data)),
-    ds_status: DSStatus::FromDSToSTA,
+    ds_status: Some(DSStatus::FromDSToSTA),
 
     retry: true,
 
-    duration_id: DurationID::Duration(44),
+    duration_id: Some(DurationID::Duration(44)),
 
     receiver_address: "00:16:bc:3d:aa:57".parse().unwrap(),
     transmitter_address: Some("00:01:e3:41:bd:6e".parse().unwrap()),

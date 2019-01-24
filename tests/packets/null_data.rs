@@ -15,11 +15,11 @@ fn test_null_data_packet() {
   test_test_item(TestItem {
     bytes: &NULL_DATA_PACKET,
     subtype: Some(FrameSubtype::Data(DataSubtype::Null)),
-    ds_status: DSStatus::FromSTAToDS,
+    ds_status: Some(DSStatus::FromSTAToDS),
 
     pwr_mgt: true,
 
-    duration_id: DurationID::Duration(258),
+    duration_id: Some(DurationID::Duration(258)),
 
     receiver_address: "00:01:e3:41:bd:6e".parse().unwrap(),
     transmitter_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),

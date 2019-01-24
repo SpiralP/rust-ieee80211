@@ -12,9 +12,11 @@ fn test_power_save_poll_packet() {
     bytes: &POWER_SAVE_POLL_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::PSPoll)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
     pwr_mgt: true,
 
-    duration_id: DurationID::AssociationID(1),
+    duration_id: Some(DurationID::AssociationID(1)),
 
     receiver_address: "00:01:e3:41:bd:6e".parse().unwrap(),
     transmitter_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),

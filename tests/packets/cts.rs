@@ -10,7 +10,9 @@ fn test_cts_packet() {
     bytes: &CTS_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::CTS)),
 
-    duration_id: DurationID::Duration(104),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(104)),
 
     receiver_address: "00:0c:41:82:b2:55".parse().unwrap(),
 

@@ -12,6 +12,9 @@ fn test_block_ack_packet() {
     bytes: &BLOCK_ACK_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::BlockAck)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+    duration_id: Some(DurationID::Duration(0)),
+
     receiver_address: "00:0c:41:82:b2:55".parse().unwrap(),
     transmitter_address: Some("00:15:00:34:18:52".parse().unwrap()),
 

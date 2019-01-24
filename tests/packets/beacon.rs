@@ -20,7 +20,9 @@ fn test_beacon_packet() {
     bytes: &BEACON_PACKET,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::Beacon)),
 
-    duration_id: DurationID::Duration(28672),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(28672)),
 
     receiver_address: "FF:FF:FF:FF:FF:FF".parse().unwrap(),
     destination_address: Some("FF:FF:FF:FF:FF:FF".parse().unwrap()),

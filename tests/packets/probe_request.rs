@@ -17,6 +17,9 @@ fn test_probe_request() {
     bytes: &PROBE_REQUEST,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::ProbeRequest)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+    duration_id: Some(DurationID::Duration(0)),
+
     receiver_address: "ff:ff:ff:ff:ff:ff".parse().unwrap(),
     destination_address: Some("ff:ff:ff:ff:ff:ff".parse().unwrap()),
 

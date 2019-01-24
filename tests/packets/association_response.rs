@@ -19,7 +19,9 @@ fn test_association_response_packet() {
       ManagementSubtype::AssociationResponse,
     )),
 
-    duration_id: DurationID::Duration(314),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(314)),
 
     receiver_address: "00:16:bc:3d:aa:57".parse().unwrap(),
     destination_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),

@@ -11,6 +11,9 @@ fn test_cf_end_packet() {
     bytes: &CF_END_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::CFEnd)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+    duration_id: Some(DurationID::Duration(0)),
+
     receiver_address: "ff:ff:ff:ff:ff:ff".parse().unwrap(),
 
     bssid_address: Some("00:15:00:34:18:52".parse().unwrap()),

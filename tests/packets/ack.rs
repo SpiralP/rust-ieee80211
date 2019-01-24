@@ -8,6 +8,9 @@ fn test_ack_packet() {
     bytes: &ACK_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::Ack)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+    duration_id: Some(DurationID::Duration(0)),
+
     receiver_address: "00:15:00:34:18:52".parse().unwrap(),
 
     ..Default::default()

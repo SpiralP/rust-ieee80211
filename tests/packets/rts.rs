@@ -11,7 +11,9 @@ fn test_rts_packet() {
     bytes: &RTS_PACKET,
     subtype: Some(FrameSubtype::Control(ControlSubtype::RTS)),
 
-    duration_id: DurationID::Duration(152),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(152)),
 
     receiver_address: "00:0c:41:82:b2:55".parse().unwrap(),
     transmitter_address: Some("00:15:00:34:18:52".parse().unwrap()),

@@ -22,6 +22,9 @@ fn test_beacon_ciphers_packet() {
     bytes: &BEACON_CIPHERS_PACKET,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::Beacon)),
 
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+    duration_id: Some(DurationID::Duration(0)),
+
     receiver_address: "FF:FF:FF:FF:FF:FF".parse().unwrap(),
     destination_address: Some("FF:FF:FF:FF:FF:FF".parse().unwrap()),
 

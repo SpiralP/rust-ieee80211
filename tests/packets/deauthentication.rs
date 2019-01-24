@@ -17,7 +17,9 @@ fn test_deauthentication_packet() {
       ManagementSubtype::Deauthentication,
     )),
 
-    duration_id: DurationID::Duration(258),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(258)),
 
     receiver_address: "00:01:e3:41:bd:6e".parse().unwrap(),
     destination_address: Some("00:01:e3:41:bd:6e".parse().unwrap()),

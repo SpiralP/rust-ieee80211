@@ -20,7 +20,9 @@ fn test_probe_response() {
     bytes: &PROBE_RESPONSE,
     subtype: Some(FrameSubtype::Management(ManagementSubtype::ProbeResponse)),
 
-    duration_id: DurationID::Duration(258),
+    ds_status: Some(DSStatus::NotLeavingDSOrADHOC),
+
+    duration_id: Some(DurationID::Duration(258)),
 
     receiver_address: "00:16:bc:3d:aa:57".parse().unwrap(),
     destination_address: Some("00:16:bc:3d:aa:57".parse().unwrap()),

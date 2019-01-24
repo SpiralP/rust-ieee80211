@@ -10,12 +10,6 @@ pub enum DSStatus {
   WDSOrMesh,
 }
 
-impl Default for DSStatus {
-  fn default() -> Self {
-    DSStatus::NotLeavingDSOrADHOC
-  }
-}
-
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum DurationID {
   /// Microseconds
@@ -25,12 +19,6 @@ pub enum DurationID {
   AssociationID(u16),
 
   Reserved(u16),
-}
-
-impl Default for DurationID {
-  fn default() -> Self {
-    DurationID::Duration(0)
-  }
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]
@@ -108,8 +96,8 @@ pub enum ManagementSubtype {
   Beacon, // 8
   /// Announcement Traffic Indication Message
   ATIM, // 9
-  /// Disassociation
-  Disassociation, // 10
+  /// Disassociate
+  Disassociate, // 10
   /// Authentication
   Authentication, // 11
   /// Deauthentication
@@ -132,7 +120,7 @@ impl ManagementSubtype {
       // 6-7 Reserved
       8 => ManagementSubtype::Beacon,
       9 => ManagementSubtype::ATIM,
-      10 => ManagementSubtype::Disassociation,
+      10 => ManagementSubtype::Disassociate,
       11 => ManagementSubtype::Authentication,
       12 => ManagementSubtype::Deauthentication,
       13 => ManagementSubtype::Action,

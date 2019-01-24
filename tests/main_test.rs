@@ -3,8 +3,12 @@ use ieee80211::*;
 #[derive(Default)]
 struct TestItem<'a> {
   bytes: &'a [u8],
+
+  version: Option<FrameVersion>,
+
+  type_: Option<FrameType>,
   subtype: Option<FrameSubtype>,
-  ds_status: DSStatus,
+  ds_status: Option<DSStatus>,
 
   more_fragments: bool,
   retry: bool,
@@ -13,7 +17,7 @@ struct TestItem<'a> {
   protected: bool,
   order: bool,
 
-  duration_id: DurationID,
+  duration_id: Option<DurationID>,
 
   receiver_address: MacAddress,
   transmitter_address: Option<MacAddress>,
@@ -51,11 +55,19 @@ fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Op
 fn test_test_item(test_item: TestItem) {
   let frame = Frame::new(&test_item.bytes);
 
-  assert_eq!(frame.version(), FrameVersion::Standard);
+  if let Some(version) = test_item.version {
+    assert_eq!(frame.version(), version, "version");
+  }
+
+  if let Some(type_) = test_item.type_ {
+    assert_eq!(frame.type_(), type_, "type_");
+  }
 
   assert_eq!(frame.subtype(), test_item.subtype.unwrap(), "subtype");
 
-  assert_eq!(frame.ds_status(), test_item.ds_status, "ds_status");
+  if let Some(ds_status) = test_item.ds_status {
+    assert_eq!(frame.ds_status(), ds_status, "ds_status");
+  }
 
   assert_eq!(
     frame.more_fragments(),
@@ -68,7 +80,9 @@ fn test_test_item(test_item: TestItem) {
   assert_eq!(frame.protected(), test_item.protected, "protected");
   assert_eq!(frame.order(), test_item.order, "order");
 
-  assert_eq!(frame.duration_or_id(), test_item.duration_id, "duration_id");
+  if let Some(duration_id) = test_item.duration_id {
+    assert_eq!(frame.duration_or_id(), duration_id, "duration_id");
+  }
 
   assert_eq!(
     frame.receiver_address(),
@@ -84,128 +98,133 @@ fn test_test_item(test_item: TestItem) {
   let fragment_number;
   let sequence_number;
 
-  match &frame.next_layer().expect("first layer") {
-    FrameLayer::Management(layer) => {
-      transmitter_address = layer.transmitter_address();
-      destination_address = layer.destination_address();
-      source_address = layer.source_address();
-      bssid_address = layer.bssid_address();
-      station_address = layer.station_address();
+  if let Some(next_layer) = frame.next_layer() {
+    match next_layer {
+      FrameLayer::Management(layer) => {
+        transmitter_address = layer.transmitter_address();
+        destination_address = layer.destination_address();
+        source_address = layer.source_address();
+        bssid_address = layer.bssid_address();
+        station_address = layer.station_address();
 
-      fragment_number = Some(layer.fragment_number());
-      sequence_number = Some(layer.sequence_number());
+        fragment_number = Some(layer.fragment_number());
+        sequence_number = Some(layer.sequence_number());
 
-      let ssid = {
-        if let Some(layer) = layer.next_layer() {
-          match layer {
-            ManagementFrameLayer::Beacon(beacon_frame) => beacon_frame.ssid(),
-            ManagementFrameLayer::ProbeRequest(probe_request_frame) => probe_request_frame.ssid(),
-            ManagementFrameLayer::ProbeResponse(probe_response_frame) => {
-              probe_response_frame.ssid()
+        let ssid = {
+          if let Some(layer) = layer.next_layer() {
+            match layer {
+              ManagementFrameLayer::Beacon(beacon_frame) => beacon_frame.ssid(),
+              ManagementFrameLayer::ProbeRequest(probe_request_frame) => probe_request_frame.ssid(),
+              ManagementFrameLayer::ProbeResponse(probe_response_frame) => {
+                probe_response_frame.ssid()
+              }
             }
+          } else {
+            None
           }
-        } else {
-          None
-        }
-      };
+        };
 
-      check(ssid, test_item.ssid, "ssid");
+        check(ssid, test_item.ssid, "ssid");
 
-      if let Some(layer) = layer.next_layer() {
-        if let ManagementFrameLayer::Beacon(beacon_frame) = layer {
-          assert_eq!(
-            beacon_frame.timestamp(),
-            test_item.timestamp.unwrap(),
-            "timestamp",
-          );
+        if let Some(layer) = layer.next_layer() {
+          if let ManagementFrameLayer::Beacon(beacon_frame) = layer {
+            assert_eq!(
+              beacon_frame.timestamp(),
+              test_item.timestamp.unwrap(),
+              "timestamp",
+            );
 
-          assert_eq!(
-            ((beacon_frame.beacon_interval() * 1_000_000f64).round()) as i64,
-            (test_item.beacon_interval.unwrap() * 1_000_000f64) as i64,
-            "beacon_interval",
-          );
+            assert_eq!(
+              ((beacon_frame.beacon_interval() * 1_000_000f64).round()) as i64,
+              (test_item.beacon_interval.unwrap() * 1_000_000f64) as i64,
+              "beacon_interval",
+            );
 
-          assert_eq!(
-            beacon_frame.capabilities_info(),
-            test_item.capabilities_info.unwrap(),
-            "capabilities_info",
-          );
+            assert_eq!(
+              beacon_frame.capabilities_info(),
+              test_item.capabilities_info.unwrap(),
+              "capabilities_info",
+            );
 
-          check(
-            beacon_frame.tagged_parameters().supported_rates(),
-            test_item.supported_rates,
-            "supported_rates",
-          );
+            check(
+              beacon_frame.tagged_parameters().supported_rates(),
+              test_item.supported_rates,
+              "supported_rates",
+            );
 
-          check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
+            check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
 
-          check(
-            beacon_frame.tagged_parameters().channel(),
-            test_item.channel,
-            "channel",
-          );
+            check(
+              beacon_frame.tagged_parameters().channel(),
+              test_item.channel,
+              "channel",
+            );
+          }
         }
       }
+      FrameLayer::Control(layer) => {
+        transmitter_address = layer.transmitter_address();
+        destination_address = layer.destination_address();
+        source_address = layer.source_address();
+        bssid_address = layer.bssid_address();
+        station_address = layer.station_address();
+        fragment_number = None;
+        sequence_number = None;
+      }
+      FrameLayer::Data(layer) => {
+        transmitter_address = layer.transmitter_address();
+        destination_address = layer.destination_address();
+        source_address = layer.source_address();
+        bssid_address = layer.bssid_address();
+        station_address = layer.station_address();
+        fragment_number = Some(layer.fragment_number());
+        sequence_number = Some(layer.sequence_number());
+      }
     }
-    FrameLayer::Control(layer) => {
-      transmitter_address = layer.transmitter_address();
-      destination_address = layer.destination_address();
-      source_address = layer.source_address();
-      bssid_address = layer.bssid_address();
-      station_address = layer.station_address();
-      fragment_number = None;
-      sequence_number = None;
-    }
-    FrameLayer::Data(layer) => {
-      transmitter_address = layer.transmitter_address();
-      destination_address = layer.destination_address();
-      source_address = layer.source_address();
-      bssid_address = layer.bssid_address();
-      station_address = layer.station_address();
-      fragment_number = Some(layer.fragment_number());
-      sequence_number = Some(layer.sequence_number());
-    }
+
+    check(
+      transmitter_address,
+      test_item.transmitter_address,
+      "transmitter_address",
+    );
+
+    check(
+      destination_address,
+      test_item.destination_address,
+      "destination_address",
+    );
+
+    check(source_address, test_item.source_address, "source_address");
+
+    check(bssid_address, test_item.bssid_address, "bssid_address");
+
+    check(
+      station_address,
+      test_item.station_address,
+      "station_address",
+    );
+
+    check(
+      fragment_number,
+      test_item.fragment_number,
+      "fragment_number",
+    );
+
+    check(
+      sequence_number,
+      test_item.sequence_number,
+      "sequence_number",
+    );
+  } else {
+    //
   }
-
-  check(
-    transmitter_address,
-    test_item.transmitter_address,
-    "transmitter_address",
-  );
-
-  check(
-    destination_address,
-    test_item.destination_address,
-    "destination_address",
-  );
-
-  check(source_address, test_item.source_address, "source_address");
-
-  check(bssid_address, test_item.bssid_address, "bssid_address");
-
-  check(
-    station_address,
-    test_item.station_address,
-    "station_address",
-  );
-
-  check(
-    fragment_number,
-    test_item.fragment_number,
-    "fragment_number",
-  );
-
-  check(
-    sequence_number,
-    test_item.sequence_number,
-    "sequence_number",
-  );
 }
 
 // Management
 include!("./packets/beacon.rs");
 include!("./packets/authentication.rs");
 include!("./packets/deauthentication.rs");
+include!("./packets/disassociate.rs");
 include!("./packets/association_request.rs");
 include!("./packets/association_response.rs");
 include!("./packets/probe_request.rs");
@@ -222,5 +241,8 @@ include!("./packets/cf_end.rs");
 include!("./packets/block_ack_request.rs");
 
 // Data
-include!("./packets/null_data.rs");
 include!("./packets/data.rs");
+include!("./packets/qos_data.rs");
+include!("./packets/null_data.rs");
+
+include!("./packets/very_bad.rs");
