@@ -205,6 +205,7 @@ fn test_test_item(test_item: TestItem) {
 // Management
 include!("./packets/beacon.rs");
 include!("./packets/authentication.rs");
+include!("./packets/deauthentication.rs");
 include!("./packets/association_request.rs");
 include!("./packets/association_response.rs");
 include!("./packets/probe_request.rs");
