@@ -23,6 +23,32 @@ impl<'a> DataFrame<'a> {
     // after frag/seq numbers
     MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
   }
+
+  pub fn next_layer(&self) -> Option<&'a [u8]> {
+    let mut index = Self::FRAGMENT_SEQUENCE_START + 2;
+
+    if self.protected() {
+      index += 8; // skip TKIP/CCMP parameters
+    }
+
+    match self.subtype() {
+      FrameSubtype::Data(ref subtype) => match subtype {
+        DataSubtype::QoSData => {
+          index += 2; // skip Qos Control
+        }
+        DataSubtype::Data => {}
+        _ => return None,
+      },
+      _ => unreachable!(),
+    }
+
+    Some(&self.bytes()[index..])
+  }
+
+  pub fn qos_control(&self) -> u8 {
+    // &self.bytes()[(Self::FRAGMENT_SEQUENCE_START + 2)..];
+    unimplemented!()
+  }
 }
 
 impl<'a> FrameTrait<'a> for DataFrame<'a> {

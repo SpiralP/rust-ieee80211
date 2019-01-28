@@ -242,6 +242,7 @@ include!("./packets/block_ack_request.rs");
 
 // Data
 include!("./packets/data.rs");
+include!("./packets/data_layer.rs");
 include!("./packets/qos_data.rs");
 include!("./packets/null_data.rs");
 

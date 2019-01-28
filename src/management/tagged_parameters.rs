@@ -43,6 +43,7 @@ impl TaggedParameters {
     self.get_bytes(TagName::SSID)
   }
 
+  /// in Mbit/sec
   pub fn supported_rates(&self) -> Option<Vec<f64>> {
     self
       .tags
@@ -50,27 +51,10 @@ impl TaggedParameters {
       .map(|supported_rates| {
         let mut rates = Vec::new();
         for rate in supported_rates {
-          let n = match rate {
-            0x82 => 1.0,
-            0x84 => 2.0,
-            0x8b => 5.5,
-            0x8c => 6.0, // B
-            0x12 => 9.0,
-            0x96 => 11.0,
-            0x98 => 12.0, // B
-            0x24 => 18.0,
-            0xa4 => 18.0, // B
-            0x30 => 24.0,
-            0xb0 => 24.0, // B
-            0x48 => 36.0,
-            0x60 => 48.0,
-            0x6c => 54.0,
-            _ => 0.0,
-          };
+          // let is_basic = (rate & 0b1000_0000) != 0;
+          let kbps = rate & 0b0111_1111;
 
-          if n != 0.0 {
-            rates.push(n);
-          }
+          rates.push((f64::from(kbps) * 500.0) / 1000.0);
         }
 
         rates
@@ -376,29 +360,3 @@ pub trait TaggedParametersTrait<'a>: FrameTrait<'a> {
     self.tagged_parameters().ssid()
   }
 }
-
-// ch freq
-// 36	5180
-// 40	5200
-// 44	5220
-// 48	5240
-// 52	5260
-// 56	5280
-// 60	5300
-// 64	5320
-// 100	5500
-// 104	5520
-// 108	5540
-// 112	5560
-// 116	5580
-// 120	5600
-// 124	5620
-// 128	5640
-// 132	5660
-// 136	5680
-// 140	5700
-// 149	5745
-// 153	5765
-// 157	5785
-// 161	5805
-// 165	5825
