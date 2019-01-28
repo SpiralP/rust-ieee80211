@@ -1,13 +1,13 @@
-pub mod control;
-pub mod data;
+mod control;
+mod data;
 mod fragment_sequence;
-pub mod management;
+mod management;
 mod types;
 
-use self::control::*;
-use self::data::*;
+pub use self::control::*;
+pub use self::data::*;
 pub use self::fragment_sequence::*;
-use self::management::*;
+pub use self::management::*;
 pub use self::types::*;
 use byteorder::{ByteOrder, LittleEndian};
 pub use eui48::MacAddress;
