@@ -41,13 +41,6 @@ impl<'a> ManagementFrame<'a> {
     Self { bytes }
   }
 
-  pub fn addr2(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
-  }
-  pub fn addr3(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
-  }
-
   pub fn next_layer(&self) -> Option<ManagementFrameLayer<'a>> {
     match self.subtype() {
       FrameSubtype::Management(subtype) => match subtype {
@@ -90,12 +83,26 @@ impl<'a> FrameTrait<'a> for ManagementFrame<'a> {
   fn transmitter_address(&self) -> Option<MacAddress> {
     Some(self.addr2())
   }
-
-  fn bssid_address(&self) -> Option<MacAddress> {
-    Some(self.addr3())
-  }
 }
 impl<'a> FragmentSequenceTrait<'a> for ManagementFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for ManagementFrame<'a> {}
 
-pub trait ManagementFrameTrait<'a>: FragmentSequenceTrait<'a> {}
+pub trait ManagementFrameTrait<'a>: FragmentSequenceTrait<'a> {
+  fn addr2(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
+  }
+  fn addr3(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
+  }
+
+  /// Basic Service Set Address (BSSID)
+  /// Basic Service Set ID for Multicast.
+  fn bssid_address(&self) -> Option<MacAddress> {
+    Some(self.addr3())
+  }
+
+  /// Station Address
+  fn station_address(&self) -> Option<MacAddress> {
+    None
+  }
+}

@@ -12,18 +12,6 @@ impl<'a> DataFrame<'a> {
     Self { bytes }
   }
 
-  pub fn addr2(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
-  }
-  pub fn addr3(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
-  }
-  pub fn addr4(&self) -> MacAddress {
-    // only on Data Mesh types
-    // after frag/seq numbers
-    MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
-  }
-
   pub fn next_layer(&self) -> Option<&'a [u8]> {
     let mut index = Self::FRAGMENT_SEQUENCE_START + 2;
 
@@ -43,11 +31,6 @@ impl<'a> DataFrame<'a> {
     }
 
     Some(&self.bytes()[index..])
-  }
-
-  pub fn qos_control(&self) -> u8 {
-    // &self.bytes()[(Self::FRAGMENT_SEQUENCE_START + 2)..];
-    unimplemented!()
   }
 }
 
@@ -85,6 +68,22 @@ impl<'a> FrameTrait<'a> for DataFrame<'a> {
       _ => self.transmitter_address(),
     }
   }
+}
+impl<'a> FragmentSequenceTrait<'a> for DataFrame<'a> {}
+impl<'a> DataFrameTrait<'a> for DataFrame<'a> {}
+
+pub trait DataFrameTrait<'a>: FrameTrait<'a> {
+  fn addr2(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
+  }
+  fn addr3(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
+  }
+  fn addr4(&self) -> MacAddress {
+    // only on Data Mesh types
+    // after frag/seq numbers
+    MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
+  }
 
   fn bssid_address(&self) -> Option<MacAddress> {
     match self.ds_status() {
@@ -102,5 +101,9 @@ impl<'a> FrameTrait<'a> for DataFrame<'a> {
       _ => None,
     }
   }
+
+  fn qos_control(&self) -> u8 {
+    // &self.bytes()[(Self::FRAGMENT_SEQUENCE_START + 2)..];
+    unimplemented!()
+  }
 }
-impl<'a> FragmentSequenceTrait<'a> for DataFrame<'a> {}

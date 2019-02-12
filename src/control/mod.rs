@@ -8,18 +8,15 @@ impl<'a> ControlFrame<'a> {
   pub fn new(bytes: &'a [u8]) -> Self {
     Self { bytes }
   }
-
-  pub fn addr1(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
-  }
-  pub fn addr2(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
-  }
 }
 
 impl<'a> FrameTrait<'a> for ControlFrame<'a> {
   fn bytes(&self) -> &'a [u8] {
     self.bytes
+  }
+
+  fn addr1(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
 
   fn transmitter_address(&self) -> Option<MacAddress> {
@@ -42,6 +39,13 @@ impl<'a> FrameTrait<'a> for ControlFrame<'a> {
   fn source_address(&self) -> Option<MacAddress> {
     None
   }
+}
+impl<'a> ControlFrameTrait<'a> for ControlFrame<'a> {}
+
+pub trait ControlFrameTrait<'a>: FrameTrait<'a> {
+  fn addr2(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
+  }
 
   fn bssid_address(&self) -> Option<MacAddress> {
     match self.subtype() {
@@ -52,5 +56,9 @@ impl<'a> FrameTrait<'a> for ControlFrame<'a> {
       },
       _ => unreachable!(),
     }
+  }
+
+  fn station_address(&self) -> Option<MacAddress> {
+    None
   }
 }

@@ -38,10 +38,6 @@ impl FrameBuilderTrait for ManagementFrameBuilder {
     &mut self.bytes
   }
 
-  fn addr1(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[4..10].copy_from_slice(mac_address.as_bytes());
-  }
-
   fn transmitter_address(&mut self, mac_address: MacAddress) {
     self.addr2(mac_address)
   }

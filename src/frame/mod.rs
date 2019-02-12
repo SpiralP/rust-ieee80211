@@ -152,15 +152,4 @@ pub trait FrameTrait<'a> {
   fn source_address(&self) -> Option<MacAddress> {
     self.transmitter_address()
   }
-
-  /// Basic Service Set Address (BSSID)
-  /// Basic Service Set ID for Multicast.
-  fn bssid_address(&self) -> Option<MacAddress> {
-    None
-  }
-
-  /// Station Address
-  fn station_address(&self) -> Option<MacAddress> {
-    None
-  }
 }
