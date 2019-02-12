@@ -1,16 +1,19 @@
 use super::*;
 
-// TODO dynamic size
-const MANAGEMENT_FRAME_SIZE: usize = ManagementFrameBuilder::FRAGMENT_SEQUENCE_START + 2;
+const MANAGEMENT_FRAME_SIZE: usize = ManagementFrame::FRAGMENT_SEQUENCE_END;
 
 pub struct ManagementFrameBuilder {
-  bytes: Vec<u8>,
+  bytes: [u8; MANAGEMENT_FRAME_SIZE],
 }
 impl ManagementFrameBuilder {
   pub fn new_blank() -> Self {
-    Self {
-      bytes: vec![0; MANAGEMENT_FRAME_SIZE],
-    }
+    let mut frame = Self {
+      bytes: [0; MANAGEMENT_FRAME_SIZE],
+    };
+
+    frame.type_(FrameType::Management);
+
+    frame
   }
 
   pub fn new_defaults() -> Self {
@@ -29,22 +32,30 @@ impl FrameBuilderTrait for ManagementFrameBuilder {
   fn bytes_mut(&mut self) -> &mut [u8] {
     &mut self.bytes
   }
-
-  fn transmitter_address(&mut self, mac_address: MacAddress) {
-    self.addr2(mac_address)
-  }
 }
 
 impl FragmentSequenceBuilderTrait for ManagementFrameBuilder {}
 impl ManagementFrameBuilderTrait for ManagementFrameBuilder {}
 
-pub trait ManagementFrameBuilderTrait: FrameBuilderTrait {
+pub trait ManagementFrameBuilderTrait: FrameBuilderTrait + FragmentSequenceBuilderTrait {
   fn addr2(&mut self, mac_address: MacAddress) {
     self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
   }
 
   fn addr3(&mut self, mac_address: MacAddress) {
     self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
+  }
+
+  /// Transmitter Address
+  /// Who this packet came from wirelessly.
+  fn transmitter_address(&mut self, mac_address: MacAddress) {
+    self.addr2(mac_address)
+  }
+
+  /// Source Address
+  /// Who the packet came from.
+  fn source_address(&mut self, mac_address: MacAddress) {
+    self.transmitter_address(mac_address)
   }
 
   fn bssid_address(&mut self, mac_address: MacAddress) {
@@ -61,7 +72,6 @@ fn test_management_frame_builder() {
   let mut management_frame_builder = ManagementFrameBuilder::new_blank();
 
   management_frame_builder.version(FrameVersion::Standard);
-  management_frame_builder.type_(FrameType::Management);
   management_frame_builder.subtype(FrameSubtype::Management(ManagementSubtype::Beacon));
   management_frame_builder.ds_status(DSStatus::FromDSToSTA);
 
@@ -86,7 +96,6 @@ fn test_management_frame_builder() {
     FrameVersion::Standard,
     "version"
   );
-  assert_eq!(management_frame.type_(), FrameType::Management, "type_");
   assert_eq!(
     management_frame.subtype(),
     FrameSubtype::Management(ManagementSubtype::Beacon),

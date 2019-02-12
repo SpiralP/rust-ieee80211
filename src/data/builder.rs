@@ -60,10 +60,6 @@ impl FrameBuilderTrait for DataFrameBuilder {
     self.bytes_mut()[4..10].copy_from_slice(mac_address.as_bytes());
   }
 
-  fn transmitter_address(&mut self, mac_address: MacAddress) {
-    self.addr2(mac_address)
-  }
-
   fn destination_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       // TODO
@@ -73,6 +69,13 @@ impl FrameBuilderTrait for DataFrameBuilder {
       // fall back to receiver
       _ => self.receiver_address(mac_address),
     };
+  }
+}
+
+impl FragmentSequenceBuilderTrait for DataFrameBuilder {}
+impl DataFrameBuilderTrait for DataFrameBuilder {
+  fn transmitter_address(&mut self, mac_address: MacAddress) {
+    self.addr2(mac_address)
   }
 
   fn source_address(&mut self, mac_address: MacAddress) {
@@ -84,10 +87,7 @@ impl FrameBuilderTrait for DataFrameBuilder {
       _ => self.transmitter_address(mac_address),
     };
   }
-}
 
-impl FragmentSequenceBuilderTrait for DataFrameBuilder {}
-impl DataFrameBuilderTrait for DataFrameBuilder {
   fn bssid_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       DSStatus::FromDSToSTA => self.addr2(mac_address),
@@ -120,6 +120,9 @@ pub trait DataFrameBuilderTrait: FrameBuilderTrait {
     // after frag/seq numbers
     self.bytes_mut()[24..30].copy_from_slice(mac_address.as_bytes());
   }
+
+  fn transmitter_address(&mut self, mac_address: MacAddress);
+  fn source_address(&mut self, mac_address: MacAddress);
 
   fn bssid_address(&mut self, mac_address: MacAddress);
 

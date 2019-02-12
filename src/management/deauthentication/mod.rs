@@ -1,5 +1,7 @@
+mod builder;
 mod fixed_parameters;
 
+pub use self::builder::*;
 pub use self::fixed_parameters::*;
 use super::*;
 

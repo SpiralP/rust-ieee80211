@@ -79,20 +79,28 @@ impl<'a> FrameTrait<'a> for ManagementFrame<'a> {
   fn bytes(&self) -> &'a [u8] {
     self.bytes
   }
-
-  fn transmitter_address(&self) -> Option<MacAddress> {
-    Some(self.addr2())
-  }
 }
 impl<'a> FragmentSequenceTrait<'a> for ManagementFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for ManagementFrame<'a> {}
 
-pub trait ManagementFrameTrait<'a>: FragmentSequenceTrait<'a> {
+pub trait ManagementFrameTrait<'a>: FrameTrait<'a> + FragmentSequenceTrait<'a> {
   fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
   fn addr3(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
+  }
+
+  /// Transmitter Address
+  /// Who this packet came from wirelessly.
+  fn transmitter_address(&self) -> Option<MacAddress> {
+    Some(self.addr2())
+  }
+
+  /// Source Address
+  /// Who the packet came from.
+  fn source_address(&self) -> Option<MacAddress> {
+    self.transmitter_address()
   }
 
   /// Basic Service Set Address (BSSID)

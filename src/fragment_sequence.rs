@@ -3,6 +3,7 @@ use byteorder::{ByteOrder, LittleEndian};
 
 pub trait FragmentSequenceTrait<'a>: FrameTrait<'a> {
   const FRAGMENT_SEQUENCE_START: usize = 22;
+  const FRAGMENT_SEQUENCE_END: usize = Self::FRAGMENT_SEQUENCE_START + 2;
 
   /// Fragment Number
   fn fragment_number(&self) -> u8 {

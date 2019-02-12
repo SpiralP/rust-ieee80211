@@ -19,6 +19,17 @@ impl<'a> FrameTrait<'a> for ControlFrame<'a> {
     MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
 
+  fn destination_address(&self) -> Option<MacAddress> {
+    None
+  }
+}
+impl<'a> ControlFrameTrait<'a> for ControlFrame<'a> {}
+
+pub trait ControlFrameTrait<'a>: FrameTrait<'a> {
+  fn addr2(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
+  }
+
   fn transmitter_address(&self) -> Option<MacAddress> {
     match self.subtype() {
       FrameSubtype::Control(subtype) => match subtype {
@@ -32,19 +43,8 @@ impl<'a> FrameTrait<'a> for ControlFrame<'a> {
     }
   }
 
-  fn destination_address(&self) -> Option<MacAddress> {
-    None
-  }
-
   fn source_address(&self) -> Option<MacAddress> {
     None
-  }
-}
-impl<'a> ControlFrameTrait<'a> for ControlFrame<'a> {}
-
-pub trait ControlFrameTrait<'a>: FrameTrait<'a> {
-  fn addr2(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
 
   fn bssid_address(&self) -> Option<MacAddress> {

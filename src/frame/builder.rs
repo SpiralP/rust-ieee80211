@@ -115,22 +115,10 @@ pub trait FrameBuilderTrait {
     self.addr1(mac_address)
   }
 
-  /// Transmitter Address
-  /// Who this packet came from wirelessly.
-  fn transmitter_address(&mut self, _mac_address: MacAddress) {
-    // noop
-  }
-
   /// Destination Address
   /// Who the packet is destined for.
   fn destination_address(&mut self, mac_address: MacAddress) {
     self.receiver_address(mac_address)
-  }
-
-  /// Source Address
-  /// Who the packet came from.
-  fn source_address(&mut self, mac_address: MacAddress) {
-    self.transmitter_address(mac_address)
   }
 }
 

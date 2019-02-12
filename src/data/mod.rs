@@ -43,10 +43,6 @@ impl<'a> FrameTrait<'a> for DataFrame<'a> {
     MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
 
-  fn transmitter_address(&self) -> Option<MacAddress> {
-    Some(self.addr2())
-  }
-
   fn destination_address(&self) -> Option<MacAddress> {
     match self.ds_status() {
       DSStatus::FromDSToSTA => Some(self.addr1()),
@@ -54,18 +50,6 @@ impl<'a> FrameTrait<'a> for DataFrame<'a> {
       DSStatus::WDSOrMesh => Some(self.addr3()),
       // fall back to receiver
       _ => Some(self.receiver_address()),
-    }
-  }
-
-  /// Source Address
-  /// Who the packet came from.
-  fn source_address(&self) -> Option<MacAddress> {
-    match self.ds_status() {
-      DSStatus::FromDSToSTA => Some(self.addr3()),
-      DSStatus::FromSTAToDS => Some(self.addr2()),
-      DSStatus::WDSOrMesh => Some(self.addr4()),
-      // fall back to transmitter
-      _ => self.transmitter_address(),
     }
   }
 }
@@ -83,6 +67,22 @@ pub trait DataFrameTrait<'a>: FrameTrait<'a> {
     // only on Data Mesh types
     // after frag/seq numbers
     MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
+  }
+
+  fn transmitter_address(&self) -> Option<MacAddress> {
+    Some(self.addr2())
+  }
+
+  /// Source Address
+  /// Who the packet came from.
+  fn source_address(&self) -> Option<MacAddress> {
+    match self.ds_status() {
+      DSStatus::FromDSToSTA => Some(self.addr3()),
+      DSStatus::FromSTAToDS => Some(self.addr2()),
+      DSStatus::WDSOrMesh => Some(self.addr4()),
+      // fall back to transmitter
+      _ => self.transmitter_address(),
+    }
   }
 
   fn bssid_address(&self) -> Option<MacAddress> {

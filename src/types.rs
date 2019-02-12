@@ -73,9 +73,12 @@ impl FrameVersion {
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 pub enum FrameType {
-  Management, // 0
-  Control,    // 1
-  Data,       // 2
+  /// 0
+  Management,
+  /// 1
+  Control,
+  /// 2
+  Data,
   Reserved(u8),
 }
 

@@ -135,21 +135,9 @@ pub trait FrameTrait<'a> {
     self.addr1()
   }
 
-  /// Transmitter Address
-  /// Who this packet came from wirelessly.
-  fn transmitter_address(&self) -> Option<MacAddress> {
-    None
-  }
-
   /// Destination Address
   /// Who the packet is destined for.
   fn destination_address(&self) -> Option<MacAddress> {
     Some(self.receiver_address())
-  }
-
-  /// Source Address
-  /// Who the packet came from.
-  fn source_address(&self) -> Option<MacAddress> {
-    self.transmitter_address()
   }
 }
