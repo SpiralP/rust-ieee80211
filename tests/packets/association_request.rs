@@ -35,6 +35,47 @@ fn test_association_request_packet() {
     fragment_number: Some(0),
     sequence_number: Some(14),
 
+    capabilities_info: Some(CapabilitiesInfo {
+      ess_capabilities: true, //
+      ibss_status: false,
+      cfp_partitipation_capabilities: 0,
+      privacy: true, //
+      short_preamble: false,
+      pbcc: false,
+      channel_agility: false,
+      spectrum_management: false,
+      short_slot_time: true, //
+      automatic_power_save_delivery: false,
+      radio_measurement: false,
+      dsss_ofdm: false,
+      delayed_block_ack: false,
+      immediate_block_ack: false,
+    }),
+
+    supported_rates: Some(vec![1.0, 2.0, 5.5, 11.0, 18.0, 24.0, 36.0, 54.0]),
+
     ..Default::default()
   });
+
+  let frame = Frame::new(&ASSOCIATION_REQUEST_PACKET);
+  match match frame.next_layer().unwrap() {
+    FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
+    _ => unreachable!("not management"),
+  } {
+    ManagementFrameLayer::AssociationRequest(ref association_request_frame) => {
+      assert_eq!(
+        association_request_frame.listen_interval(),
+        0x000a,
+        "listen_interval"
+      );
+
+      assert_eq!(
+        association_request_frame.ssid().unwrap(),
+        b"martinet3",
+        "ssid"
+      );
+    }
+
+    _ => unreachable!("not association request"),
+  }
 }

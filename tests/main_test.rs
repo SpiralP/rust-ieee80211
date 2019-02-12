@@ -127,39 +127,75 @@ fn test_test_item(test_item: TestItem) {
 
         check(ssid, test_item.ssid, "ssid");
 
-        if let Some(layer) = layer.next_layer() {
-          if let ManagementFrameLayer::Beacon(beacon_frame) = layer {
-            assert_eq!(
-              beacon_frame.timestamp(),
-              test_item.timestamp.unwrap(),
-              "timestamp",
-            );
+        if let Some(ref layer) = layer.next_layer() {
+          match layer {
+            ManagementFrameLayer::Beacon(ref beacon_frame) => {
+              assert_eq!(
+                beacon_frame.timestamp(),
+                test_item.timestamp.unwrap(),
+                "timestamp",
+              );
 
-            assert_eq!(
-              ((beacon_frame.beacon_interval() * 1_000_000f64).round()) as i64,
-              (test_item.beacon_interval.unwrap() * 1_000_000f64) as i64,
-              "beacon_interval",
-            );
+              assert_eq!(
+                ((beacon_frame.beacon_interval() * 1_000_000f64).round()) as i64,
+                (test_item.beacon_interval.unwrap() * 1_000_000f64) as i64,
+                "beacon_interval",
+              );
 
-            assert_eq!(
-              beacon_frame.capabilities_info(),
-              test_item.capabilities_info.unwrap(),
-              "capabilities_info",
-            );
+              assert_eq!(
+                beacon_frame.capabilities_info(),
+                test_item.capabilities_info.unwrap(),
+                "capabilities_info",
+              );
 
-            check(
-              beacon_frame.tagged_parameters().supported_rates(),
-              test_item.supported_rates,
-              "supported_rates",
-            );
+              check(
+                beacon_frame.tagged_parameters().supported_rates(),
+                test_item.supported_rates,
+                "supported_rates",
+              );
 
-            check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
+              check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
 
-            check(
-              beacon_frame.tagged_parameters().channel(),
-              test_item.channel,
-              "channel",
-            );
+              check(
+                beacon_frame.tagged_parameters().channel(),
+                test_item.channel,
+                "channel",
+              );
+            }
+
+            ManagementFrameLayer::AssociationRequest(ref association_request_frame) => {
+              assert_eq!(
+                association_request_frame.capabilities_info(),
+                test_item.capabilities_info.unwrap(),
+                "capabilities_info",
+              );
+
+              check(
+                association_request_frame
+                  .tagged_parameters()
+                  .supported_rates(),
+                test_item.supported_rates,
+                "supported_rates",
+              );
+            }
+
+            ManagementFrameLayer::AssociationResponse(ref association_response_frame) => {
+              assert_eq!(
+                association_response_frame.capabilities_info(),
+                test_item.capabilities_info.unwrap(),
+                "capabilities_info",
+              );
+
+              check(
+                association_response_frame
+                  .tagged_parameters()
+                  .supported_rates(),
+                test_item.supported_rates,
+                "supported_rates",
+              );
+            }
+
+            _ => {}
           }
         }
       }

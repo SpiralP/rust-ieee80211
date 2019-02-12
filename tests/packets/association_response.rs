@@ -34,6 +34,47 @@ fn test_association_response_packet() {
     fragment_number: Some(0),
     sequence_number: Some(439),
 
+    capabilities_info: Some(CapabilitiesInfo {
+      ess_capabilities: true, //
+      ibss_status: false,
+      cfp_partitipation_capabilities: 0,
+      privacy: true, //
+      short_preamble: false,
+      pbcc: false,
+      channel_agility: false,
+      spectrum_management: false,
+      short_slot_time: true, //
+      automatic_power_save_delivery: false,
+      radio_measurement: false,
+      dsss_ofdm: false,
+      delayed_block_ack: false,
+      immediate_block_ack: false,
+    }),
+
+    supported_rates: Some(vec![1.0, 2.0, 5.5, 11.0, 18.0, 24.0, 36.0, 54.0]),
+
     ..Default::default()
   });
+
+  let frame = Frame::new(&ASSOCIATION_RESPONSE_PACKET);
+  match match frame.next_layer().unwrap() {
+    FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
+    _ => unreachable!("not management"),
+  } {
+    ManagementFrameLayer::AssociationResponse(ref association_response_frame) => {
+      assert_eq!(
+        association_response_frame.status_code(),
+        StatusCode::Successful,
+        "status_code"
+      );
+
+      assert_eq!(
+        association_response_frame.association_id(),
+        0x0004,
+        "association_id"
+      );
+    }
+
+    _ => unreachable!("not association response"),
+  }
 }

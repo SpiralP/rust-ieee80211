@@ -20,28 +20,9 @@ pub trait BeaconFixedParametersTrait<'a>: FrameTrait<'a> {
   }
 
   fn capabilities_info(&self) -> CapabilitiesInfo {
-    let b1 = self.bytes()[Self::FIXED_PARAMETERS_START + 10];
-    let b2 = self.bytes()[Self::FIXED_PARAMETERS_START + 11];
-
-    let n = u16::from(b1 & 0b0000_1100) | u16::from(b2 & 0b0000_0010);
-    let cfp_partitipation_capabilities = (n >> 2) as u8;
-
-    CapabilitiesInfo {
-      ess_capabilities: (b1 & 0b0000_0001) != 0,
-      ibss_status: (b1 & 0b0000_0010) != 0,
-      cfp_partitipation_capabilities,
-      privacy: (b1 & 0b0001_0000) != 0,
-      short_preamble: (b1 & 0b0010_0000) != 0,
-      pbcc: (b1 & 0b0100_0000) != 0,
-      channel_agility: (b1 & 0b1000_0000) != 0,
-      spectrum_management: (b2 & 0b0000_0001) != 0,
-      short_slot_time: (b2 & 0b0000_0100) != 0,
-      automatic_power_save_delivery: (b2 & 0b0000_1000) != 0,
-      radio_measurement: (b2 & 0b0001_0000) != 0,
-      dsss_ofdm: (b2 & 0b0010_0000) != 0,
-      delayed_block_ack: (b2 & 0b0100_0000) != 0,
-      immediate_block_ack: (b2 & 0b1000_0000) != 0,
-    }
+    CapabilitiesInfo::from_bytes(
+      &self.bytes()[(Self::FIXED_PARAMETERS_START + 10)..(Self::FIXED_PARAMETERS_START + 12)],
+    )
   }
 }
 
@@ -113,4 +94,30 @@ pub struct CapabilitiesInfo {
 
   /// 0: Not Implemented
   pub immediate_block_ack: bool,
+}
+impl CapabilitiesInfo {
+  pub fn from_bytes(bytes: &[u8]) -> Self {
+    let b1 = bytes[0];
+    let b2 = bytes[1];
+
+    let n = u16::from(b1 & 0b0000_1100) | u16::from(b2 & 0b0000_0010);
+    let cfp_partitipation_capabilities = (n >> 2) as u8;
+
+    CapabilitiesInfo {
+      ess_capabilities: (b1 & 0b0000_0001) != 0,
+      ibss_status: (b1 & 0b0000_0010) != 0,
+      cfp_partitipation_capabilities,
+      privacy: (b1 & 0b0001_0000) != 0,
+      short_preamble: (b1 & 0b0010_0000) != 0,
+      pbcc: (b1 & 0b0100_0000) != 0,
+      channel_agility: (b1 & 0b1000_0000) != 0,
+      spectrum_management: (b2 & 0b0000_0001) != 0,
+      short_slot_time: (b2 & 0b0000_0100) != 0,
+      automatic_power_save_delivery: (b2 & 0b0000_1000) != 0,
+      radio_measurement: (b2 & 0b0001_0000) != 0,
+      dsss_ofdm: (b2 & 0b0010_0000) != 0,
+      delayed_block_ack: (b2 & 0b0100_0000) != 0,
+      immediate_block_ack: (b2 & 0b1000_0000) != 0,
+    }
+  }
 }
