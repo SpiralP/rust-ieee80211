@@ -46,23 +46,6 @@ impl DataFrameBuilder {
     self.bytes.resize(index + data.len(), 0);
     self.bytes_mut()[index..].copy_from_slice(data);
   }
-
-  fn bssid_address(&mut self, mac_address: MacAddress) {
-    match self.build().ds_status() {
-      DSStatus::FromDSToSTA => self.addr2(mac_address),
-      DSStatus::FromSTAToDS => self.addr1(mac_address),
-      DSStatus::NotLeavingDSOrADHOC => self.addr3(mac_address),
-      _ => {}
-    }
-  }
-
-  fn station_address(&mut self, mac_address: MacAddress) {
-    match self.build().ds_status() {
-      DSStatus::FromDSToSTA => self.addr1(mac_address),
-      DSStatus::FromSTAToDS => self.addr2(mac_address),
-      _ => {}
-    }
-  }
 }
 impl FrameBuilderTrait for DataFrameBuilder {
   fn bytes(&self) -> &[u8] {
@@ -104,7 +87,24 @@ impl FrameBuilderTrait for DataFrameBuilder {
 }
 
 impl FragmentSequenceBuilderTrait for DataFrameBuilder {}
-impl DataFrameBuilderTrait for DataFrameBuilder {}
+impl DataFrameBuilderTrait for DataFrameBuilder {
+  fn bssid_address(&mut self, mac_address: MacAddress) {
+    match self.build().ds_status() {
+      DSStatus::FromDSToSTA => self.addr2(mac_address),
+      DSStatus::FromSTAToDS => self.addr1(mac_address),
+      DSStatus::NotLeavingDSOrADHOC => self.addr3(mac_address),
+      _ => {}
+    }
+  }
+
+  fn station_address(&mut self, mac_address: MacAddress) {
+    match self.build().ds_status() {
+      DSStatus::FromDSToSTA => self.addr1(mac_address),
+      DSStatus::FromSTAToDS => self.addr2(mac_address),
+      _ => {}
+    }
+  }
+}
 
 pub trait DataFrameBuilderTrait: FrameBuilderTrait {
   fn addr2(&mut self, mac_address: MacAddress) {
@@ -120,6 +120,10 @@ pub trait DataFrameBuilderTrait: FrameBuilderTrait {
     // after frag/seq numbers
     self.bytes_mut()[24..30].copy_from_slice(mac_address.as_bytes());
   }
+
+  fn bssid_address(&mut self, mac_address: MacAddress);
+
+  fn station_address(&mut self, mac_address: MacAddress);
 }
 
 #[test]

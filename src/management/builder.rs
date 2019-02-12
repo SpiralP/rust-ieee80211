@@ -36,7 +36,6 @@ impl FrameBuilderTrait for ManagementFrameBuilder {
 }
 
 impl FragmentSequenceBuilderTrait for ManagementFrameBuilder {}
-
 impl ManagementFrameBuilderTrait for ManagementFrameBuilder {}
 
 pub trait ManagementFrameBuilderTrait: FrameBuilderTrait {
