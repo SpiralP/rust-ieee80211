@@ -9,10 +9,10 @@ impl<'a> ControlFrame<'a> {
     Self { bytes }
   }
 
-  fn addr1(&self) -> MacAddress {
+  pub fn addr1(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
-  fn addr2(&self) -> MacAddress {
+  pub fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
 }

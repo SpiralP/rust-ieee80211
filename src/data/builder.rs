@@ -47,29 +47,38 @@ impl DataFrameBuilder {
     self.bytes_mut()[index..].copy_from_slice(data);
   }
 
-  fn addr1(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[4..10].copy_from_slice(mac_address.as_bytes());
-  }
-
-  fn addr2(&mut self, mac_address: MacAddress) {
+  pub fn addr2(&mut self, mac_address: MacAddress) {
     self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
   }
 
-  fn addr3(&mut self, mac_address: MacAddress) {
+  pub fn addr3(&mut self, mac_address: MacAddress) {
     self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
   }
 
-  fn addr4(&mut self, mac_address: MacAddress) {
+  pub fn addr4(&mut self, mac_address: MacAddress) {
     // only on Data Mesh types
     // after frag/seq numbers
     self.bytes_mut()[24..30].copy_from_slice(mac_address.as_bytes());
   }
+}
+impl FrameBuilderTrait for DataFrameBuilder {
+  fn bytes(&self) -> &[u8] {
+    &self.bytes
+  }
 
-  pub fn transmitter_address(&mut self, mac_address: MacAddress) {
+  fn bytes_mut(&mut self) -> &mut [u8] {
+    &mut self.bytes
+  }
+
+  fn addr1(&mut self, mac_address: MacAddress) {
+    self.bytes_mut()[4..10].copy_from_slice(mac_address.as_bytes());
+  }
+
+  fn transmitter_address(&mut self, mac_address: MacAddress) {
     self.addr2(mac_address)
   }
 
-  pub fn destination_address(&mut self, mac_address: MacAddress) {
+  fn destination_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       // TODO
       DSStatus::FromDSToSTA => self.addr1(mac_address),
@@ -80,7 +89,7 @@ impl DataFrameBuilder {
     };
   }
 
-  pub fn source_address(&mut self, mac_address: MacAddress) {
+  fn source_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       DSStatus::FromDSToSTA => self.addr3(mac_address),
       DSStatus::FromSTAToDS => self.addr2(mac_address),
@@ -90,7 +99,7 @@ impl DataFrameBuilder {
     };
   }
 
-  pub fn bssid_address(&mut self, mac_address: MacAddress) {
+  fn bssid_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       DSStatus::FromDSToSTA => self.addr2(mac_address),
       DSStatus::FromSTAToDS => self.addr1(mac_address),
@@ -99,21 +108,12 @@ impl DataFrameBuilder {
     }
   }
 
-  pub fn station_address(&mut self, mac_address: MacAddress) {
+  fn station_address(&mut self, mac_address: MacAddress) {
     match self.build().ds_status() {
       DSStatus::FromDSToSTA => self.addr1(mac_address),
       DSStatus::FromSTAToDS => self.addr2(mac_address),
       _ => {}
     }
-  }
-}
-impl FrameBuilderTrait for DataFrameBuilder {
-  fn bytes(&self) -> &[u8] {
-    &self.bytes
-  }
-
-  fn bytes_mut(&mut self) -> &mut [u8] {
-    &mut self.bytes
   }
 }
 
@@ -186,16 +186,4 @@ fn test_data_frame_builder() {
   assert_eq!(data_frame.fragment_number(), 11);
 
   assert_eq!(data_frame.next_layer().unwrap(), b"hello!!");
-
-  use std::io::Write;
-  std::fs::File::create("built_packet.txt")
-    .unwrap()
-    .write_all(
-      format!("0000 {:02X?}", data_frame.bytes())
-        .replace("[", "")
-        .replace("]", "")
-        .replace(",", "")
-        .as_bytes(),
-    )
-    .unwrap();
 }

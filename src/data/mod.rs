@@ -12,16 +12,13 @@ impl<'a> DataFrame<'a> {
     Self { bytes }
   }
 
-  fn addr1(&self) -> MacAddress {
-    MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
-  }
-  fn addr2(&self) -> MacAddress {
+  pub fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
-  fn addr3(&self) -> MacAddress {
+  pub fn addr3(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
   }
-  fn addr4(&self) -> MacAddress {
+  pub fn addr4(&self) -> MacAddress {
     // only on Data Mesh types
     // after frag/seq numbers
     MacAddress::from_bytes(&self.bytes()[24..30]).unwrap()
@@ -57,6 +54,10 @@ impl<'a> DataFrame<'a> {
 impl<'a> FrameTrait<'a> for DataFrame<'a> {
   fn bytes(&self) -> &'a [u8] {
     self.bytes
+  }
+
+  fn addr1(&self) -> MacAddress {
+    MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
   }
 
   fn transmitter_address(&self) -> Option<MacAddress> {

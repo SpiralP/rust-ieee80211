@@ -2,6 +2,7 @@ mod association_request;
 mod association_response;
 mod authentication;
 mod beacon;
+mod builder;
 mod deauthentication;
 mod disassociate;
 mod probe_request;
@@ -12,6 +13,7 @@ pub use self::association_request::*;
 pub use self::association_response::*;
 pub use self::authentication::*;
 pub use self::beacon::*;
+pub use self::builder::*;
 pub use self::deauthentication::*;
 pub use self::disassociate::*;
 pub use self::probe_request::*;
@@ -39,10 +41,10 @@ impl<'a> ManagementFrame<'a> {
     Self { bytes }
   }
 
-  fn addr2(&self) -> MacAddress {
+  pub fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
-  fn addr3(&self) -> MacAddress {
+  pub fn addr3(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[16..22]).unwrap()
   }
 
