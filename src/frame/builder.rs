@@ -132,17 +132,6 @@ pub trait FrameBuilderTrait {
   fn source_address(&mut self, mac_address: MacAddress) {
     self.transmitter_address(mac_address)
   }
-
-  /// Basic Service Set Address (BSSID)
-  /// Basic Service Set ID for Multicast.
-  fn bssid_address(&mut self, _mac_address: MacAddress) {
-    // noop
-  }
-
-  /// Station Address
-  fn station_address(&mut self, _mac_address: MacAddress) {
-    // noop
-  }
 }
 
 #[test]

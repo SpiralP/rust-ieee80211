@@ -20,14 +20,6 @@ impl ManagementFrameBuilder {
   pub fn build(&self) -> ManagementFrame {
     ManagementFrame::new(self.bytes())
   }
-
-  pub fn addr2(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
-  }
-
-  pub fn addr3(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
-  }
 }
 impl FrameBuilderTrait for ManagementFrameBuilder {
   fn bytes(&self) -> &[u8] {
@@ -41,13 +33,29 @@ impl FrameBuilderTrait for ManagementFrameBuilder {
   fn transmitter_address(&mut self, mac_address: MacAddress) {
     self.addr2(mac_address)
   }
+}
+
+impl FragmentSequenceBuilderTrait for ManagementFrameBuilder {}
+
+impl ManagementFrameBuilderTrait for ManagementFrameBuilder {}
+
+pub trait ManagementFrameBuilderTrait: FrameBuilderTrait {
+  fn addr2(&mut self, mac_address: MacAddress) {
+    self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
+  }
+
+  fn addr3(&mut self, mac_address: MacAddress) {
+    self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
+  }
 
   fn bssid_address(&mut self, mac_address: MacAddress) {
     self.addr3(mac_address)
   }
-}
 
-impl FragmentSequenceBuilderTrait for ManagementFrameBuilder {}
+  fn station_address(&mut self, _mac_address: MacAddress) {
+    // noop
+  }
+}
 
 #[test]
 fn test_management_frame_builder() {

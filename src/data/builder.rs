@@ -47,18 +47,21 @@ impl DataFrameBuilder {
     self.bytes_mut()[index..].copy_from_slice(data);
   }
 
-  pub fn addr2(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
+  fn bssid_address(&mut self, mac_address: MacAddress) {
+    match self.build().ds_status() {
+      DSStatus::FromDSToSTA => self.addr2(mac_address),
+      DSStatus::FromSTAToDS => self.addr1(mac_address),
+      DSStatus::NotLeavingDSOrADHOC => self.addr3(mac_address),
+      _ => {}
+    }
   }
 
-  pub fn addr3(&mut self, mac_address: MacAddress) {
-    self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
-  }
-
-  pub fn addr4(&mut self, mac_address: MacAddress) {
-    // only on Data Mesh types
-    // after frag/seq numbers
-    self.bytes_mut()[24..30].copy_from_slice(mac_address.as_bytes());
+  fn station_address(&mut self, mac_address: MacAddress) {
+    match self.build().ds_status() {
+      DSStatus::FromDSToSTA => self.addr1(mac_address),
+      DSStatus::FromSTAToDS => self.addr2(mac_address),
+      _ => {}
+    }
   }
 }
 impl FrameBuilderTrait for DataFrameBuilder {
@@ -98,26 +101,26 @@ impl FrameBuilderTrait for DataFrameBuilder {
       _ => self.transmitter_address(mac_address),
     };
   }
-
-  fn bssid_address(&mut self, mac_address: MacAddress) {
-    match self.build().ds_status() {
-      DSStatus::FromDSToSTA => self.addr2(mac_address),
-      DSStatus::FromSTAToDS => self.addr1(mac_address),
-      DSStatus::NotLeavingDSOrADHOC => self.addr3(mac_address),
-      _ => {}
-    }
-  }
-
-  fn station_address(&mut self, mac_address: MacAddress) {
-    match self.build().ds_status() {
-      DSStatus::FromDSToSTA => self.addr1(mac_address),
-      DSStatus::FromSTAToDS => self.addr2(mac_address),
-      _ => {}
-    }
-  }
 }
 
 impl FragmentSequenceBuilderTrait for DataFrameBuilder {}
+impl DataFrameBuilderTrait for DataFrameBuilder {}
+
+pub trait DataFrameBuilderTrait: FrameBuilderTrait {
+  fn addr2(&mut self, mac_address: MacAddress) {
+    self.bytes_mut()[10..16].copy_from_slice(mac_address.as_bytes());
+  }
+
+  fn addr3(&mut self, mac_address: MacAddress) {
+    self.bytes_mut()[16..22].copy_from_slice(mac_address.as_bytes());
+  }
+
+  fn addr4(&mut self, mac_address: MacAddress) {
+    // only on Data Mesh types
+    // after frag/seq numbers
+    self.bytes_mut()[24..30].copy_from_slice(mac_address.as_bytes());
+  }
+}
 
 #[test]
 fn test_data_frame_builder() {
