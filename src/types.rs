@@ -666,3 +666,200 @@ impl StatusCode {
     }
   }
 }
+
+#[derive(Debug, PartialEq)]
+pub enum ReasonCode {
+  Reserved(u16),
+
+  ///  1 Unspecified reason
+  UnspecifiedReason,
+  ///  2 Previous authentication no longer valid
+  PreviousAuthenticationNoLongerValid,
+  ///  3 Deauthenticated because sending STA is leaving (or has left) IBSS or ESS
+  STALeavingIBSSOrESS,
+  ///  4 Disassociated due to inactivity
+  Inactivity,
+  ///  5 Disassociated because AP is unable to handle all currently associated STAs
+  APIsUnableToHandleAllCurrentlyAssociatedSTAs,
+  ///  6 Class 2 frame received from nonauthenticated STA
+  Class2FrameReceivedFromNonauthenticatedSTA,
+  ///  7 Class 3 frame received from nonassociated STA
+  Class3FrameReceivedFromNonassociatedSTA,
+  ///  8 Disassociated because sending STA is leaving (or has left) BSS
+  STALeavingBSS,
+  ///  9 STA requesting (re)association is not authenticated with responding STA
+  NotAuthenticated,
+  /// 10 Disassociated because the information in the Power Capability element is unacceptable
+  PowerCapabilityElementIsUnacceptable,
+  /// 11 Disassociated because the information in the Supported Channels element is unacceptable
+  SupportedChannelsElementIsUnacceptable,
+  /// 12 Disassociated due to BSS transition management
+  DisassociatedDueToBSSTransitionManagement,
+  /// 13 Invalid information element, i.e., an information element defined in this standard for which the content does not meet the specifications in Clause 7
+  InvalidInformationElement,
+  /// 14 Message integrity code (MIC) failure
+  MessageIntegrityCodeFailure,
+  /// 15 4-Way Handshake timeout
+  FourWayHandshakeTimeout,
+  /// 16 Group Key Handshake timeout
+  GroupKeyHandshakeTimeout,
+  /// 17 Information element in 4-Way Handshake different from (Re)Association Request/Probe Response/Beacon frame
+  InformationDifferent,
+  /// 18 Invalid group cipher
+  InvalidGroupCipher,
+  /// 19 Invalid pairwise cipher
+  InvalidPairwiseCipher,
+  /// 20 Invalid AKMP
+  InvalidAKMP,
+  /// 21 Unsupported RSN information element version
+  UnsupportedRSNInformationElementVersion,
+  /// 22 Invalid RSN information element capabilities
+  InvalidRSNInformationElementCapabilities,
+  /// 23 IEEE 802.1X authentication failed
+  IEEE8021XAuthenticationFailed,
+  /// 24 Cipher suite rejected because of the security policy
+  CipherSuiteRejectedBecauseOfTheSecurityPolicy,
+  /// 25 TDLS direct-link teardown due to TDLS peer STA unreachable via the TDLS direct link
+  TDLSDirectLinkTeardownUnreachable,
+  /// 26 TDLS direct-link teardown for unspecified reason
+  TDLSDirectLinkTeardownUnspecifiedReason,
+  /// 27 Disassociated because session terminated by SSP request
+  DisassociatedBecauseSessionTerminatedBySSPRequest,
+  /// 28 Disassociated because of lack of SSP roaming agreement
+  DisassociatedBecauseOfLackOfSSPRoamingAgreement,
+  /// 29 Requested service rejected because of SSP cipher suite or AKM requirement
+  RequestedServiceRejected,
+  /// 30 Requested service not authorized in this location
+  RequestedServiceNotAuthorizedInThisLocation,
+  /// 31 TS deleted because QoS AP lacks sufficient bandwidth for this QoS STA due to a change in BSS service characteristics or operational mode
+  TSDeleted,
+  /// 32 Disassociated for unspecified, QoS-related reason
+  DisassociatedForUnspecifiedQoSRelatedReason,
+  /// 33 Disassociated because QoS AP lacks sufficient bandwidth for this QoS STA
+  QoSAPLacksSufficientBandwidthForThisQoSSTA,
+  /// 34 Disassociated because excessive number of frames need to be acknowledged, but are not acknowledged due to AP transmissions and/or poor channel conditions
+  ExcessiveNumberOfFramesNotAcknowledged,
+  /// 35 Disassociated because STA is transmitting outside the limits of its TXOPs
+  STAIsTransmittingOutsideTheLimitsOfItsTXOPs,
+  /// 36 Requested from peer STA as the STA is leaving the BSS (or resetting)
+  STALeavingTheBSS,
+  /// 37 Requested from peer STA as it does not want to use the mechanism
+  STADoesNotWantToUseTheMechanism,
+  /// 38 Requested from peer STA as the STA received frames using the mechanism for which a setup is required
+  STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired,
+  /// 39 Requested from peer STA due to timeout
+  RequestedFromPeerSTADueToTimeout,
+  /// 45 Peer STA does not support the requested cipher suite
+  PeerSTADoesNotSupportTheRequestedCipherSuite,
+  /// 46 Disassociated because authorized access limit reached
+  AuthorizedAccessLimitReached,
+  /// 47 Disassociated due to external service requirements
+  DisassociatedDueToExternalServiceRequirements,
+  /// 48 Invalid FT Action frame count
+  InvalidFTActionFrameCount,
+  /// 49 Invalid pairwise master key identifier (PMKI)
+  InvalidPairwiseMasterKeyIdentifier,
+  /// 50 Invalid MDE
+  InvalidMDE,
+  /// 51 Invalid FTE
+  InvalidFTE,
+  /// 52 SME cancels the mesh peering instance with the reason other than reaching the maximum number of peer mesh STAs
+  SMECancel,
+  /// 53 The mesh STA has reached the supported maximum number of peer mesh STAs
+  MeshMaxSupportedMaximumNumberOfPeerMeshSTAs,
+  /// 54 The received information violates the Mesh Configuration policy configured in the mesh STA profile
+  InformationViolatesMeshPolicy,
+  /// 55 The mesh STA has received a Mesh Peering Close message requesting to close the mesh peering
+  MeshSTAReceivedAMeshPeeringCloseMessage,
+  /// 56 The mesh STA has re-sent dot11MeshMaxRetries Mesh Peering Open messages, without receiving a Mesh Peering Confirm message
+  MeshSTAHasResentMaxRetriesWithoutConfirm,
+  /// 57 The confirmTimer for the mesh peering instance times out
+  TheConfirmTimerForTheMeshPeeringInstanceTimesOut,
+  /// 58 The mesh STA fails to unwrap the GTK or the values in the wrapped contents do not match
+  MeshSTAFailsToUnwrapGTK,
+  /// 59 The mesh STA receives inconsistent information about the mesh parameters between Mesh Peering Management frames
+  MeshSTAReceivesInconsistentInformation,
+  /// 60 The mesh STA fails the authenticated mesh peering exchange because due to failure in selecting either the pairwise ciphersuite or group ciphersuite
+  MeshSTAFailsAuthenticatedMeshPeeringExchange,
+  /// 61 The mesh STA does not have proxy information for this external destination
+  MeshSTADoesNotHaveProxyInformation,
+  /// 62 The mesh STA does not have forwarding information for this destination
+  MeshSTADoesNotHaveForwardingInformation,
+  /// 63 The mesh STA determines that the link to the next hop of an active path in its forwarding information is no longer usable
+  MeshSTALinkNoLongerUsable,
+  /// 64 The Deauthentication frame was sent because the MAC address of the STA already exists in the mesh BSS. See 11.3.3 (Additional mechanisms for an AP collocated with a mesh STA)
+  MacAddressAlreadyExists,
+  /// 65 The mesh STA performs channel switch to meet regulatory requirements
+  MeshSTAPerformsChannelSwitchToMeetRegulatoryRequirements,
+  /// 66 The mesh STA performs channel switch with unspecified reason
+  MeshSTAPerformsChannelSwitchWithUnspecifiedReason,
+}
+impl ReasonCode {
+  pub fn from_u16(n: u16) -> Self {
+    match n {
+      1 => ReasonCode::UnspecifiedReason,
+      2 => ReasonCode::PreviousAuthenticationNoLongerValid,
+      3 => ReasonCode::STALeavingIBSSOrESS,
+      4 => ReasonCode::Inactivity,
+      5 => ReasonCode::APIsUnableToHandleAllCurrentlyAssociatedSTAs,
+      6 => ReasonCode::Class2FrameReceivedFromNonauthenticatedSTA,
+      7 => ReasonCode::Class3FrameReceivedFromNonassociatedSTA,
+      8 => ReasonCode::STALeavingBSS,
+      9 => ReasonCode::NotAuthenticated,
+      10 => ReasonCode::PowerCapabilityElementIsUnacceptable,
+      11 => ReasonCode::SupportedChannelsElementIsUnacceptable,
+      12 => ReasonCode::DisassociatedDueToBSSTransitionManagement,
+      13 => ReasonCode::InvalidInformationElement,
+      14 => ReasonCode::MessageIntegrityCodeFailure,
+      15 => ReasonCode::FourWayHandshakeTimeout,
+      16 => ReasonCode::GroupKeyHandshakeTimeout,
+      17 => ReasonCode::InformationDifferent,
+      18 => ReasonCode::InvalidGroupCipher,
+      19 => ReasonCode::InvalidPairwiseCipher,
+      20 => ReasonCode::InvalidAKMP,
+      21 => ReasonCode::UnsupportedRSNInformationElementVersion,
+      22 => ReasonCode::InvalidRSNInformationElementCapabilities,
+      23 => ReasonCode::IEEE8021XAuthenticationFailed,
+      24 => ReasonCode::CipherSuiteRejectedBecauseOfTheSecurityPolicy,
+      25 => ReasonCode::TDLSDirectLinkTeardownUnreachable,
+      26 => ReasonCode::TDLSDirectLinkTeardownUnspecifiedReason,
+      27 => ReasonCode::DisassociatedBecauseSessionTerminatedBySSPRequest,
+      28 => ReasonCode::DisassociatedBecauseOfLackOfSSPRoamingAgreement,
+      29 => ReasonCode::RequestedServiceRejected,
+      30 => ReasonCode::RequestedServiceNotAuthorizedInThisLocation,
+      31 => ReasonCode::TSDeleted,
+      32 => ReasonCode::DisassociatedForUnspecifiedQoSRelatedReason,
+      33 => ReasonCode::QoSAPLacksSufficientBandwidthForThisQoSSTA,
+      34 => ReasonCode::ExcessiveNumberOfFramesNotAcknowledged,
+      35 => ReasonCode::STAIsTransmittingOutsideTheLimitsOfItsTXOPs,
+      36 => ReasonCode::STALeavingTheBSS,
+      37 => ReasonCode::STADoesNotWantToUseTheMechanism,
+      38 => ReasonCode::STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired,
+      39 => ReasonCode::RequestedFromPeerSTADueToTimeout,
+      45 => ReasonCode::PeerSTADoesNotSupportTheRequestedCipherSuite,
+      46 => ReasonCode::AuthorizedAccessLimitReached,
+      47 => ReasonCode::DisassociatedDueToExternalServiceRequirements,
+      48 => ReasonCode::InvalidFTActionFrameCount,
+      49 => ReasonCode::InvalidPairwiseMasterKeyIdentifier,
+      50 => ReasonCode::InvalidMDE,
+      51 => ReasonCode::InvalidFTE,
+      52 => ReasonCode::SMECancel,
+      53 => ReasonCode::MeshMaxSupportedMaximumNumberOfPeerMeshSTAs,
+      54 => ReasonCode::InformationViolatesMeshPolicy,
+      55 => ReasonCode::MeshSTAReceivedAMeshPeeringCloseMessage,
+      56 => ReasonCode::MeshSTAHasResentMaxRetriesWithoutConfirm,
+      57 => ReasonCode::TheConfirmTimerForTheMeshPeeringInstanceTimesOut,
+      58 => ReasonCode::MeshSTAFailsToUnwrapGTK,
+      59 => ReasonCode::MeshSTAReceivesInconsistentInformation,
+      60 => ReasonCode::MeshSTAFailsAuthenticatedMeshPeeringExchange,
+      61 => ReasonCode::MeshSTADoesNotHaveProxyInformation,
+      62 => ReasonCode::MeshSTADoesNotHaveForwardingInformation,
+      63 => ReasonCode::MeshSTALinkNoLongerUsable,
+      64 => ReasonCode::MacAddressAlreadyExists,
+      65 => ReasonCode::MeshSTAPerformsChannelSwitchToMeetRegulatoryRequirements,
+      66 => ReasonCode::MeshSTAPerformsChannelSwitchWithUnspecifiedReason,
+
+      other => ReasonCode::Reserved(other),
+    }
+  }
+}

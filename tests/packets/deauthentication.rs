@@ -34,4 +34,20 @@ fn test_deauthentication_packet() {
 
     ..Default::default()
   });
+
+  let frame = Frame::new(&DEAUTHENTICATION_PACKET);
+  match match frame.next_layer().unwrap() {
+    FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
+    _ => unreachable!("not management"),
+  } {
+    ManagementFrameLayer::Deauthentication(ref deauthentication_frame) => {
+      // Reason code: Deauthenticated because sending STA is leaving (or has left) IBSS or ESS (0x0003)
+      assert_eq!(
+        deauthentication_frame.reason_code(),
+        ReasonCode::STALeavingIBSSOrESS,
+        "reason_code"
+      );
+    }
+    _ => unreachable!("not deauthentication"),
+  }
 }

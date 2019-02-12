@@ -2,6 +2,7 @@ mod association_request;
 mod association_response;
 mod authentication;
 mod beacon;
+mod deauthentication;
 mod probe_request;
 mod probe_response;
 mod tagged_parameters;
@@ -10,6 +11,7 @@ pub use self::association_request::*;
 pub use self::association_response::*;
 pub use self::authentication::*;
 pub use self::beacon::*;
+pub use self::deauthentication::*;
 pub use self::probe_request::*;
 pub use self::probe_response::*;
 pub use self::tagged_parameters::*;
@@ -24,6 +26,7 @@ pub enum ManagementFrameLayer<'a> {
   ProbeRequest(ProbeRequestFrame<'a>),
   ProbeResponse(ProbeResponseFrame<'a>),
   Authentication(AuthenticationFrame<'a>),
+  Deauthentication(DeauthenticationFrame<'a>),
   AssociationRequest(AssociationRequestFrame<'a>),
   AssociationResponse(AssociationResponseFrame<'a>),
 }
@@ -54,6 +57,9 @@ impl<'a> ManagementFrame<'a> {
         )),
         ManagementSubtype::Authentication => Some(ManagementFrameLayer::Authentication(
           AuthenticationFrame::new(&self.bytes),
+        )),
+        ManagementSubtype::Deauthentication => Some(ManagementFrameLayer::Deauthentication(
+          DeauthenticationFrame::new(&self.bytes),
         )),
         ManagementSubtype::AssociationRequest => Some(ManagementFrameLayer::AssociationRequest(
           AssociationRequestFrame::new(&self.bytes),
