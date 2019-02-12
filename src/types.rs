@@ -344,3 +344,325 @@ impl DataSubtype {
     }
   }
 }
+
+#[derive(Debug, PartialEq)]
+pub enum StatusCode {
+  ///  0 Successful
+  Successful,
+  ///  1 Unspecified failure
+  UnspecifiedFailure,
+  ///  2 TDLS wakeup schedule rejected but alternative schedule provided
+  TDLSWakeupScheduleRejectedButAlternativeScheduleProvided,
+  ///  3 TDLS wakeup schedule rejected
+  TDLSWakeupScheduleRejected,
+  ///  4 Reserved
+  ///  5 Security disabled
+  SecurityDisabled,
+  ///  6 Unacceptable lifetime
+  UnacceptableLifetime,
+  ///  7 Not in same BSS
+  NotInSameBSS,
+  ///  8 Reserved
+  ///  9 Reserved
+  /// 10 Cannot support all requested capabilities in the Capability Information field
+  CannotSupportAllRequestedCapabilities,
+  /// 11 Reassociation denied due to inability to confirm that association exists
+  ReassociationDenied,
+  /// 12 Association denied due to reason outside the scope of this standard
+  AssociationDenied,
+  /// 13 Responding STA does not support the specified authentication algorithm
+  STADoesNotSupportTheSpecifiedAuthenticationAlgorithm,
+  /// 14 Received an Authentication frame with authentication transaction sequence number out of expected sequence
+  ReceivedBadAuthenticationFrame,
+  /// 15 Authentication rejected because of challenge failure
+  AuthenticationRejectedBecauseOfChallengeFailure,
+  /// 16 Authentication rejected due to timeout waiting for next frame in sequence
+  AuthenticationRejectedDueToTimeoutWaitingForNextFrameInSequence,
+  /// 17 Association denied because AP is unable to handle additional associated STAs
+  AssociationDeniedBecauseAPIsUnableToHandleAdditionalAssociatedSTAs,
+  /// 18 Association denied due to requesting STA not supporting all of the data rates in the BSSBasicRateSet parameter
+  AssociationDeniedDataRates,
+  /// 19 Association denied due to requesting STA not supporting the short preamble option
+  AssociationDeniedShortPreamble,
+  /// 20 Association denied due to requesting STA not supporting the PBCC modulation option
+  AssociationDeniedPBCCModulation,
+  /// 21 Association denied due to requesting STA not supporting the Channel Agility option
+  AssociationDeniedChannelAgility,
+  /// 22 Association request rejected because Spectrum Management capability is required
+  AssociationRequestRejectedSpectrumManagement,
+  /// 23 Association request rejected because the information in the Power Capability element is unacceptable
+  AssociationRequestRejectedPowerCapability,
+  /// 24 Association request rejected because the information in the Supported Channels element is unacceptable
+  AssociationRequestRejectedSupportedChannels,
+  /// 25 Association denied due to requesting STA not supporting the Short Slot Time option
+  AssociationDeniedDueToRequestingSTANotSupportingTheShortSlotTimeOption,
+  /// 26 Association denied due to requesting STA not supporting the DSSS-OFDM option
+  AssociationDeniedDueToRequestingSTANotSupportingTheDSSSOFDMOption,
+  /// 27 Reserved Association denied because the requesting STA does not support HT features
+  ReservedAssociationDeniedBecauseTheRequestingSTADoesNotSupportHTFeatures,
+  /// 28 R0KH unreachable
+  R0KHUnreachable,
+  /// 29 Association denied because the requesting STA does not support the phased coexistence operation (PCO) transition time required by the AP
+  AssociationDeniedPhasedCoexistence,
+  /// 30 Association request rejected temporarily; try again later
+  AssociationRequestRejectedTemporarily,
+  /// 31 Robust Management frame policy violation
+  RobustManagementFramePolicyViolation,
+  /// 32 Unspecified, QoS-related failure
+  UnspecifiedQoSRelatedFailure,
+  /// 33 Association denied because QoS AP or PCP has insufficient bandwidth to handle another QoS STA
+  AssociationDeniedBecauseInsufficientBandwidth,
+  /// 34 Association denied due to excessive frame loss rates and/or poor conditions on current operating channel
+  AssociationDeniedExcessiveFrameLoss,
+  /// 35 Association (with QoS BSS) denied because the requesting STA does not support the QoS facility
+  AssociationWithQoSBSSDeniedBecauseTheRequestingSTADoesNotSupportTheQoSFacility,
+  /// 36 Reserved
+  /// 37 The request has been declined
+  TheRequestHasBeenDeclined,
+  /// 38 The request has not been successful as one or more parameters have invalid values
+  TheRequestHasNotBeenSuccessfulAsOneOrMoreParametersHaveInvalidValues,
+  /// 39 The allocation or TS has not been created because the request cannot be honored; however, a suggested TSPEC/DMG TSPEC is provided so that the initiating STA may attempt to set another allocation or TS with the suggested changes to the TSPEC/DMG TSPEC
+  TheAllocationOrTSHasNotBeenCreated,
+  /// 40 Invalid information element, i.e., an information element defined in this standard for which the content does not meet the specifications in Clause 7
+  InvalidInformationElement,
+  /// 41 Invalid group cipher
+  InvalidGroupCipher,
+  /// 42 Invalid pairwise cipher
+  InvalidPairwiseCipher,
+  /// 43 Invalid AKMP
+  InvalidAKMP,
+  /// 44 Unsupported RSN information element version
+  UnsupportedRSNInformationElementVersion,
+  /// 45 Invalid RSN information element capabilities
+  InvalidRSNInformationElementCapabilities,
+  /// 46 Cipher suite rejected because of security policy
+  CipherSuiteRejectedBecauseOfSecurityPolicy,
+  /// 47 The TS per allocation has not been created; however, the PCP/HC may be capable of creating a TS or allocation, in response to a request, after the time indicated in the TS Delay element
+  TheTSPerAllocationHasNotBeenCreated,
+  /// 48 Direct link is not allowed in the BSS by policy
+  DirectLinkIsNotAllowedInTheBSSByPolicy,
+  /// 49 The Destination STA is not present within this BSS
+  TheDestinationSTAIsNotPresentWithinThisBSS,
+  /// 50 The Destination STA is not a QoS STA
+  TheDestinationSTAIsNotAQoSSTA,
+  /// 51 Association denied because the ListenInterval is too large
+  AssociationDeniedBecauseTheListenIntervalIsTooLarge,
+  /// 52 Invalid FT Action frame count
+  InvalidFTActionFrameCount,
+  /// 53 Invalid pairwise master key identifier (PMKID)
+  InvalidPairwiseMasterKeyIdentifier,
+  /// 54 Invalid MDIE
+  InvalidMDIE,
+  /// 55 Invalid FTIE
+  InvalidFTIE,
+  /// 56 Requested TCLAS processing is not supported by the PCP/AP
+  RequestedTCLASProcessingIsNotSupportedByThePCPOrAP,
+  /// 57 The PCP/AP has insufficient TCLAS processing resources to satisfy the request
+  ThePCPOrAPHasInsufficientTCLASProcessingResourcesToSatisfyTheRequest,
+  /// 58 The TS has not been created because the request cannot be honored; however, the PCP/HC suggests the STA to transition to other BSSs to setup the TS
+  TheTSHasNotBeenCreatedBecauseTheRequestCannotBeHonored,
+  /// 59 GAS Advertisement Protocol not supported
+  GASAdvertisementProtocolNotSupported,
+  /// 60 No outstanding GAS request
+  NoOutstandingGASRequest,
+  /// 61 GAS Response not received from the Advertisement Server
+  GASResponseNotReceivedFromTheAdvertisementServer,
+  /// 62 STA timed out waiting for GAS Query Response
+  STATimedOutWaitingForGASQueryResponse,
+  /// 63 GAS Response is larger than query response length limit
+  GASResponseIsLargerThanQueryResponseLengthLimit,
+  /// 64 Request refused because home network does not support request
+  RequestRefusedBecauseHomeNetworkDoesNotSupportRequest,
+  /// 65 Advertisement Server in the network is not currently reachable
+  AdvertisementServerInTheNetworkIsNotCurrentlyReachable,
+  /// 66 Reserved
+  /// 67 Request refused due to permissions received via SSPN interface
+  RequestRefusedDueToPermissionsReceivedViaSSPNInterface,
+  /// 68 Request refused because PCP/AP does not support unauthenticated access
+  RequestRefusedBecausePCPOrAPDoesNotSupportUnauthenticatedAccess,
+  /// 69 Reserved
+  /// 70 Reserved
+  /// 71 Reserved
+  /// 72 Invalid contents of RSNIE
+  InvalidContentsOfRSNIE,
+  /// 73 U-APSD Coexistence is not supported
+  UAPSDCoexistenceIsNotSupported,
+  /// 74 Requested U-APSD Coexistence mode is not supported
+  RequestedUAPSDCoexistenceModeIsNotSupported,
+  /// 75 Requested Interval/Duration value cannot be supported with U-APSD Coexistence
+  RequestedIntervalDurationValueCannotBeSupportedWithUAPSDCoexistence,
+  /// 76 Authentication is rejected because an Anti-Clogging Token is required
+  AuthenticationIsRejectedBecauseAnAntiCloggingTokenIsRequired,
+  /// 77 Authentication is rejected because the offered finite cyclic group is not supported
+  AuthenticationIsRejectedBecauseTheOfferedFiniteCyclicGroupIsNotSupported,
+  /// 78 The TBTT adjustment request has not been successful because the STA could not find an alternative TBTT
+  TheTBTTAdjustmentRequestHasNotBeenSuccessful,
+  /// 79 Transmission failure
+  TransmissionFailure,
+  /// 80 Requested TCLAS Not Supported
+  RequestedTCLASNotSupported,
+  /// 81 TCLAS Resources Exhausted
+  TCLASResourcesExhausted,
+  /// 82 Rejected with Suggested BSS Transition
+  RejectedWithSuggestedBSSTransition,
+  /// 83 Reject with recommended schedule
+  RejectWithRecommendedSchedule,
+  /// 84 Reject because no wakeup schedule specified
+  RejectBecauseNoWakeupScheduleSpecified,
+  /// 85 Success, the destination STA is in power save mode
+  SuccessTheDestinationSTAIsInPowerSaveMode,
+  /// 86 FST pending, in process of admitting FST session
+  FSTPendingInProcessOfAdmittingFSTSession,
+  /// 87 performing FST now
+  PerformingFSTNow,
+  /// 88 FST pending, gap(s) in Block Ack window
+  FSTPendingGapInBlockAckWindow,
+  /// 89 Reject because of U-PID setting
+  RejectBecauseOfUPIDSetting,
+  /// 92 (Re)association refused for some external reason
+  AssociationRefusedForSomeExternalReason,
+  /// 93 (Re)association refused because of memory limits at the AP
+  AssociationRefusedBecauseOfMemoryLimitsAtTheAP,
+  /// 94 (Re)association refused because emergency services are not supported at the AP
+  AssociationRefusedBecauseEmergencyServicesAreNotSupportedAtTheAP,
+  /// 95 GAS query response not yet received
+  GASQueryResponseNotYetReceived,
+  /// 96 Reject since the request is for transition to a frequency band subject to DSE procedures and FST initiator is a dependent STA
+  RejectDSEProcedures,
+  /// 97 Reserved
+  /// 98 Reserved
+  /// 99 The association has been denied; however, one or more Multi-band elements are included that can be used by the receiving STA to join the BSS
+  TheAssociationHasBeenDenied,
+  /// 100 The request failed due to a reservation conflict
+  TheRequestFailedDueToAReservationConflict,
+  /// 101 The request failed due to exceeded MAF limit
+  TheRequestFailedDueToExceededMAFLimit,
+  /// 102 The request failed due to exceeded MCCA track limit
+  TheRequestFailedDueToExceededMCCATrackLimit,
+  /// 103 Association denied because the information in the Spectrum Management field is unacceptable
+  AssociationDeniedBecauseSpectrumManagement,
+  /// 104 Association denied because the requesting STA does not support VHT features
+  AssociationDeniedBecauseTheRequestingSTADoesNotSupportVHTFeatures,
+  /// 105 Enablement denied
+  EnablementDenied,
+  /// 106 Enablement denied due to restriction from an authorized GDB
+  EnablementDeniedDueToRestrictionFromAnAuthorizedGDB,
+  /// 107 Authorization deenabled
+  AuthorizationDeenabled,
+  /// 112 Authentication rejected due to FILS authentication failure
+  AuthenticationRejectedDueToFILSAuthenticationFailure,
+  /// 113 Authentication rejected due to unknown Authentication Server
+  AuthenticationRejectedDueToUnknownAuthenticationServer,
+
+  Reserved(u16),
+}
+impl StatusCode {
+  pub fn from_u16(n: u16) -> Self {
+    match n {
+      0 => StatusCode::Successful,
+      1 => StatusCode::UnspecifiedFailure,
+      2 => StatusCode::TDLSWakeupScheduleRejectedButAlternativeScheduleProvided,
+      3 => StatusCode::TDLSWakeupScheduleRejected,
+      // 4 Reserved
+      5 => StatusCode::SecurityDisabled,
+      6 => StatusCode::UnacceptableLifetime,
+      7 => StatusCode::NotInSameBSS,
+      // 8 Reserved
+      // 9 Reserved
+      10 => StatusCode::CannotSupportAllRequestedCapabilities,
+      11 => StatusCode::ReassociationDenied,
+      12 => StatusCode::AssociationDenied,
+      13 => StatusCode::STADoesNotSupportTheSpecifiedAuthenticationAlgorithm,
+      14 => StatusCode::ReceivedBadAuthenticationFrame,
+      15 => StatusCode::AuthenticationRejectedBecauseOfChallengeFailure,
+      16 => StatusCode::AuthenticationRejectedDueToTimeoutWaitingForNextFrameInSequence,
+      17 => StatusCode::AssociationDeniedBecauseAPIsUnableToHandleAdditionalAssociatedSTAs,
+      18 => StatusCode::AssociationDeniedDataRates,
+      19 => StatusCode::AssociationDeniedShortPreamble,
+      20 => StatusCode::AssociationDeniedPBCCModulation,
+      21 => StatusCode::AssociationDeniedChannelAgility,
+      22 => StatusCode::AssociationRequestRejectedSpectrumManagement,
+      23 => StatusCode::AssociationRequestRejectedPowerCapability,
+      24 => StatusCode::AssociationRequestRejectedSupportedChannels,
+      25 => StatusCode::AssociationDeniedDueToRequestingSTANotSupportingTheShortSlotTimeOption,
+      26 => StatusCode::AssociationDeniedDueToRequestingSTANotSupportingTheDSSSOFDMOption,
+      27 => StatusCode::ReservedAssociationDeniedBecauseTheRequestingSTADoesNotSupportHTFeatures,
+      28 => StatusCode::R0KHUnreachable,
+      29 => StatusCode::AssociationDeniedPhasedCoexistence,
+      30 => StatusCode::AssociationRequestRejectedTemporarily,
+      31 => StatusCode::RobustManagementFramePolicyViolation,
+      32 => StatusCode::UnspecifiedQoSRelatedFailure,
+      33 => StatusCode::AssociationDeniedBecauseInsufficientBandwidth,
+      34 => StatusCode::AssociationDeniedExcessiveFrameLoss,
+      35 => {
+        StatusCode::AssociationWithQoSBSSDeniedBecauseTheRequestingSTADoesNotSupportTheQoSFacility
+      }
+      37 => StatusCode::TheRequestHasBeenDeclined,
+      38 => StatusCode::TheRequestHasNotBeenSuccessfulAsOneOrMoreParametersHaveInvalidValues,
+      39 => StatusCode::TheAllocationOrTSHasNotBeenCreated,
+      40 => StatusCode::InvalidInformationElement,
+      41 => StatusCode::InvalidGroupCipher,
+      42 => StatusCode::InvalidPairwiseCipher,
+      43 => StatusCode::InvalidAKMP,
+      44 => StatusCode::UnsupportedRSNInformationElementVersion,
+      45 => StatusCode::InvalidRSNInformationElementCapabilities,
+      46 => StatusCode::CipherSuiteRejectedBecauseOfSecurityPolicy,
+      47 => StatusCode::TheTSPerAllocationHasNotBeenCreated,
+      48 => StatusCode::DirectLinkIsNotAllowedInTheBSSByPolicy,
+      49 => StatusCode::TheDestinationSTAIsNotPresentWithinThisBSS,
+      50 => StatusCode::TheDestinationSTAIsNotAQoSSTA,
+      51 => StatusCode::AssociationDeniedBecauseTheListenIntervalIsTooLarge,
+      52 => StatusCode::InvalidFTActionFrameCount,
+      53 => StatusCode::InvalidPairwiseMasterKeyIdentifier,
+      54 => StatusCode::InvalidMDIE,
+      55 => StatusCode::InvalidFTIE,
+      56 => StatusCode::RequestedTCLASProcessingIsNotSupportedByThePCPOrAP,
+      57 => StatusCode::ThePCPOrAPHasInsufficientTCLASProcessingResourcesToSatisfyTheRequest,
+      58 => StatusCode::TheTSHasNotBeenCreatedBecauseTheRequestCannotBeHonored,
+      59 => StatusCode::GASAdvertisementProtocolNotSupported,
+      60 => StatusCode::NoOutstandingGASRequest,
+      61 => StatusCode::GASResponseNotReceivedFromTheAdvertisementServer,
+      62 => StatusCode::STATimedOutWaitingForGASQueryResponse,
+      63 => StatusCode::GASResponseIsLargerThanQueryResponseLengthLimit,
+      64 => StatusCode::RequestRefusedBecauseHomeNetworkDoesNotSupportRequest,
+      65 => StatusCode::AdvertisementServerInTheNetworkIsNotCurrentlyReachable,
+      67 => StatusCode::RequestRefusedDueToPermissionsReceivedViaSSPNInterface,
+      68 => StatusCode::RequestRefusedBecausePCPOrAPDoesNotSupportUnauthenticatedAccess,
+      72 => StatusCode::InvalidContentsOfRSNIE,
+      73 => StatusCode::UAPSDCoexistenceIsNotSupported,
+      74 => StatusCode::RequestedUAPSDCoexistenceModeIsNotSupported,
+      75 => StatusCode::RequestedIntervalDurationValueCannotBeSupportedWithUAPSDCoexistence,
+      76 => StatusCode::AuthenticationIsRejectedBecauseAnAntiCloggingTokenIsRequired,
+      77 => StatusCode::AuthenticationIsRejectedBecauseTheOfferedFiniteCyclicGroupIsNotSupported,
+      78 => StatusCode::TheTBTTAdjustmentRequestHasNotBeenSuccessful,
+      79 => StatusCode::TransmissionFailure,
+      80 => StatusCode::RequestedTCLASNotSupported,
+      81 => StatusCode::TCLASResourcesExhausted,
+      82 => StatusCode::RejectedWithSuggestedBSSTransition,
+      83 => StatusCode::RejectWithRecommendedSchedule,
+      84 => StatusCode::RejectBecauseNoWakeupScheduleSpecified,
+      85 => StatusCode::SuccessTheDestinationSTAIsInPowerSaveMode,
+      86 => StatusCode::FSTPendingInProcessOfAdmittingFSTSession,
+      87 => StatusCode::PerformingFSTNow,
+      88 => StatusCode::FSTPendingGapInBlockAckWindow,
+      89 => StatusCode::RejectBecauseOfUPIDSetting,
+      92 => StatusCode::AssociationRefusedForSomeExternalReason,
+      93 => StatusCode::AssociationRefusedBecauseOfMemoryLimitsAtTheAP,
+      94 => StatusCode::AssociationRefusedBecauseEmergencyServicesAreNotSupportedAtTheAP,
+      95 => StatusCode::GASQueryResponseNotYetReceived,
+      96 => StatusCode::RejectDSEProcedures,
+      99 => StatusCode::TheAssociationHasBeenDenied,
+      100 => StatusCode::TheRequestFailedDueToAReservationConflict,
+      101 => StatusCode::TheRequestFailedDueToExceededMAFLimit,
+      102 => StatusCode::TheRequestFailedDueToExceededMCCATrackLimit,
+      103 => StatusCode::AssociationDeniedBecauseSpectrumManagement,
+      104 => StatusCode::AssociationDeniedBecauseTheRequestingSTADoesNotSupportVHTFeatures,
+      105 => StatusCode::EnablementDenied,
+      106 => StatusCode::EnablementDeniedDueToRestrictionFromAnAuthorizedGDB,
+      107 => StatusCode::AuthorizationDeenabled,
+      112 => StatusCode::AuthenticationRejectedDueToFILSAuthenticationFailure,
+      113 => StatusCode::AuthenticationRejectedDueToUnknownAuthenticationServer,
+      other => StatusCode::Reserved(other),
+    }
+  }
+}

@@ -41,10 +41,10 @@ fn test_authentication_packet() {
     ManagementFrameLayer::Authentication(ref authentication_frame) => {
       assert_eq!(
         authentication_frame.authentication_algorithm(),
-        AuthenticationAlgorithm::Something(0)
+        AuthenticationAlgorithm::OpenSystem
       );
       assert_eq!(authentication_frame.authentication_seq(), 0x0001);
-      assert_eq!(authentication_frame.status_code(), StatusCode::Something(0));
+      assert_eq!(authentication_frame.status_code(), StatusCode::Successful);
     }
     _ => unreachable!("not authentication"),
   }
