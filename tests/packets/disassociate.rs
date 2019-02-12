@@ -32,4 +32,20 @@ fn test_disassociate_packet() {
 
     ..Default::default()
   });
+
+  let frame = Frame::new(&DISASSOCIATE_PACKET);
+  match match frame.next_layer().unwrap() {
+    FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
+    _ => unreachable!("not management"),
+  } {
+    ManagementFrameLayer::Disassociate(ref disassociate_frame) => {
+      // Reason code: Disassociated because sending STA is leaving (or has left) BSS (0x0008)
+      assert_eq!(
+        disassociate_frame.reason_code(),
+        ReasonCode::STALeavingBSS,
+        "reason_code"
+      );
+    }
+    _ => unreachable!("not disassociate"),
+  }
 }
