@@ -3,6 +3,7 @@ use byteorder::{ByteOrder, LittleEndian};
 
 pub trait AuthenticationFixedParametersTrait<'a>: FrameTrait<'a> {
   const FIXED_PARAMETERS_START: usize = 24;
+  const FIXED_PARAMETERS_END: usize = 24 + 6;
 
   fn authentication_algorithm(&self) -> AuthenticationAlgorithm {
     // 0: Open System

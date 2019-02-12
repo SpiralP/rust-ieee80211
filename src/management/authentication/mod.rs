@@ -20,3 +20,6 @@ impl<'a> FrameTrait<'a> for AuthenticationFrame<'a> {
 impl<'a> FragmentSequenceTrait<'a> for AuthenticationFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for AuthenticationFrame<'a> {}
 impl<'a> AuthenticationFixedParametersTrait<'a> for AuthenticationFrame<'a> {}
+impl<'a> TaggedParametersTrait<'a> for AuthenticationFrame<'a> {
+  const TAGGED_PARAMETERS_START: usize = Self::FIXED_PARAMETERS_END;
+}
