@@ -32,4 +32,20 @@ fn test_authentication_packet() {
 
     ..Default::default()
   });
+
+  let frame = Frame::new(&AUTHENTICATION_PACKET);
+  match match frame.next_layer().unwrap() {
+    FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
+    _ => unreachable!("not management"),
+  } {
+    ManagementFrameLayer::Authentication(ref authentication_frame) => {
+      assert_eq!(
+        authentication_frame.authentication_algorithm(),
+        AuthenticationAlgorithm::Something(0)
+      );
+      assert_eq!(authentication_frame.authentication_seq(), 0x0001);
+      assert_eq!(authentication_frame.status_code(), StatusCode::Something(0));
+    }
+    _ => unreachable!("not authentication"),
+  }
 }

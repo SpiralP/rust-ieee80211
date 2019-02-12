@@ -118,6 +118,7 @@ fn test_test_item(test_item: TestItem) {
               ManagementFrameLayer::ProbeResponse(probe_response_frame) => {
                 probe_response_frame.ssid()
               }
+              _ => None,
             }
           } else {
             None

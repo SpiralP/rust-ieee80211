@@ -1,3 +1,6 @@
+mod fixed_parameters;
+
+pub use self::fixed_parameters::*;
 use super::*;
 
 pub struct BeaconFrame<'a> {
@@ -17,5 +20,5 @@ impl<'a> FrameTrait<'a> for BeaconFrame<'a> {
 }
 impl<'a> FragmentSequenceTrait<'a> for BeaconFrame<'a> {}
 impl<'a> ManagementFrameTrait<'a> for BeaconFrame<'a> {}
-impl<'a> FixedParametersTrait<'a> for BeaconFrame<'a> {}
+impl<'a> BeaconFixedParametersTrait<'a> for BeaconFrame<'a> {}
 impl<'a> TaggedParametersTrait<'a> for BeaconFrame<'a> {}

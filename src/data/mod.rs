@@ -1,3 +1,6 @@
+mod builder;
+
+pub use self::builder::*;
 use super::*;
 
 pub struct DataFrame<'a> {

@@ -1,11 +1,11 @@
+mod authentication;
 mod beacon;
-mod fixed_parameters;
 mod probe_request;
 mod probe_response;
 mod tagged_parameters;
 
+pub use self::authentication::*;
 pub use self::beacon::*;
-pub use self::fixed_parameters::*;
 pub use self::probe_request::*;
 pub use self::probe_response::*;
 pub use self::tagged_parameters::*;
@@ -19,6 +19,7 @@ pub enum ManagementFrameLayer<'a> {
   Beacon(BeaconFrame<'a>),
   ProbeRequest(ProbeRequestFrame<'a>),
   ProbeResponse(ProbeResponseFrame<'a>),
+  Authentication(AuthenticationFrame<'a>),
 }
 
 impl<'a> ManagementFrame<'a> {
@@ -44,6 +45,9 @@ impl<'a> ManagementFrame<'a> {
         )),
         ManagementSubtype::ProbeResponse => Some(ManagementFrameLayer::ProbeResponse(
           ProbeResponseFrame::new(&self.bytes),
+        )),
+        ManagementSubtype::Authentication => Some(ManagementFrameLayer::Authentication(
+          AuthenticationFrame::new(&self.bytes),
         )),
         _ => None,
       },

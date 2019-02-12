@@ -1,7 +1,7 @@
 use super::*;
 use byteorder::{ByteOrder, LittleEndian};
 
-pub trait FixedParametersTrait<'a>: FrameTrait<'a> {
+pub trait BeaconFixedParametersTrait<'a>: FrameTrait<'a> {
   // Fixed Parameters (24..36) on Beacons
   const FIXED_PARAMETERS_START: usize = 24;
 
