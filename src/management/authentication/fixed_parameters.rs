@@ -6,21 +6,18 @@ pub trait AuthenticationFixedParametersTrait<'a>: FrameTrait<'a> {
   const FIXED_PARAMETERS_END: usize = Self::FIXED_PARAMETERS_START + 6;
 
   fn authentication_algorithm(&self) -> AuthenticationAlgorithm {
-    // 0: Open System
     AuthenticationAlgorithm::from_u16(LittleEndian::read_u16(
       &self.bytes()[Self::FIXED_PARAMETERS_START..(Self::FIXED_PARAMETERS_START + 2)],
     ))
   }
 
   fn authentication_seq(&self) -> u16 {
-    // 0x0001
     LittleEndian::read_u16(
       &self.bytes()[(Self::FIXED_PARAMETERS_START + 2)..(Self::FIXED_PARAMETERS_START + 4)],
     )
   }
 
   fn status_code(&self) -> StatusCode {
-    // 0x0000 Successful
     StatusCode::from_u16(LittleEndian::read_u16(
       &self.bytes()[(Self::FIXED_PARAMETERS_START + 4)..(Self::FIXED_PARAMETERS_START + 6)],
     ))
