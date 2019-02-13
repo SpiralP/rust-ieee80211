@@ -39,15 +39,16 @@ pub trait FrameBuilderTrait {
   fn bytes_mut(&mut self) -> &mut [u8];
 
   fn version(&mut self, version: FrameVersion) {
-    self.bytes_mut()[0] = (self.bytes()[0] & !0b0000_0011) | (0b0000_0011 & version.to_u8());
+    self.bytes_mut()[0] = (self.bytes()[0] & !0b0000_0011) | (0b0000_0011 & version.into_u8());
   }
 
   fn type_(&mut self, type_: FrameType) {
-    self.bytes_mut()[0] = (self.bytes()[0] & !0b0000_1100) | (0b0000_1100 & (type_.to_u8() << 2));
+    self.bytes_mut()[0] = (self.bytes()[0] & !0b0000_1100) | (0b0000_1100 & (type_.into_u8() << 2));
   }
 
   fn subtype(&mut self, subtype: FrameSubtype) {
-    self.bytes_mut()[0] = (self.bytes()[0] & !0b1111_0000) | (0b1111_0000 & (subtype.to_u8() << 4));
+    self.bytes_mut()[0] =
+      (self.bytes()[0] & !0b1111_0000) | (0b1111_0000 & (subtype.into_u8() << 4));
   }
 
   fn to_ds(&mut self, to_ds: bool) {

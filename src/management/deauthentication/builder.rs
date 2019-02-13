@@ -1,6 +1,6 @@
 use super::*;
 
-const DEAUTHENTICATION_FRAME_SIZE: usize = DeauthenticationFrame::FRAGMENT_SEQUENCE_END;
+const DEAUTHENTICATION_FRAME_SIZE: usize = DeauthenticationFrame::FIXED_PARAMETERS_END;
 
 pub struct DeauthenticationFrameBuilder {
   bytes: [u8; DEAUTHENTICATION_FRAME_SIZE],
@@ -38,6 +38,7 @@ impl FrameBuilderTrait for DeauthenticationFrameBuilder {
 }
 impl FragmentSequenceBuilderTrait for DeauthenticationFrameBuilder {}
 impl ManagementFrameBuilderTrait for DeauthenticationFrameBuilder {}
+impl DeauthenticationFixedParametersBuilderTrait for DeauthenticationFrameBuilder {}
 
 #[test]
 fn test_deauthentication_frame_builder() {
@@ -60,6 +61,8 @@ fn test_deauthentication_frame_builder() {
 
   deauthentication_frame_builder.sequence_number(10);
   deauthentication_frame_builder.fragment_number(11);
+
+  deauthentication_frame_builder.reason_code(ReasonCode::STALeavingBSS);
 
   let deauthentication_frame = deauthentication_frame_builder.build();
 
@@ -120,4 +123,10 @@ fn test_deauthentication_frame_builder() {
 
   assert_eq!(deauthentication_frame.sequence_number(), 10);
   assert_eq!(deauthentication_frame.fragment_number(), 11);
+
+  assert_eq!(
+    deauthentication_frame.reason_code(),
+    ReasonCode::STALeavingBSS,
+    "reason_code"
+  );
 }

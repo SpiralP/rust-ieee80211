@@ -20,6 +20,7 @@ pub trait FragmentSequenceTrait<'a>: FrameTrait<'a> {
 
 pub trait FragmentSequenceBuilderTrait: FrameBuilderTrait {
   const FRAGMENT_SEQUENCE_START: usize = 22;
+  const FRAGMENT_SEQUENCE_END: usize = Self::FRAGMENT_SEQUENCE_START + 2;
 
   /// Fragment Number
   fn fragment_number(&mut self, fragment_number: u8) {

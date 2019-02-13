@@ -63,7 +63,7 @@ impl FrameVersion {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
       FrameVersion::Standard => 0,
       FrameVersion::Reserved(other) => other,
@@ -92,7 +92,7 @@ impl FrameType {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
       FrameType::Management => 0,
       FrameType::Control => 1,
@@ -122,11 +122,11 @@ impl FrameSubtype {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
-      FrameSubtype::Management(subtype) => subtype.to_u8(),
-      FrameSubtype::Control(subtype) => subtype.to_u8(),
-      FrameSubtype::Data(subtype) => subtype.to_u8(),
+      FrameSubtype::Management(subtype) => subtype.into_u8(),
+      FrameSubtype::Control(subtype) => subtype.into_u8(),
+      FrameSubtype::Data(subtype) => subtype.into_u8(),
       FrameSubtype::Reserved(_type, subtype) => subtype,
     }
   }
@@ -186,7 +186,7 @@ impl ManagementSubtype {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
       ManagementSubtype::AssociationRequest => 0,
       ManagementSubtype::AssociationResponse => 1,
@@ -249,7 +249,7 @@ impl ControlSubtype {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
       // 0-6 Reserved
       ControlSubtype::ControlWrapper => 7,
@@ -325,7 +325,7 @@ impl DataSubtype {
     }
   }
 
-  pub fn to_u8(self) -> u8 {
+  pub fn into_u8(self) -> u8 {
     match self {
       DataSubtype::Data => 0,
       DataSubtype::DataCFAck => 1,
@@ -418,7 +418,7 @@ pub enum StatusCode {
   /// 34 Association denied due to excessive frame loss rates and/or poor conditions on current operating channel
   AssociationDeniedExcessiveFrameLoss,
   /// 35 Association (with QoS BSS) denied because the requesting STA does not support the QoS facility
-  AssociationWithQoSBSSDeniedBecauseTheRequestingSTADoesNotSupportTheQoSFacility,
+  AssociationWithQoSBSSDenied,
   /// 36 Reserved
   /// 37 The request has been declined
   TheRequestHasBeenDeclined,
@@ -597,9 +597,7 @@ impl StatusCode {
       32 => StatusCode::UnspecifiedQoSRelatedFailure,
       33 => StatusCode::AssociationDeniedBecauseInsufficientBandwidth,
       34 => StatusCode::AssociationDeniedExcessiveFrameLoss,
-      35 => {
-        StatusCode::AssociationWithQoSBSSDeniedBecauseTheRequestingSTADoesNotSupportTheQoSFacility
-      }
+      35 => StatusCode::AssociationWithQoSBSSDenied,
       37 => StatusCode::TheRequestHasBeenDeclined,
       38 => StatusCode::TheRequestHasNotBeenSuccessfulAsOneOrMoreParametersHaveInvalidValues,
       39 => StatusCode::TheAllocationOrTSHasNotBeenCreated,
@@ -665,15 +663,122 @@ impl StatusCode {
       107 => StatusCode::AuthorizationDeenabled,
       112 => StatusCode::AuthenticationRejectedDueToFILSAuthenticationFailure,
       113 => StatusCode::AuthenticationRejectedDueToUnknownAuthenticationServer,
+
       other => StatusCode::Reserved(other),
+    }
+  }
+
+  pub fn into_u16(self) -> u16 {
+    match self {
+      StatusCode::Successful => 0,
+      StatusCode::UnspecifiedFailure => 1,
+      StatusCode::TDLSWakeupScheduleRejectedButAlternativeScheduleProvided => 2,
+      StatusCode::TDLSWakeupScheduleRejected => 3,
+      // 4 Reserved
+      StatusCode::SecurityDisabled => 5,
+      StatusCode::UnacceptableLifetime => 6,
+      StatusCode::NotInSameBSS => 7,
+      // 8 Reserved
+      // 9 Reserved
+      StatusCode::CannotSupportAllRequestedCapabilities => 10,
+      StatusCode::ReassociationDenied => 11,
+      StatusCode::AssociationDenied => 12,
+      StatusCode::STADoesNotSupportTheSpecifiedAuthenticationAlgorithm => 13,
+      StatusCode::ReceivedBadAuthenticationFrame => 14,
+      StatusCode::AuthenticationRejectedBecauseOfChallengeFailure => 15,
+      StatusCode::AuthenticationRejectedDueToTimeoutWaitingForNextFrameInSequence => 16,
+      StatusCode::AssociationDeniedBecauseAPIsUnableToHandleAdditionalAssociatedSTAs => 17,
+      StatusCode::AssociationDeniedDataRates => 18,
+      StatusCode::AssociationDeniedShortPreamble => 19,
+      StatusCode::AssociationDeniedPBCCModulation => 20,
+      StatusCode::AssociationDeniedChannelAgility => 21,
+      StatusCode::AssociationRequestRejectedSpectrumManagement => 22,
+      StatusCode::AssociationRequestRejectedPowerCapability => 23,
+      StatusCode::AssociationRequestRejectedSupportedChannels => 24,
+      StatusCode::AssociationDeniedDueToRequestingSTANotSupportingTheShortSlotTimeOption => 25,
+      StatusCode::AssociationDeniedDueToRequestingSTANotSupportingTheDSSSOFDMOption => 26,
+      StatusCode::ReservedAssociationDeniedBecauseTheRequestingSTADoesNotSupportHTFeatures => 27,
+      StatusCode::R0KHUnreachable => 28,
+      StatusCode::AssociationDeniedPhasedCoexistence => 29,
+      StatusCode::AssociationRequestRejectedTemporarily => 30,
+      StatusCode::RobustManagementFramePolicyViolation => 31,
+      StatusCode::UnspecifiedQoSRelatedFailure => 32,
+      StatusCode::AssociationDeniedBecauseInsufficientBandwidth => 33,
+      StatusCode::AssociationDeniedExcessiveFrameLoss => 34,
+      StatusCode::AssociationWithQoSBSSDenied => 35,
+      StatusCode::TheRequestHasBeenDeclined => 37,
+      StatusCode::TheRequestHasNotBeenSuccessfulAsOneOrMoreParametersHaveInvalidValues => 38,
+      StatusCode::TheAllocationOrTSHasNotBeenCreated => 39,
+      StatusCode::InvalidInformationElement => 40,
+      StatusCode::InvalidGroupCipher => 41,
+      StatusCode::InvalidPairwiseCipher => 42,
+      StatusCode::InvalidAKMP => 43,
+      StatusCode::UnsupportedRSNInformationElementVersion => 44,
+      StatusCode::InvalidRSNInformationElementCapabilities => 45,
+      StatusCode::CipherSuiteRejectedBecauseOfSecurityPolicy => 46,
+      StatusCode::TheTSPerAllocationHasNotBeenCreated => 47,
+      StatusCode::DirectLinkIsNotAllowedInTheBSSByPolicy => 48,
+      StatusCode::TheDestinationSTAIsNotPresentWithinThisBSS => 49,
+      StatusCode::TheDestinationSTAIsNotAQoSSTA => 50,
+      StatusCode::AssociationDeniedBecauseTheListenIntervalIsTooLarge => 51,
+      StatusCode::InvalidFTActionFrameCount => 52,
+      StatusCode::InvalidPairwiseMasterKeyIdentifier => 53,
+      StatusCode::InvalidMDIE => 54,
+      StatusCode::InvalidFTIE => 55,
+      StatusCode::RequestedTCLASProcessingIsNotSupportedByThePCPOrAP => 56,
+      StatusCode::ThePCPOrAPHasInsufficientTCLASProcessingResourcesToSatisfyTheRequest => 57,
+      StatusCode::TheTSHasNotBeenCreatedBecauseTheRequestCannotBeHonored => 58,
+      StatusCode::GASAdvertisementProtocolNotSupported => 59,
+      StatusCode::NoOutstandingGASRequest => 60,
+      StatusCode::GASResponseNotReceivedFromTheAdvertisementServer => 61,
+      StatusCode::STATimedOutWaitingForGASQueryResponse => 62,
+      StatusCode::GASResponseIsLargerThanQueryResponseLengthLimit => 63,
+      StatusCode::RequestRefusedBecauseHomeNetworkDoesNotSupportRequest => 64,
+      StatusCode::AdvertisementServerInTheNetworkIsNotCurrentlyReachable => 65,
+      StatusCode::RequestRefusedDueToPermissionsReceivedViaSSPNInterface => 67,
+      StatusCode::RequestRefusedBecausePCPOrAPDoesNotSupportUnauthenticatedAccess => 68,
+      StatusCode::InvalidContentsOfRSNIE => 72,
+      StatusCode::UAPSDCoexistenceIsNotSupported => 73,
+      StatusCode::RequestedUAPSDCoexistenceModeIsNotSupported => 74,
+      StatusCode::RequestedIntervalDurationValueCannotBeSupportedWithUAPSDCoexistence => 75,
+      StatusCode::AuthenticationIsRejectedBecauseAnAntiCloggingTokenIsRequired => 76,
+      StatusCode::AuthenticationIsRejectedBecauseTheOfferedFiniteCyclicGroupIsNotSupported => 77,
+      StatusCode::TheTBTTAdjustmentRequestHasNotBeenSuccessful => 78,
+      StatusCode::TransmissionFailure => 79,
+      StatusCode::RequestedTCLASNotSupported => 80,
+      StatusCode::TCLASResourcesExhausted => 81,
+      StatusCode::RejectedWithSuggestedBSSTransition => 82,
+      StatusCode::RejectWithRecommendedSchedule => 83,
+      StatusCode::RejectBecauseNoWakeupScheduleSpecified => 84,
+      StatusCode::SuccessTheDestinationSTAIsInPowerSaveMode => 85,
+      StatusCode::FSTPendingInProcessOfAdmittingFSTSession => 86,
+      StatusCode::PerformingFSTNow => 87,
+      StatusCode::FSTPendingGapInBlockAckWindow => 88,
+      StatusCode::RejectBecauseOfUPIDSetting => 89,
+      StatusCode::AssociationRefusedForSomeExternalReason => 92,
+      StatusCode::AssociationRefusedBecauseOfMemoryLimitsAtTheAP => 93,
+      StatusCode::AssociationRefusedBecauseEmergencyServicesAreNotSupportedAtTheAP => 94,
+      StatusCode::GASQueryResponseNotYetReceived => 95,
+      StatusCode::RejectDSEProcedures => 96,
+      StatusCode::TheAssociationHasBeenDenied => 99,
+      StatusCode::TheRequestFailedDueToAReservationConflict => 100,
+      StatusCode::TheRequestFailedDueToExceededMAFLimit => 101,
+      StatusCode::TheRequestFailedDueToExceededMCCATrackLimit => 102,
+      StatusCode::AssociationDeniedBecauseSpectrumManagement => 103,
+      StatusCode::AssociationDeniedBecauseTheRequestingSTADoesNotSupportVHTFeatures => 104,
+      StatusCode::EnablementDenied => 105,
+      StatusCode::EnablementDeniedDueToRestrictionFromAnAuthorizedGDB => 106,
+      StatusCode::AuthorizationDeenabled => 107,
+      StatusCode::AuthenticationRejectedDueToFILSAuthenticationFailure => 112,
+      StatusCode::AuthenticationRejectedDueToUnknownAuthenticationServer => 113,
+
+      StatusCode::Reserved(other) => other,
     }
   }
 }
 
 #[derive(Debug, PartialEq)]
 pub enum ReasonCode {
-  Reserved(u16),
-
   ///  1 Unspecified reason
   UnspecifiedReason,
   ///  2 Previous authentication no longer valid
@@ -796,6 +901,8 @@ pub enum ReasonCode {
   MeshSTAPerformsChannelSwitchToMeetRegulatoryRequirements,
   /// 66 The mesh STA performs channel switch with unspecified reason
   MeshSTAPerformsChannelSwitchWithUnspecifiedReason,
+
+  Reserved(u16),
 }
 impl ReasonCode {
   pub fn from_u16(n: u16) -> Self {
@@ -863,6 +970,74 @@ impl ReasonCode {
       66 => ReasonCode::MeshSTAPerformsChannelSwitchWithUnspecifiedReason,
 
       other => ReasonCode::Reserved(other),
+    }
+  }
+
+  pub fn into_u16(self) -> u16 {
+    match self {
+      ReasonCode::UnspecifiedReason => 1,
+      ReasonCode::PreviousAuthenticationNoLongerValid => 2,
+      ReasonCode::STALeavingIBSSOrESS => 3,
+      ReasonCode::Inactivity => 4,
+      ReasonCode::APIsUnableToHandleAllCurrentlyAssociatedSTAs => 5,
+      ReasonCode::Class2FrameReceivedFromNonauthenticatedSTA => 6,
+      ReasonCode::Class3FrameReceivedFromNonassociatedSTA => 7,
+      ReasonCode::STALeavingBSS => 8,
+      ReasonCode::NotAuthenticated => 9,
+      ReasonCode::PowerCapabilityElementIsUnacceptable => 10,
+      ReasonCode::SupportedChannelsElementIsUnacceptable => 11,
+      ReasonCode::DisassociatedDueToBSSTransitionManagement => 12,
+      ReasonCode::InvalidInformationElement => 13,
+      ReasonCode::MessageIntegrityCodeFailure => 14,
+      ReasonCode::FourWayHandshakeTimeout => 15,
+      ReasonCode::GroupKeyHandshakeTimeout => 16,
+      ReasonCode::InformationDifferent => 17,
+      ReasonCode::InvalidGroupCipher => 18,
+      ReasonCode::InvalidPairwiseCipher => 19,
+      ReasonCode::InvalidAKMP => 20,
+      ReasonCode::UnsupportedRSNInformationElementVersion => 21,
+      ReasonCode::InvalidRSNInformationElementCapabilities => 22,
+      ReasonCode::IEEE8021XAuthenticationFailed => 23,
+      ReasonCode::CipherSuiteRejectedBecauseOfTheSecurityPolicy => 24,
+      ReasonCode::TDLSDirectLinkTeardownUnreachable => 25,
+      ReasonCode::TDLSDirectLinkTeardownUnspecifiedReason => 26,
+      ReasonCode::DisassociatedBecauseSessionTerminatedBySSPRequest => 27,
+      ReasonCode::DisassociatedBecauseOfLackOfSSPRoamingAgreement => 28,
+      ReasonCode::RequestedServiceRejected => 29,
+      ReasonCode::RequestedServiceNotAuthorizedInThisLocation => 30,
+      ReasonCode::TSDeleted => 31,
+      ReasonCode::DisassociatedForUnspecifiedQoSRelatedReason => 32,
+      ReasonCode::QoSAPLacksSufficientBandwidthForThisQoSSTA => 33,
+      ReasonCode::ExcessiveNumberOfFramesNotAcknowledged => 34,
+      ReasonCode::STAIsTransmittingOutsideTheLimitsOfItsTXOPs => 35,
+      ReasonCode::STALeavingTheBSS => 36,
+      ReasonCode::STADoesNotWantToUseTheMechanism => 37,
+      ReasonCode::STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired => 38,
+      ReasonCode::RequestedFromPeerSTADueToTimeout => 39,
+      ReasonCode::PeerSTADoesNotSupportTheRequestedCipherSuite => 45,
+      ReasonCode::AuthorizedAccessLimitReached => 46,
+      ReasonCode::DisassociatedDueToExternalServiceRequirements => 47,
+      ReasonCode::InvalidFTActionFrameCount => 48,
+      ReasonCode::InvalidPairwiseMasterKeyIdentifier => 49,
+      ReasonCode::InvalidMDE => 50,
+      ReasonCode::InvalidFTE => 51,
+      ReasonCode::SMECancel => 52,
+      ReasonCode::MeshMaxSupportedMaximumNumberOfPeerMeshSTAs => 53,
+      ReasonCode::InformationViolatesMeshPolicy => 54,
+      ReasonCode::MeshSTAReceivedAMeshPeeringCloseMessage => 55,
+      ReasonCode::MeshSTAHasResentMaxRetriesWithoutConfirm => 56,
+      ReasonCode::TheConfirmTimerForTheMeshPeeringInstanceTimesOut => 57,
+      ReasonCode::MeshSTAFailsToUnwrapGTK => 58,
+      ReasonCode::MeshSTAReceivesInconsistentInformation => 59,
+      ReasonCode::MeshSTAFailsAuthenticatedMeshPeeringExchange => 60,
+      ReasonCode::MeshSTADoesNotHaveProxyInformation => 61,
+      ReasonCode::MeshSTADoesNotHaveForwardingInformation => 62,
+      ReasonCode::MeshSTALinkNoLongerUsable => 63,
+      ReasonCode::MacAddressAlreadyExists => 64,
+      ReasonCode::MeshSTAPerformsChannelSwitchToMeetRegulatoryRequirements => 65,
+      ReasonCode::MeshSTAPerformsChannelSwitchWithUnspecifiedReason => 66,
+
+      ReasonCode::Reserved(other) => other,
     }
   }
 }
