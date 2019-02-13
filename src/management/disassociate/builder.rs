@@ -2,23 +2,22 @@ use super::*;
 
 const DISASSOCIATE_FRAME_SIZE: usize = DisassociateFrame::FIXED_PARAMETERS_END;
 
+#[derive(Default)]
 pub struct DisassociateFrameBuilder {
   bytes: [u8; DISASSOCIATE_FRAME_SIZE],
 }
 impl DisassociateFrameBuilder {
-  pub fn new_blank() -> Self {
-    let mut frame = Self {
+  pub fn new() -> Self {
+    let mut builder = Self {
       bytes: [0; DISASSOCIATE_FRAME_SIZE],
     };
 
-    frame.type_(FrameType::Management);
-    frame.subtype(FrameSubtype::Management(ManagementSubtype::Disassociate));
+    builder.type_(FrameType::Management);
+    builder.subtype(FrameSubtype::Management(ManagementSubtype::Disassociate));
 
-    frame
-  }
+    builder.reason_code(ReasonCode::STALeavingBSS);
 
-  pub fn new_defaults() -> Self {
-    Self::new_blank()
+    builder
   }
 
   pub fn build(&self) -> DisassociateFrame {
@@ -40,7 +39,7 @@ impl DisassociateFixedParametersBuilderTrait for DisassociateFrameBuilder {}
 
 #[test]
 fn test_disassociate_frame_builder() {
-  let mut disassociate_frame_builder = DisassociateFrameBuilder::new_blank();
+  let mut disassociate_frame_builder = DisassociateFrameBuilder::new();
 
   disassociate_frame_builder.version(FrameVersion::Standard);
   disassociate_frame_builder.subtype(FrameSubtype::Management(ManagementSubtype::Beacon));

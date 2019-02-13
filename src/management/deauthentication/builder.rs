@@ -2,25 +2,24 @@ use super::*;
 
 const DEAUTHENTICATION_FRAME_SIZE: usize = DeauthenticationFrame::FIXED_PARAMETERS_END;
 
+#[derive(Default)]
 pub struct DeauthenticationFrameBuilder {
   bytes: [u8; DEAUTHENTICATION_FRAME_SIZE],
 }
 impl DeauthenticationFrameBuilder {
-  pub fn new_blank() -> Self {
-    let mut frame = Self {
+  pub fn new() -> Self {
+    let mut builder = Self {
       bytes: [0; DEAUTHENTICATION_FRAME_SIZE],
     };
 
-    frame.type_(FrameType::Management);
-    frame.subtype(FrameSubtype::Management(
+    builder.type_(FrameType::Management);
+    builder.subtype(FrameSubtype::Management(
       ManagementSubtype::Deauthentication,
     ));
 
-    frame
-  }
+    builder.reason_code(ReasonCode::STALeavingIBSSOrESS);
 
-  pub fn new_defaults() -> Self {
-    Self::new_blank()
+    builder
   }
 
   pub fn build(&self) -> DeauthenticationFrame {
@@ -42,7 +41,7 @@ impl DeauthenticationFixedParametersBuilderTrait for DeauthenticationFrameBuilde
 
 #[test]
 fn test_deauthentication_frame_builder() {
-  let mut deauthentication_frame_builder = DeauthenticationFrameBuilder::new_blank();
+  let mut deauthentication_frame_builder = DeauthenticationFrameBuilder::new();
 
   deauthentication_frame_builder.version(FrameVersion::Standard);
   deauthentication_frame_builder.subtype(FrameSubtype::Management(ManagementSubtype::Beacon));

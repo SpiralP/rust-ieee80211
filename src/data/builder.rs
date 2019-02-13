@@ -3,18 +3,19 @@ use super::*;
 // TODO dynamic size
 const DATA_FRAME_SIZE: usize = DataFrameBuilder::FRAGMENT_SEQUENCE_START + 2;
 
+#[derive(Default)]
 pub struct DataFrameBuilder {
   bytes: Vec<u8>,
 }
 impl DataFrameBuilder {
-  pub fn new_blank() -> Self {
-    Self {
+  pub fn new() -> Self {
+    let mut builder = Self {
       bytes: vec![0; DATA_FRAME_SIZE],
-    }
-  }
+    };
 
-  pub fn new_defaults() -> Self {
-    Self::new_blank()
+    builder.type_(FrameType::Data);
+
+    builder
   }
 
   pub fn build(&self) -> DataFrame {
@@ -131,7 +132,7 @@ pub trait DataFrameBuilderTrait: FrameBuilderTrait {
 
 #[test]
 fn test_data_frame_builder() {
-  let mut data_frame_builder = DataFrameBuilder::new_blank();
+  let mut data_frame_builder = DataFrameBuilder::new();
 
   data_frame_builder.version(FrameVersion::Standard);
   data_frame_builder.type_(FrameType::Data);

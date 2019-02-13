@@ -7,13 +7,13 @@ pub struct ManagementFrameBuilder {
 }
 impl ManagementFrameBuilder {
   pub fn new_blank() -> Self {
-    let mut frame = Self {
+    let mut builder = Self {
       bytes: [0; MANAGEMENT_FRAME_SIZE],
     };
 
-    frame.type_(FrameType::Management);
+    builder.type_(FrameType::Management);
 
-    frame
+    builder
   }
 
   pub fn new_defaults() -> Self {

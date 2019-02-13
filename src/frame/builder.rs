@@ -2,22 +2,19 @@ use super::*;
 
 const FRAME_SIZE: usize = 10;
 
+#[derive(Default)]
 pub struct FrameBuilder {
   bytes: [u8; FRAME_SIZE],
 }
 impl FrameBuilder {
-  pub fn new_blank() -> Self {
-    Self {
+  pub fn new() -> Self {
+    let mut builder = Self {
       bytes: [0; FRAME_SIZE],
-    }
-  }
+    };
 
-  pub fn new_defaults() -> Self {
-    let mut frame_builder = Self::new_blank();
+    builder.version(FrameVersion::Standard);
 
-    frame_builder.version(FrameVersion::Standard);
-
-    unimplemented!() // TODO
+    builder
   }
 
   pub fn build(&self) -> Frame {
@@ -125,7 +122,7 @@ pub trait FrameBuilderTrait {
 
 #[test]
 fn test_frame_builder() {
-  let mut frame_builder = FrameBuilder::new_blank();
+  let mut frame_builder = FrameBuilder::new();
 
   frame_builder.version(FrameVersion::Standard);
   frame_builder.type_(FrameType::Data);

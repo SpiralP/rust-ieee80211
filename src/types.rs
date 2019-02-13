@@ -850,13 +850,13 @@ pub enum ReasonCode {
   /// 35 Disassociated because STA is transmitting outside the limits of its TXOPs
   STAIsTransmittingOutsideTheLimitsOfItsTXOPs,
   /// 36 Requested from peer STA as the STA is leaving the BSS (or resetting)
-  STALeavingTheBSS,
+  RequestedSTALeavingBSS,
   /// 37 Requested from peer STA as it does not want to use the mechanism
-  STADoesNotWantToUseTheMechanism,
+  RequestedSTADoesNotWantToUseTheMechanism,
   /// 38 Requested from peer STA as the STA received frames using the mechanism for which a setup is required
-  STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired,
+  RequestedSTAReceivedFrames,
   /// 39 Requested from peer STA due to timeout
-  RequestedFromPeerSTADueToTimeout,
+  RequestedSTATimeout,
   /// 45 Peer STA does not support the requested cipher suite
   PeerSTADoesNotSupportTheRequestedCipherSuite,
   /// 46 Disassociated because authorized access limit reached
@@ -942,10 +942,10 @@ impl ReasonCode {
       33 => ReasonCode::QoSAPLacksSufficientBandwidthForThisQoSSTA,
       34 => ReasonCode::ExcessiveNumberOfFramesNotAcknowledged,
       35 => ReasonCode::STAIsTransmittingOutsideTheLimitsOfItsTXOPs,
-      36 => ReasonCode::STALeavingTheBSS,
-      37 => ReasonCode::STADoesNotWantToUseTheMechanism,
-      38 => ReasonCode::STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired,
-      39 => ReasonCode::RequestedFromPeerSTADueToTimeout,
+      36 => ReasonCode::RequestedSTALeavingBSS,
+      37 => ReasonCode::RequestedSTADoesNotWantToUseTheMechanism,
+      38 => ReasonCode::RequestedSTAReceivedFrames,
+      39 => ReasonCode::RequestedSTATimeout,
       45 => ReasonCode::PeerSTADoesNotSupportTheRequestedCipherSuite,
       46 => ReasonCode::AuthorizedAccessLimitReached,
       47 => ReasonCode::DisassociatedDueToExternalServiceRequirements,
@@ -1010,10 +1010,10 @@ impl ReasonCode {
       ReasonCode::QoSAPLacksSufficientBandwidthForThisQoSSTA => 33,
       ReasonCode::ExcessiveNumberOfFramesNotAcknowledged => 34,
       ReasonCode::STAIsTransmittingOutsideTheLimitsOfItsTXOPs => 35,
-      ReasonCode::STALeavingTheBSS => 36,
-      ReasonCode::STADoesNotWantToUseTheMechanism => 37,
-      ReasonCode::STAReceivedFramesUsingTheMechanismForWhichASetupIsRequired => 38,
-      ReasonCode::RequestedFromPeerSTADueToTimeout => 39,
+      ReasonCode::RequestedSTALeavingBSS => 36,
+      ReasonCode::RequestedSTADoesNotWantToUseTheMechanism => 37,
+      ReasonCode::RequestedSTAReceivedFrames => 38,
+      ReasonCode::RequestedSTATimeout => 39,
       ReasonCode::PeerSTADoesNotSupportTheRequestedCipherSuite => 45,
       ReasonCode::AuthorizedAccessLimitReached => 46,
       ReasonCode::DisassociatedDueToExternalServiceRequirements => 47,
