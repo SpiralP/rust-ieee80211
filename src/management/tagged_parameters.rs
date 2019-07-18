@@ -35,6 +35,10 @@ impl TaggedParameters {
     self.tags.insert(tag_name, tag_data.to_vec());
   }
 
+  pub fn get_all(&self) -> &HashMap<TagName, Vec<u8>> {
+    &self.tags
+  }
+
   pub fn get_bytes(&self, tag_name: TagName) -> Option<Vec<u8>> {
     self.tags.get(&tag_name).cloned()
   }
