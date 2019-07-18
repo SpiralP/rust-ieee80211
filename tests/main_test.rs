@@ -51,7 +51,7 @@ fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Op
   }
 }
 
-#[allow(clippy::cyclomatic_complexity)]
+#[allow(clippy::cognitive_complexity)]
 fn test_test_item(test_item: TestItem) {
   let frame = Frame::new(&test_item.bytes);
 
