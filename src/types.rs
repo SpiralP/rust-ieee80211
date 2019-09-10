@@ -1,4 +1,4 @@
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DSStatus {
   /// Not leaving DS or network is operating in AD-HOC mode
   NotLeavingDSOrADHOC,
@@ -38,7 +38,7 @@ impl DSStatus {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DurationID {
   /// Microseconds
   Duration(u16),
@@ -49,7 +49,7 @@ pub enum DurationID {
   Reserved(u16),
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum FrameVersion {
   Standard, // 0
   Reserved(u8),
@@ -71,7 +71,7 @@ impl FrameVersion {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum FrameType {
   /// 0
   Management,
@@ -102,7 +102,7 @@ impl FrameType {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum FrameSubtype {
   Management(ManagementSubtype),
   Control(ControlSubtype),
@@ -132,7 +132,7 @@ impl FrameSubtype {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ManagementSubtype {
   /// Association Request
   AssociationRequest, // 0
@@ -208,7 +208,7 @@ impl ManagementSubtype {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum ControlSubtype {
   /// 0-6 Reserved
   Reserved(u8), // 0-6
@@ -266,7 +266,7 @@ impl ControlSubtype {
   }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub enum DataSubtype {
   /// Data
   Data, // 0

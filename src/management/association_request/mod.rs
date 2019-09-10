@@ -23,3 +23,18 @@ impl<'a> AssociationRequestFixedParametersTrait<'a> for AssociationRequestFrame<
 impl<'a> TaggedParametersTrait<'a> for AssociationRequestFrame<'a> {
   const TAGGED_PARAMETERS_START: usize = Self::FIXED_PARAMETERS_END;
 }
+
+use std::fmt;
+impl<'a> fmt::Display for AssociationRequestFrame<'a> {
+  fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(f, "AssociationRequest")?;
+
+    if let Some(transmitter_address) = self.transmitter_address() {
+      write!(f, " tx: {}", transmitter_address)?;
+    }
+
+    write!(f, " rx: {}", self.receiver_address())?;
+
+    Ok(())
+  }
+}
