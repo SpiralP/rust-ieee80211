@@ -1,5 +1,5 @@
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, LittleEndian};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -9,7 +9,7 @@ pub struct TaggedParameters {
 
 impl TaggedParameters {
   pub fn new() -> Self {
-    TaggedParameters {
+    Self {
       tags: HashMap::new(),
     }
   }
@@ -205,13 +205,13 @@ impl RSN {
   }
 
   fn read_cipher_suite(bytes: &[u8]) -> CipherSuite {
-    let (oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+    let (oui, type_) = Self::read_suite_oui_and_type(&bytes);
 
     CipherSuite::from(oui, type_)
   }
 
   fn read_akm_suite(bytes: &[u8]) -> AKMSuite {
-    let (oui, type_) = RSN::read_suite_oui_and_type(&bytes);
+    let (oui, type_) = Self::read_suite_oui_and_type(&bytes);
 
     AKMSuite::from(oui, type_)
   }
@@ -225,8 +225,8 @@ pub enum CipherSuite {
 impl CipherSuite {
   fn from(oui: [u8; 3], type_: u8) -> Self {
     match oui {
-      [0x00, 0x0f, 0xac] => CipherSuite::Standard(CipherSuiteType::from(type_)),
-      other => CipherSuite::Vendor(other, type_),
+      [0x00, 0x0f, 0xac] => Self::Standard(CipherSuiteType::from(type_)),
+      other => Self::Vendor(other, type_),
     }
   }
 }
@@ -246,13 +246,13 @@ pub enum CipherSuiteType {
 impl CipherSuiteType {
   fn from(type_: u8) -> Self {
     match type_ {
-      1 => CipherSuiteType::WEP40,
-      2 => CipherSuiteType::TKIP,
-      4 => CipherSuiteType::CCMP,
-      5 => CipherSuiteType::WEP104,
-      6 => CipherSuiteType::BIP,
-      7 => CipherSuiteType::GroupAddressedTrafficNotAllowed,
-      other => CipherSuiteType::Reserved(other),
+      1 => Self::WEP40,
+      2 => Self::TKIP,
+      4 => Self::CCMP,
+      5 => Self::WEP104,
+      6 => Self::BIP,
+      7 => Self::GroupAddressedTrafficNotAllowed,
+      other => Self::Reserved(other),
     }
   }
 }
@@ -265,8 +265,8 @@ pub enum AKMSuite {
 impl AKMSuite {
   fn from(oui: [u8; 3], type_: u8) -> Self {
     match oui {
-      [0x00, 0x0f, 0xac] => AKMSuite::Standard(AKMSuiteType::from(type_)),
-      other => AKMSuite::Vendor(other, type_),
+      [0x00, 0x0f, 0xac] => Self::Standard(AKMSuiteType::from(type_)),
+      other => Self::Vendor(other, type_),
     }
   }
 }
@@ -301,16 +301,16 @@ pub enum AKMSuiteType {
 impl AKMSuiteType {
   fn from(type_: u8) -> Self {
     match type_ {
-      1 => AKMSuiteType::IEEE802_1X,
-      2 => AKMSuiteType::PSK,
-      3 => AKMSuiteType::FTOver802_1X,
-      4 => AKMSuiteType::FTPSK,
-      5 => AKMSuiteType::IEEE802_1XSHA,
-      6 => AKMSuiteType::PSKSHA,
-      7 => AKMSuiteType::TDLS,
-      8 => AKMSuiteType::SAE,
-      9 => AKMSuiteType::FTOverSAE,
-      other => AKMSuiteType::Reserved(other),
+      1 => Self::IEEE802_1X,
+      2 => Self::PSK,
+      3 => Self::FTOver802_1X,
+      4 => Self::FTPSK,
+      5 => Self::IEEE802_1XSHA,
+      6 => Self::PSKSHA,
+      7 => Self::TDLS,
+      8 => Self::SAE,
+      9 => Self::FTOverSAE,
+      other => Self::Reserved(other),
     }
   }
 }
@@ -332,7 +332,7 @@ pub enum TagName {
   ExtendedCapabilities,
 }
 
-pub trait TaggedParametersTrait<'a>: FrameTrait<'a> {
+pub trait TaggedParametersTrait: FrameTrait {
   // Tagged Parameters (36..) on Beacon
   const TAGGED_PARAMETERS_START: usize = 36;
 

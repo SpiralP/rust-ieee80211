@@ -2,39 +2,41 @@ mod builder;
 
 pub use self::builder::*;
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, Bytes, LittleEndian};
 
-pub enum FrameLayer<'a> {
-  Management(ManagementFrame<'a>),
-  Control(ControlFrame<'a>),
-  Data(DataFrame<'a>),
+pub enum FrameLayer {
+  Management(ManagementFrame),
+  Control(ControlFrame),
+  Data(DataFrame),
 }
 
-pub struct Frame<'a> {
-  bytes: &'a [u8],
+pub struct Frame {
+  bytes: Bytes,
 }
-impl<'a> Frame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
-    Self { bytes }
+impl Frame {
+  pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+    Self {
+      bytes: bytes.into(),
+    }
   }
 
-  pub fn next_layer(&self) -> Option<FrameLayer<'a>> {
+  pub fn next_layer(&self) -> Option<FrameLayer> {
     match self.type_() {
-      FrameType::Management => Some(FrameLayer::Management(ManagementFrame::new(&self.bytes()))),
-      FrameType::Control => Some(FrameLayer::Control(ControlFrame::new(&self.bytes()))),
-      FrameType::Data => Some(FrameLayer::Data(DataFrame::new(&self.bytes()))),
+      FrameType::Management => Some(FrameLayer::Management(ManagementFrame::new(self.bytes()))),
+      FrameType::Control => Some(FrameLayer::Control(ControlFrame::new(self.bytes()))),
+      FrameType::Data => Some(FrameLayer::Data(DataFrame::new(self.bytes()))),
       _ => None,
     }
   }
 }
-impl<'a> FrameTrait<'a> for Frame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for Frame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
 
-pub trait FrameTrait<'a> {
-  fn bytes(&self) -> &'a [u8];
+pub trait FrameTrait {
+  fn bytes(&self) -> Bytes;
 
   fn version(&self) -> FrameVersion {
     FrameVersion::from_u8(self.bytes()[0] & 0b0000_0011)
@@ -108,7 +110,10 @@ pub trait FrameTrait<'a> {
 
   /// Duration or Association Identifier
   fn duration_or_id(&self) -> DurationID {
-    if (self.bytes()[3] & 0b1000_0000) != 0 {
+    if (self.bytes()[3] & 0b1000_0000) == 0 {
+      let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0111_1111_1111_1111;
+      DurationID::Duration(n)
+    } else {
       let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0011_1111_1111_1111;
       // valid range 1-2007
       if n < 1 || n > 2007 {
@@ -116,9 +121,6 @@ pub trait FrameTrait<'a> {
       } else {
         DurationID::AssociationID(n)
       }
-    } else {
-      let n = LittleEndian::read_u16(&self.bytes()[2..4]) & 0b0111_1111_1111_1111;
-      DurationID::Duration(n)
     }
   }
 

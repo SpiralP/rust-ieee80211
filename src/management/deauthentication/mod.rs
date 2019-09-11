@@ -1,24 +1,23 @@
 mod builder;
 mod fixed_parameters;
 
-pub use self::builder::*;
-pub use self::fixed_parameters::*;
+pub use self::{builder::*, fixed_parameters::*};
 use super::*;
 
-pub struct DeauthenticationFrame<'a> {
-  bytes: &'a [u8],
+pub struct DeauthenticationFrame {
+  bytes: Bytes,
 }
 
-impl<'a> DeauthenticationFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl DeauthenticationFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
-impl<'a> FrameTrait<'a> for DeauthenticationFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for DeauthenticationFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for DeauthenticationFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for DeauthenticationFrame<'a> {}
-impl<'a> DeauthenticationFixedParametersTrait<'a> for DeauthenticationFrame<'a> {}
+impl FragmentSequenceTrait for DeauthenticationFrame {}
+impl ManagementFrameTrait for DeauthenticationFrame {}
+impl DeauthenticationFixedParametersTrait for DeauthenticationFrame {}

@@ -1,7 +1,7 @@
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, LittleEndian};
 
-pub trait BeaconFixedParametersTrait<'a>: FrameTrait<'a> {
+pub trait BeaconFixedParametersTrait: FrameTrait {
   // Fixed Parameters (24..36) on Beacons
   const FIXED_PARAMETERS_START: usize = 24;
 
@@ -14,9 +14,9 @@ pub trait BeaconFixedParametersTrait<'a>: FrameTrait<'a> {
 
   /// in seconds
   fn beacon_interval(&self) -> f64 {
-    let bytes =
-      &self.bytes()[(Self::FIXED_PARAMETERS_START + 8)..(Self::FIXED_PARAMETERS_START + 10)];
-    f64::from(LittleEndian::read_u16(bytes)) * 0.001_024f64
+    f64::from(LittleEndian::read_u16(
+      &self.bytes()[(Self::FIXED_PARAMETERS_START + 8)..(Self::FIXED_PARAMETERS_START + 10)],
+    )) * 0.001_024_f64
   }
 
   fn capabilities_info(&self) -> CapabilitiesInfo {
@@ -103,7 +103,7 @@ impl CapabilitiesInfo {
     let n = u16::from(b1 & 0b0000_1100) | u16::from(b2 & 0b0000_0010);
     let cfp_partitipation_capabilities = (n >> 2) as u8;
 
-    CapabilitiesInfo {
+    Self {
       ess_capabilities: (b1 & 0b0000_0001) != 0,
       ibss_status: (b1 & 0b0000_0010) != 0,
       cfp_partitipation_capabilities,

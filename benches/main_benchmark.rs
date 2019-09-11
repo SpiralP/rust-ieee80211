@@ -5,11 +5,11 @@ use criterion::*;
 include!("../tests/main_test.rs");
 
 fn criterion_benchmark(c: &mut Criterion) {
-  c.bench_function("new beacon", |b| b.iter(|| Frame::new(&BEACON_PACKET)));
+  c.bench_function("new beacon", |b| b.iter(|| Frame::new(&BEACON_PACKET[..])));
 
   c.bench_function("beacon ssid", |b| {
     b.iter(|| {
-      let frame = Frame::new(&BEACON_PACKET);
+      let frame = Frame::new(&BEACON_PACKET[..]);
 
       match frame.next_layer().unwrap() {
         FrameLayer::Management(management_frame) => match management_frame.next_layer().unwrap() {
@@ -23,7 +23,7 @@ fn criterion_benchmark(c: &mut Criterion) {
 
   c.bench_function("beacon test", |b| {
     b.iter(|| {
-      let frame = Frame::new(&BEACON_PACKET);
+      let frame = Frame::new(&BEACON_PACKET[..]);
 
       match frame.next_layer().unwrap() {
         FrameLayer::Management(management_frame) => match management_frame.next_layer().unwrap() {
@@ -44,7 +44,7 @@ fn criterion_benchmark(c: &mut Criterion) {
   });
 
   c.bench_function("byteorder LittleEndian::read_u16", |b| {
-    use byteorder::*;
+    use bytes::*;
 
     const BYTES: [u8; 2] = [0x12, 0x34];
 

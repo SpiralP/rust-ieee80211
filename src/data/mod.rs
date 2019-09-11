@@ -2,17 +2,18 @@ mod builder;
 
 pub use self::builder::*;
 use super::*;
+use bytes::Bytes;
 
-pub struct DataFrame<'a> {
-  bytes: &'a [u8],
+pub struct DataFrame {
+  bytes: Bytes,
 }
 
-impl<'a> DataFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl DataFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 
-  pub fn next_layer(&self) -> Option<&'a [u8]> {
+  pub fn next_layer(&self) -> Option<Bytes> {
     let mut index = Self::FRAGMENT_SEQUENCE_START + 2;
 
     if self.protected() {
@@ -30,13 +31,13 @@ impl<'a> DataFrame<'a> {
       _ => unreachable!(),
     }
 
-    Some(&self.bytes()[index..])
+    Some(self.bytes().slice_from(index))
   }
 }
 
-impl<'a> FrameTrait<'a> for DataFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for DataFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 
   fn addr1(&self) -> MacAddress {
@@ -53,10 +54,10 @@ impl<'a> FrameTrait<'a> for DataFrame<'a> {
     }
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for DataFrame<'a> {}
-impl<'a> DataFrameTrait<'a> for DataFrame<'a> {}
+impl FragmentSequenceTrait for DataFrame {}
+impl DataFrameTrait for DataFrame {}
 
-pub trait DataFrameTrait<'a>: FrameTrait<'a> {
+pub trait DataFrameTrait: FrameTrait {
   fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }
@@ -103,7 +104,7 @@ pub trait DataFrameTrait<'a>: FrameTrait<'a> {
   }
 
   fn qos_control(&self) -> u8 {
-    // &self.bytes()[(Self::FRAGMENT_SEQUENCE_START + 2)..];
+    // self.bytes()[(Self::FRAGMENT_SEQUENCE_START + 2)..];
     unimplemented!()
   }
 }

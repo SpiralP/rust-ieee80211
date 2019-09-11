@@ -3,23 +3,23 @@ mod fixed_parameters;
 pub use self::fixed_parameters::*;
 use super::*;
 
-pub struct AssociationResponseFrame<'a> {
-  bytes: &'a [u8],
+pub struct AssociationResponseFrame {
+  bytes: Bytes,
 }
 
-impl<'a> AssociationResponseFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl AssociationResponseFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
-impl<'a> FrameTrait<'a> for AssociationResponseFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for AssociationResponseFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for AssociationResponseFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for AssociationResponseFrame<'a> {}
-impl<'a> AssociationResponseFixedParametersTrait<'a> for AssociationResponseFrame<'a> {}
-impl<'a> TaggedParametersTrait<'a> for AssociationResponseFrame<'a> {
+impl FragmentSequenceTrait for AssociationResponseFrame {}
+impl ManagementFrameTrait for AssociationResponseFrame {}
+impl AssociationResponseFixedParametersTrait for AssociationResponseFrame {}
+impl TaggedParametersTrait for AssociationResponseFrame {
   const TAGGED_PARAMETERS_START: usize = Self::FIXED_PARAMETERS_END;
 }

@@ -1,21 +1,21 @@
 use super::*;
 
-pub struct ProbeRequestFrame<'a> {
-  bytes: &'a [u8],
+pub struct ProbeRequestFrame {
+  bytes: Bytes,
 }
 
-impl<'a> ProbeRequestFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl ProbeRequestFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
-impl<'a> FrameTrait<'a> for ProbeRequestFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for ProbeRequestFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for ProbeRequestFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for ProbeRequestFrame<'a> {}
-impl<'a> TaggedParametersTrait<'a> for ProbeRequestFrame<'a> {
+impl FragmentSequenceTrait for ProbeRequestFrame {}
+impl ManagementFrameTrait for ProbeRequestFrame {}
+impl TaggedParametersTrait for ProbeRequestFrame {
   const TAGGED_PARAMETERS_START: usize = 24;
 }

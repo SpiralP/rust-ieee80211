@@ -1,18 +1,19 @@
 use super::*;
+use bytes::Bytes;
 
-pub struct ControlFrame<'a> {
-  bytes: &'a [u8],
+pub struct ControlFrame {
+  bytes: Bytes,
 }
 
-impl<'a> ControlFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl ControlFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
 
-impl<'a> FrameTrait<'a> for ControlFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for ControlFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 
   fn addr1(&self) -> MacAddress {
@@ -23,9 +24,9 @@ impl<'a> FrameTrait<'a> for ControlFrame<'a> {
     None
   }
 }
-impl<'a> ControlFrameTrait<'a> for ControlFrame<'a> {}
+impl ControlFrameTrait for ControlFrame {}
 
-pub trait ControlFrameTrait<'a>: FrameTrait<'a> {
+pub trait ControlFrameTrait: FrameTrait {
   fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }

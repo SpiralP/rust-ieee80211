@@ -1,20 +1,20 @@
 use super::*;
 
-pub struct ProbeResponseFrame<'a> {
-  bytes: &'a [u8],
+pub struct ProbeResponseFrame {
+  bytes: Bytes,
 }
 
-impl<'a> ProbeResponseFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl ProbeResponseFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
-impl<'a> FrameTrait<'a> for ProbeResponseFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for ProbeResponseFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for ProbeResponseFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for ProbeResponseFrame<'a> {}
-impl<'a> BeaconFixedParametersTrait<'a> for ProbeResponseFrame<'a> {}
-impl<'a> TaggedParametersTrait<'a> for ProbeResponseFrame<'a> {}
+impl FragmentSequenceTrait for ProbeResponseFrame {}
+impl ManagementFrameTrait for ProbeResponseFrame {}
+impl BeaconFixedParametersTrait for ProbeResponseFrame {}
+impl TaggedParametersTrait for ProbeResponseFrame {}

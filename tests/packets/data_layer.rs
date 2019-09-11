@@ -46,7 +46,7 @@ fn test_data_layer_packet() {
   ]
   .to_vec();
 
-  let frame = Frame::new(&DATA_LAYER_PACKET);
+  let frame = Frame::new(&DATA_LAYER_PACKET[..]);
   match frame.next_layer().unwrap() {
     FrameLayer::Data(ref data_frame) => {
       let data_layer = data_frame.next_layer().unwrap().to_vec();

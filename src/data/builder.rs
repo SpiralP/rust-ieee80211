@@ -19,7 +19,7 @@ impl DataFrameBuilder {
   }
 
   pub fn build(&self) -> DataFrame {
-    DataFrame::new(self.bytes())
+    DataFrame::new(self.bytes().into())
   }
 
   pub fn next_layer(&mut self, data: &[u8]) {
@@ -196,5 +196,5 @@ fn test_data_frame_builder() {
   assert_eq!(data_frame.sequence_number(), 10);
   assert_eq!(data_frame.fragment_number(), 11);
 
-  assert_eq!(data_frame.next_layer().unwrap(), b"hello!!");
+  assert_eq!(&data_frame.next_layer().unwrap()[..], b"hello!!");
 }

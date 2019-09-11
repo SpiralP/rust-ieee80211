@@ -1,7 +1,7 @@
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, LittleEndian};
 
-pub trait FragmentSequenceTrait<'a>: FrameTrait<'a> {
+pub trait FragmentSequenceTrait: FrameTrait {
   const FRAGMENT_SEQUENCE_START: usize = 22;
   const FRAGMENT_SEQUENCE_END: usize = Self::FRAGMENT_SEQUENCE_START + 2;
 

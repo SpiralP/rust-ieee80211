@@ -33,7 +33,7 @@ fn test_authentication_packet() {
     ..Default::default()
   });
 
-  let frame = Frame::new(&AUTHENTICATION_PACKET);
+  let frame = Frame::new(&AUTHENTICATION_PACKET[..]);
   match match frame.next_layer().unwrap() {
     FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
     _ => unreachable!("not management"),

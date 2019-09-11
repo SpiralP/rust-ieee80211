@@ -1,7 +1,7 @@
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, LittleEndian};
 
-pub trait AuthenticationFixedParametersTrait<'a>: FrameTrait<'a> {
+pub trait AuthenticationFixedParametersTrait: FrameTrait {
   const FIXED_PARAMETERS_START: usize = 24;
   const FIXED_PARAMETERS_END: usize = Self::FIXED_PARAMETERS_START + 6;
 
@@ -39,15 +39,15 @@ pub enum AuthenticationAlgorithm {
 impl AuthenticationAlgorithm {
   pub fn from_u16(n: u16) -> Self {
     match n {
-      0 => AuthenticationAlgorithm::OpenSystem,
-      1 => AuthenticationAlgorithm::SharedKey,
-      2 => AuthenticationAlgorithm::FastBSSTransition,
-      3 => AuthenticationAlgorithm::SAE,
-      4 => AuthenticationAlgorithm::FILSSharedKeyWithoutPFS,
-      5 => AuthenticationAlgorithm::FILSSharedKeyWithPFS,
-      6 => AuthenticationAlgorithm::FILSPublicKey,
-      0x80 => AuthenticationAlgorithm::NetworkEAP, // 0x80
-      other => AuthenticationAlgorithm::Reserved(other),
+      0 => Self::OpenSystem,
+      1 => Self::SharedKey,
+      2 => Self::FastBSSTransition,
+      3 => Self::SAE,
+      4 => Self::FILSSharedKeyWithoutPFS,
+      5 => Self::FILSSharedKeyWithPFS,
+      6 => Self::FILSPublicKey,
+      0x80 => Self::NetworkEAP, // 0x80
+      other => Self::Reserved(other),
     }
   }
 }

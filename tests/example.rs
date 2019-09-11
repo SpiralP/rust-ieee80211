@@ -12,7 +12,7 @@ const BEACON_PACKET: [u8; 110] = [
 
 #[test]
 fn test_example() {
-  let frame = Frame::new(&BEACON_PACKET);
+  let frame = Frame::new(&BEACON_PACKET[..]);
 
   let receiver_address = frame.receiver_address();
   println!("receiver_address: {}", receiver_address);

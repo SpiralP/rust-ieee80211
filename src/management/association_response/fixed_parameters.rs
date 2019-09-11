@@ -1,7 +1,7 @@
 use super::*;
-use byteorder::{ByteOrder, LittleEndian};
+use bytes::{ByteOrder, LittleEndian};
 
-pub trait AssociationResponseFixedParametersTrait<'a>: FrameTrait<'a> {
+pub trait AssociationResponseFixedParametersTrait: FrameTrait {
   const FIXED_PARAMETERS_START: usize = 24;
   const FIXED_PARAMETERS_END: usize = Self::FIXED_PARAMETERS_START + 6;
 

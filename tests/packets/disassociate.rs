@@ -33,7 +33,7 @@ fn test_disassociate_packet() {
     ..Default::default()
   });
 
-  let frame = Frame::new(&DISASSOCIATE_PACKET);
+  let frame = Frame::new(&DISASSOCIATE_PACKET[..]);
   match match frame.next_layer().unwrap() {
     FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
     _ => unreachable!("not management"),

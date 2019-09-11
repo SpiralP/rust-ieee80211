@@ -9,64 +9,59 @@ mod probe_request;
 mod probe_response;
 mod tagged_parameters;
 
-pub use self::association_request::*;
-pub use self::association_response::*;
-pub use self::authentication::*;
-pub use self::beacon::*;
-pub use self::builder::*;
-pub use self::deauthentication::*;
-pub use self::disassociate::*;
-pub use self::probe_request::*;
-pub use self::probe_response::*;
-pub use self::tagged_parameters::*;
+pub use self::{
+  association_request::*, association_response::*, authentication::*, beacon::*, builder::*,
+  deauthentication::*, disassociate::*, probe_request::*, probe_response::*, tagged_parameters::*,
+};
 use super::*;
+use bytes::Bytes;
 
-pub struct ManagementFrame<'a> {
-  bytes: &'a [u8],
+pub struct ManagementFrame {
+  bytes: Bytes,
 }
 
-pub enum ManagementFrameLayer<'a> {
-  Beacon(BeaconFrame<'a>),
-  ProbeRequest(ProbeRequestFrame<'a>),
-  ProbeResponse(ProbeResponseFrame<'a>),
-  Authentication(AuthenticationFrame<'a>),
-  Deauthentication(DeauthenticationFrame<'a>),
-  Disassociate(DisassociateFrame<'a>),
-  AssociationRequest(AssociationRequestFrame<'a>),
-  AssociationResponse(AssociationResponseFrame<'a>),
+pub enum ManagementFrameLayer {
+  Beacon(BeaconFrame),
+  ProbeRequest(ProbeRequestFrame),
+  ProbeResponse(ProbeResponseFrame),
+  Authentication(AuthenticationFrame),
+  Deauthentication(DeauthenticationFrame),
+  Disassociate(DisassociateFrame),
+  AssociationRequest(AssociationRequestFrame),
+  AssociationResponse(AssociationResponseFrame),
 }
 
-impl<'a> ManagementFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl ManagementFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 
-  pub fn next_layer(&self) -> Option<ManagementFrameLayer<'a>> {
+  pub fn next_layer(&self) -> Option<ManagementFrameLayer> {
     match self.subtype() {
       FrameSubtype::Management(subtype) => match subtype {
         ManagementSubtype::Beacon => {
-          Some(ManagementFrameLayer::Beacon(BeaconFrame::new(&self.bytes)))
+          Some(ManagementFrameLayer::Beacon(BeaconFrame::new(self.bytes())))
         }
         ManagementSubtype::ProbeRequest => Some(ManagementFrameLayer::ProbeRequest(
-          ProbeRequestFrame::new(&self.bytes),
+          ProbeRequestFrame::new(self.bytes()),
         )),
         ManagementSubtype::ProbeResponse => Some(ManagementFrameLayer::ProbeResponse(
-          ProbeResponseFrame::new(&self.bytes),
+          ProbeResponseFrame::new(self.bytes()),
         )),
         ManagementSubtype::Authentication => Some(ManagementFrameLayer::Authentication(
-          AuthenticationFrame::new(&self.bytes),
+          AuthenticationFrame::new(self.bytes()),
         )),
         ManagementSubtype::Deauthentication => Some(ManagementFrameLayer::Deauthentication(
-          DeauthenticationFrame::new(&self.bytes),
+          DeauthenticationFrame::new(self.bytes()),
         )),
         ManagementSubtype::Disassociate => Some(ManagementFrameLayer::Disassociate(
-          DisassociateFrame::new(&self.bytes),
+          DisassociateFrame::new(self.bytes()),
         )),
         ManagementSubtype::AssociationRequest => Some(ManagementFrameLayer::AssociationRequest(
-          AssociationRequestFrame::new(&self.bytes),
+          AssociationRequestFrame::new(self.bytes()),
         )),
         ManagementSubtype::AssociationResponse => Some(ManagementFrameLayer::AssociationResponse(
-          AssociationResponseFrame::new(&self.bytes),
+          AssociationResponseFrame::new(self.bytes()),
         )),
         _ => None,
       },
@@ -75,15 +70,15 @@ impl<'a> ManagementFrame<'a> {
   }
 }
 
-impl<'a> FrameTrait<'a> for ManagementFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for ManagementFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for ManagementFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for ManagementFrame<'a> {}
+impl FragmentSequenceTrait for ManagementFrame {}
+impl ManagementFrameTrait for ManagementFrame {}
 
-pub trait ManagementFrameTrait<'a>: FrameTrait<'a> + FragmentSequenceTrait<'a> {
+pub trait ManagementFrameTrait: FrameTrait + FragmentSequenceTrait {
   fn addr2(&self) -> MacAddress {
     MacAddress::from_bytes(&self.bytes()[10..16]).unwrap()
   }

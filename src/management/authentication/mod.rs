@@ -3,23 +3,23 @@ mod fixed_parameters;
 pub use self::fixed_parameters::*;
 use super::*;
 
-pub struct AuthenticationFrame<'a> {
-  bytes: &'a [u8],
+pub struct AuthenticationFrame {
+  bytes: Bytes,
 }
 
-impl<'a> AuthenticationFrame<'a> {
-  pub fn new(bytes: &'a [u8]) -> Self {
+impl AuthenticationFrame {
+  pub fn new(bytes: Bytes) -> Self {
     Self { bytes }
   }
 }
-impl<'a> FrameTrait<'a> for AuthenticationFrame<'a> {
-  fn bytes(&self) -> &'a [u8] {
-    self.bytes
+impl FrameTrait for AuthenticationFrame {
+  fn bytes(&self) -> Bytes {
+    self.bytes.clone()
   }
 }
-impl<'a> FragmentSequenceTrait<'a> for AuthenticationFrame<'a> {}
-impl<'a> ManagementFrameTrait<'a> for AuthenticationFrame<'a> {}
-impl<'a> AuthenticationFixedParametersTrait<'a> for AuthenticationFrame<'a> {}
-impl<'a> TaggedParametersTrait<'a> for AuthenticationFrame<'a> {
+impl FragmentSequenceTrait for AuthenticationFrame {}
+impl ManagementFrameTrait for AuthenticationFrame {}
+impl AuthenticationFixedParametersTrait for AuthenticationFrame {}
+impl TaggedParametersTrait for AuthenticationFrame {
   const TAGGED_PARAMETERS_START: usize = Self::FIXED_PARAMETERS_END;
 }

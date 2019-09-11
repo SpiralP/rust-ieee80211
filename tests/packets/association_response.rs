@@ -56,7 +56,7 @@ fn test_association_response_packet() {
     ..Default::default()
   });
 
-  let frame = Frame::new(&ASSOCIATION_RESPONSE_PACKET);
+  let frame = Frame::new(&ASSOCIATION_RESPONSE_PACKET[..]);
   match match frame.next_layer().unwrap() {
     FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
     _ => unreachable!("not management"),

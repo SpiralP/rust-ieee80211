@@ -35,7 +35,7 @@ fn test_deauthentication_packet() {
     ..Default::default()
   });
 
-  let frame = Frame::new(&DEAUTHENTICATION_PACKET);
+  let frame = Frame::new(&DEAUTHENTICATION_PACKET[..]);
   match match frame.next_layer().unwrap() {
     FrameLayer::Management(ref management_frame) => management_frame.next_layer().unwrap(),
     _ => unreachable!("not management"),
