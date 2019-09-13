@@ -39,7 +39,7 @@ fn test_example() {
 
       println!(
         "channel: {}",
-        beacon_frame.tagged_parameters().channel().unwrap()
+        beacon_frame.tagged_parameters().unwrap().channel().unwrap()
       );
       // channel: 11
 

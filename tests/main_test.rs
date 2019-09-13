@@ -149,15 +149,19 @@ fn test_test_item(test_item: TestItem) {
               );
 
               check(
-                beacon_frame.tagged_parameters().supported_rates(),
+                beacon_frame.tagged_parameters().unwrap().supported_rates(),
                 test_item.supported_rates,
                 "supported_rates",
               );
 
-              check(beacon_frame.tagged_parameters().rsn(), test_item.rsn, "rsn");
+              check(
+                beacon_frame.tagged_parameters().unwrap().rsn(),
+                test_item.rsn,
+                "rsn",
+              );
 
               check(
-                beacon_frame.tagged_parameters().channel(),
+                beacon_frame.tagged_parameters().unwrap().channel(),
                 test_item.channel,
                 "channel",
               );
@@ -173,6 +177,7 @@ fn test_test_item(test_item: TestItem) {
               check(
                 association_request_frame
                   .tagged_parameters()
+                  .unwrap()
                   .supported_rates(),
                 test_item.supported_rates,
                 "supported_rates",
@@ -189,6 +194,7 @@ fn test_test_item(test_item: TestItem) {
               check(
                 association_response_frame
                   .tagged_parameters()
+                  .unwrap()
                   .supported_rates(),
                 test_item.supported_rates,
                 "supported_rates",

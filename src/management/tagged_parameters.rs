@@ -332,11 +332,14 @@ pub enum TagName {
   ExtendedCapabilities,
 }
 
+#[derive(Debug)]
+pub struct OverflowError;
+
 pub trait TaggedParametersTrait: FrameTrait {
   // Tagged Parameters (36..) on Beacon
   const TAGGED_PARAMETERS_START: usize = 36;
 
-  fn tagged_parameters(&self) -> TaggedParameters {
+  fn tagged_parameters(&self) -> Result<TaggedParameters, OverflowError> {
     let mut tagged_parameters = TaggedParameters::new();
 
     let mut i = Self::TAGGED_PARAMETERS_START;
@@ -351,16 +354,21 @@ pub trait TaggedParametersTrait: FrameTrait {
       let tag_length: usize = bytes[i] as usize;
 
       i += 1;
+
+      if (i + tag_length) > len {
+        return Err(OverflowError);
+      }
+
       let data = &bytes[i..(i + tag_length)];
       i += tag_length;
 
       tagged_parameters.add(tag_number, data);
     }
 
-    tagged_parameters
+    Ok(tagged_parameters)
   }
 
   fn ssid(&self) -> Option<Vec<u8>> {
-    self.tagged_parameters().ssid()
+    self.tagged_parameters().ok()?.ssid()
   }
 }

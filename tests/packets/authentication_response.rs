@@ -59,6 +59,7 @@ fn test_authentication_response_packet() {
       assert_eq!(
         authentication_frame
           .tagged_parameters()
+          .unwrap()
           .get_bytes(TagName::Other(221))
           .unwrap(),
         [0x00, 0x10, 0x18, 0x01, 0x01, 0x00],
