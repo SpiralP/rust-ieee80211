@@ -332,8 +332,29 @@ pub enum TagName {
   ExtendedCapabilities,
 }
 
+use std::{error::Error, fmt};
+
 #[derive(Debug)]
-pub struct OverflowError;
+pub struct OverflowError {
+  details: String,
+}
+
+impl OverflowError {
+  pub fn new(details: String) -> Self {
+    Self { details }
+  }
+}
+impl fmt::Display for OverflowError {
+  fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    write!(f, "OverflowError: {}", self.details)
+  }
+}
+
+impl Error for OverflowError {
+  fn description(&self) -> &str {
+    &self.details
+  }
+}
 
 pub trait TaggedParametersTrait: FrameTrait {
   // Tagged Parameters (36..) on Beacon
@@ -356,7 +377,7 @@ pub trait TaggedParametersTrait: FrameTrait {
       i += 1;
 
       if (i + tag_length) > len {
-        return Err(OverflowError);
+        return Err(OverflowError::new(format!("{} > {}", i + tag_length, len)));
       }
 
       let data = &bytes[i..(i + tag_length)];
