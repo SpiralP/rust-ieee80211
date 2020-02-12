@@ -7,6 +7,7 @@ pub struct DisassociateFrameBuilder {
   bytes: [u8; DISASSOCIATE_FRAME_SIZE],
 }
 impl DisassociateFrameBuilder {
+  #[must_use]
   pub fn new() -> Self {
     let mut builder = Self {
       bytes: [0; DISASSOCIATE_FRAME_SIZE],
@@ -20,6 +21,7 @@ impl DisassociateFrameBuilder {
     builder
   }
 
+  #[must_use]
   pub fn build(&self) -> DisassociateFrame {
     DisassociateFrame::new(self.bytes().to_vec())
   }

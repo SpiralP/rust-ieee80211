@@ -10,6 +10,7 @@ pub enum DSStatus {
   WDSOrMesh,
 }
 impl DSStatus {
+  #[must_use]
   pub fn from_bools(from_ds: bool, to_ds: bool) -> Self {
     match (from_ds, to_ds) {
       // 00 Not leaving DS or network is operating in AD-HOC mode
@@ -23,7 +24,8 @@ impl DSStatus {
     }
   }
 
-  /// returns from_ds, to_ds
+  /// returns (`from_ds`, `to_ds`)
+  #[must_use]
   pub fn to_bools(self) -> (bool, bool) {
     match self {
       // 00 Not leaving DS or network is operating in AD-HOC mode
@@ -56,6 +58,7 @@ pub enum FrameVersion {
 }
 
 impl FrameVersion {
+  #[must_use]
   pub fn from_u8(n: u8) -> Self {
     match n {
       0 => Self::Standard,
@@ -63,6 +66,7 @@ impl FrameVersion {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       Self::Standard => 0,
@@ -83,6 +87,7 @@ pub enum FrameType {
 }
 
 impl FrameType {
+  #[must_use]
   pub fn from_u8(n: u8) -> Self {
     match n {
       0 => Self::Management,
@@ -92,6 +97,7 @@ impl FrameType {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       Self::Management => 0,
@@ -113,6 +119,7 @@ pub enum FrameSubtype {
 }
 
 impl FrameSubtype {
+  #[must_use]
   pub fn from_u8(type_: FrameType, subtype: u8) -> Self {
     match type_ {
       FrameType::Management => Self::Management(ManagementSubtype::from_u8(subtype)),
@@ -122,6 +129,7 @@ impl FrameSubtype {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       Self::Management(subtype) => subtype.into_u8(),
@@ -165,6 +173,7 @@ pub enum ManagementSubtype {
 }
 
 impl ManagementSubtype {
+  #[must_use]
   pub fn from_u8(n: u8) -> Self {
     match n {
       0 => Self::AssociationRequest,
@@ -186,6 +195,7 @@ impl ManagementSubtype {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       Self::AssociationRequest => 0,
@@ -233,6 +243,7 @@ pub enum ControlSubtype {
 }
 
 impl ControlSubtype {
+  #[must_use]
   pub fn from_u8(n: u8) -> Self {
     match n {
       // 0-6 Reserved
@@ -249,6 +260,7 @@ impl ControlSubtype {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       // 0-6 Reserved
@@ -303,6 +315,7 @@ pub enum DataSubtype {
 }
 
 impl DataSubtype {
+  #[must_use]
   pub fn from_u8(n: u8) -> Self {
     match n {
       0 => Self::Data,
@@ -325,6 +338,7 @@ impl DataSubtype {
     }
   }
 
+  #[must_use]
   pub fn into_u8(self) -> u8 {
     match self {
       Self::Data => 0,
@@ -560,6 +574,8 @@ pub enum StatusCode {
   Reserved(u16),
 }
 impl StatusCode {
+  #[allow(clippy::too_many_lines)]
+  #[must_use]
   pub fn from_u16(n: u16) -> Self {
     match n {
       0 => Self::Successful,
@@ -668,6 +684,8 @@ impl StatusCode {
     }
   }
 
+  #[allow(clippy::too_many_lines)]
+  #[must_use]
   pub fn into_u16(self) -> u16 {
     match self {
       Self::Successful => 0,
@@ -905,6 +923,7 @@ pub enum ReasonCode {
   Reserved(u16),
 }
 impl ReasonCode {
+  #[must_use]
   pub fn from_u16(n: u16) -> Self {
     match n {
       1 => Self::UnspecifiedReason,
@@ -973,6 +992,7 @@ impl ReasonCode {
     }
   }
 
+  #[must_use]
   pub fn into_u16(self) -> u16 {
     match self {
       Self::UnspecifiedReason => 1,

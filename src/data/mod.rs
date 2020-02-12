@@ -49,8 +49,7 @@ impl FrameTrait for DataFrame {
   fn destination_address(&self) -> Option<MacAddress> {
     match self.ds_status() {
       DSStatus::FromDSToSTA => Some(self.addr1()),
-      DSStatus::FromSTAToDS => Some(self.addr3()),
-      DSStatus::WDSOrMesh => Some(self.addr3()),
+      DSStatus::FromSTAToDS | DSStatus::WDSOrMesh => Some(self.addr3()),
       // fall back to receiver
       _ => Some(self.receiver_address()),
     }

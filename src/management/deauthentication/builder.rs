@@ -7,6 +7,7 @@ pub struct DeauthenticationFrameBuilder {
   bytes: [u8; DEAUTHENTICATION_FRAME_SIZE],
 }
 impl DeauthenticationFrameBuilder {
+  #[must_use]
   pub fn new() -> Self {
     let mut builder = Self {
       bytes: [0; DEAUTHENTICATION_FRAME_SIZE],
@@ -22,6 +23,7 @@ impl DeauthenticationFrameBuilder {
     builder
   }
 
+  #[must_use]
   pub fn build(&self) -> DeauthenticationFrame {
     DeauthenticationFrame::new(self.bytes().to_vec())
   }

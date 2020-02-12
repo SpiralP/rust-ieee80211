@@ -8,6 +8,7 @@ pub struct TaggedParameters {
 }
 
 impl TaggedParameters {
+  #[must_use]
   pub fn new() -> Self {
     Self {
       tags: HashMap::new(),
@@ -35,19 +36,23 @@ impl TaggedParameters {
     self.tags.insert(tag_name, tag_data.to_vec());
   }
 
+  #[must_use]
   pub fn get_all(&self) -> &HashMap<TagName, Vec<u8>> {
     &self.tags
   }
 
+  #[must_use]
   pub fn get_bytes(&self, tag_name: TagName) -> Option<Vec<u8>> {
     self.tags.get(&tag_name).cloned()
   }
 
+  #[must_use]
   pub fn ssid(&self) -> Option<Vec<u8>> {
     self.get_bytes(TagName::SSID)
   }
 
   /// in Mbit/sec
+  #[must_use]
   pub fn supported_rates(&self) -> Option<Vec<f64>> {
     self
       .tags
@@ -65,6 +70,7 @@ impl TaggedParameters {
       })
   }
 
+  #[must_use]
   pub fn channel(&self) -> Option<u8> {
     self
       .tags
@@ -74,6 +80,7 @@ impl TaggedParameters {
       .or_else(|| self.tags.get(&TagName::HTInformation).map(|bytes| bytes[0]))
   }
 
+  #[must_use]
   pub fn rsn(&self) -> Option<RSNVersion> {
     self.tags.get(&TagName::RSNInformation).and_then(|bytes| {
       let mut i = 0;
@@ -339,6 +346,7 @@ pub struct OverflowError {
 }
 
 impl OverflowError {
+  #[must_use]
   pub fn new(details: String) -> Self {
     Self { details }
   }

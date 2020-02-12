@@ -96,6 +96,7 @@ pub struct CapabilitiesInfo {
   pub immediate_block_ack: bool,
 }
 impl CapabilitiesInfo {
+  #[must_use]
   pub fn from_bytes(bytes: &[u8]) -> Self {
     let b1 = bytes[0];
     let b2 = bytes[1];

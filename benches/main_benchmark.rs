@@ -44,7 +44,7 @@ fn criterion_benchmark(c: &mut Criterion) {
   });
 
   c.bench_function("byteorder LittleEndian::read_u16", |b| {
-    use bytes::*;
+    use byteorder::{ByteOrder, LittleEndian};
 
     const BYTES: [u8; 2] = [0x12, 0x34];
 
@@ -69,7 +69,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     b.iter(|| {
       let left = u16::from(BYTES[1]);
       let right = u16::from(BYTES[0]);
-      (right | (left << 8))
+      right | (left << 8)
     })
   });
 }

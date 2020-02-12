@@ -8,6 +8,7 @@ pub struct DataFrameBuilder {
   bytes: Vec<u8>,
 }
 impl DataFrameBuilder {
+  #[must_use]
   pub fn new() -> Self {
     let mut builder = Self {
       bytes: vec![0; DATA_FRAME_SIZE],
@@ -18,6 +19,7 @@ impl DataFrameBuilder {
     builder
   }
 
+  #[must_use]
   pub fn build(&self) -> DataFrame {
     DataFrame::new(self.bytes().to_vec())
   }
@@ -65,8 +67,7 @@ impl FrameBuilderTrait for DataFrameBuilder {
     match self.build().ds_status() {
       // TODO
       DSStatus::FromDSToSTA => self.addr1(mac_address),
-      DSStatus::FromSTAToDS => self.addr3(mac_address),
-      DSStatus::WDSOrMesh => self.addr3(mac_address),
+      DSStatus::FromSTAToDS | DSStatus::WDSOrMesh => self.addr3(mac_address),
       // fall back to receiver
       _ => self.receiver_address(mac_address),
     };

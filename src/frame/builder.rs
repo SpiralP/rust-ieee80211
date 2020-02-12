@@ -7,6 +7,7 @@ pub struct FrameBuilder {
   bytes: [u8; FRAME_SIZE],
 }
 impl FrameBuilder {
+  #[must_use]
   pub fn new() -> Self {
     let mut builder = Self {
       bytes: [0; FRAME_SIZE],
@@ -17,6 +18,7 @@ impl FrameBuilder {
     builder
   }
 
+  #[must_use]
   pub fn build(&self) -> Frame {
     Frame::new(self.bytes().to_vec())
   }

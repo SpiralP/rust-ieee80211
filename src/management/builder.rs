@@ -6,6 +6,7 @@ pub struct ManagementFrameBuilder {
   bytes: [u8; MANAGEMENT_FRAME_SIZE],
 }
 impl ManagementFrameBuilder {
+  #[must_use]
   pub fn new_blank() -> Self {
     let mut builder = Self {
       bytes: [0; MANAGEMENT_FRAME_SIZE],
@@ -16,10 +17,12 @@ impl ManagementFrameBuilder {
     builder
   }
 
+  #[must_use]
   pub fn new_defaults() -> Self {
     Self::new_blank()
   }
 
+  #[must_use]
   pub fn build(&self) -> ManagementFrame {
     ManagementFrame::new(self.bytes().to_vec())
   }

@@ -37,6 +37,7 @@ pub enum AuthenticationAlgorithm {
   Reserved(u16),
 }
 impl AuthenticationAlgorithm {
+  #[must_use]
   pub fn from_u16(n: u16) -> Self {
     match n {
       0 => Self::OpenSystem,

@@ -1,6 +1,7 @@
 #![warn(clippy::pedantic)]
 #![allow(clippy::module_name_repetitions)]
 #![allow(clippy::missing_errors_doc)]
+#![allow(clippy::cast_possible_truncation)]
 
 mod control;
 mod data;
