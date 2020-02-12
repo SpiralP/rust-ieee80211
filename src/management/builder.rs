@@ -21,7 +21,7 @@ impl ManagementFrameBuilder {
   }
 
   pub fn build(&self) -> ManagementFrame {
-    ManagementFrame::new(self.bytes().into())
+    ManagementFrame::new(self.bytes().to_vec())
   }
 }
 impl FrameBuilderTrait for ManagementFrameBuilder {

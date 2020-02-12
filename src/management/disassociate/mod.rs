@@ -9,8 +9,10 @@ pub struct DisassociateFrame {
 }
 
 impl DisassociateFrame {
-  pub fn new(bytes: Bytes) -> Self {
-    Self { bytes }
+  pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+    Self {
+      bytes: bytes.into(),
+    }
   }
 }
 impl FrameTrait for DisassociateFrame {

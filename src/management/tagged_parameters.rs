@@ -1,5 +1,5 @@
 use super::*;
-use bytes::{ByteOrder, LittleEndian};
+use byteorder::{ByteOrder, LittleEndian};
 use std::collections::HashMap;
 
 #[derive(Default)]
@@ -240,8 +240,8 @@ pub enum CipherSuiteType {
   CCMP,                // 4 // AES (CCM)
   WEP104,              // 5
   BIP,                 // 6
-  GroupAddressedTrafficNotAllowed, // 7
-                       // 8-255 Reserved
+  GroupAddressedTrafficNotAllowed, /* 7
+                        * 8-255 Reserved */
 }
 impl CipherSuiteType {
   fn from(type_: u8) -> Self {
@@ -274,8 +274,9 @@ impl AKMSuite {
 /// Authentication and Key Management Suite
 #[derive(Debug, PartialEq)]
 pub enum AKMSuiteType {
-  Reserved(u8), // 0 Reserved
-
+  // 0 Reserved
+  // 10-255 Reserved
+  Reserved(u8),
   /// IEEE 802.1X with RSNA default
   IEEE802_1X, // 1
   /// Pre-Shared-Key
@@ -295,8 +296,6 @@ pub enum AKMSuiteType {
   SAE, // 8
   /// FT auth over SAE with SHA256
   FTOverSAE, // 9
-
-             //  10-255 Reserved
 }
 impl AKMSuiteType {
   fn from(type_: u8) -> Self {

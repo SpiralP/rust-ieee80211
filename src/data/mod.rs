@@ -9,8 +9,10 @@ pub struct DataFrame {
 }
 
 impl DataFrame {
-  pub fn new(bytes: Bytes) -> Self {
-    Self { bytes }
+  pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+    Self {
+      bytes: bytes.into(),
+    }
   }
 
   pub fn next_layer(&self) -> Option<Bytes> {
@@ -31,7 +33,7 @@ impl DataFrame {
       _ => unreachable!(),
     }
 
-    Some(self.bytes().slice_from(index))
+    Some(self.bytes().slice(index..))
   }
 }
 

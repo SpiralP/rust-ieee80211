@@ -46,14 +46,14 @@ struct TestItem<'a> {
 
 fn check<T: std::fmt::Debug + std::cmp::PartialEq>(original: Option<T>, test: Option<T>, s: &str) {
   assert_eq!(original.is_some(), test.is_some(), "{}.is_some()", s);
-  if test.is_some() {
-    assert_eq!(original.unwrap(), test.unwrap(), "{}", s);
+  if let Some(test) = test {
+    assert_eq!(original.unwrap(), test, "{}", s);
   }
 }
 
 #[allow(clippy::cognitive_complexity)]
 fn test_test_item(test_item: TestItem) {
-  let frame = Frame::new(&test_item.bytes[..]);
+  let frame = Frame::new(test_item.bytes.to_vec());
 
   if let Some(version) = test_item.version {
     assert_eq!(frame.version(), version, "version");

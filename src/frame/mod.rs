@@ -2,7 +2,8 @@ mod builder;
 
 pub use self::builder::*;
 use super::*;
-use bytes::{ByteOrder, Bytes, LittleEndian};
+use byteorder::{ByteOrder, LittleEndian};
+use bytes::Bytes;
 
 pub enum FrameLayer {
   Management(ManagementFrame),

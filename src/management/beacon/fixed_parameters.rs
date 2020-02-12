@@ -1,5 +1,5 @@
 use super::*;
-use bytes::{ByteOrder, LittleEndian};
+use byteorder::{ByteOrder, LittleEndian};
 
 pub trait BeaconFixedParametersTrait: FrameTrait {
   // Fixed Parameters (24..36) on Beacons

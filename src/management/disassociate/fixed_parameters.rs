@@ -1,5 +1,5 @@
 use super::*;
-use bytes::{ByteOrder, LittleEndian};
+use byteorder::{ByteOrder, LittleEndian};
 
 pub trait DisassociateFixedParametersTrait: FrameTrait {
   const FIXED_PARAMETERS_START: usize = 24;
