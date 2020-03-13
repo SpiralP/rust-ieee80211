@@ -2,20 +2,20 @@ mod builder;
 
 pub use self::builder::*;
 use super::*;
-use bytes::Bytes;
+use std::borrow::Cow;
 
-pub struct DataFrame {
-    bytes: Bytes,
+pub struct DataFrame<'a> {
+    bytes: Cow<'a, [u8]>,
 }
 
-impl DataFrame {
-    pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+impl<'a> DataFrame<'a> {
+    pub fn new<T: Into<Cow<'a, [u8]>>>(bytes: T) -> Self {
         Self {
             bytes: bytes.into(),
         }
     }
 
-    pub fn next_layer(&self) -> Option<Bytes> {
+    pub fn next_layer(&self) -> Option<&[u8]> {
         let mut index = Self::FRAGMENT_SEQUENCE_START + 2;
 
         if self.protected() {
@@ -33,13 +33,13 @@ impl DataFrame {
             _ => unreachable!(),
         }
 
-        Some(self.bytes().slice(index..))
+        Some(&self.bytes()[index..])
     }
 }
 
-impl FrameTrait for DataFrame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+impl FrameTrait for DataFrame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes.as_ref()
     }
 
     fn addr1(&self) -> MacAddress {
@@ -55,8 +55,8 @@ impl FrameTrait for DataFrame {
         }
     }
 }
-impl FragmentSequenceTrait for DataFrame {}
-impl DataFrameTrait for DataFrame {}
+impl FragmentSequenceTrait for DataFrame<'_> {}
+impl DataFrameTrait for DataFrame<'_> {}
 
 pub trait DataFrameTrait: FrameTrait {
     fn addr2(&self) -> MacAddress {

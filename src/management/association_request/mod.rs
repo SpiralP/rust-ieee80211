@@ -3,29 +3,29 @@ mod fixed_parameters;
 pub use self::fixed_parameters::*;
 use super::*;
 
-pub struct AssociationRequestFrame {
-    bytes: Bytes,
+pub struct AssociationRequestFrame<'a> {
+    bytes: &'a [u8],
 }
 
-impl AssociationRequestFrame {
-    pub fn new(bytes: Bytes) -> Self {
+impl<'a> AssociationRequestFrame<'a> {
+    pub fn new(bytes: &'a [u8]) -> Self {
         Self { bytes }
     }
 }
-impl FrameTrait for AssociationRequestFrame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+impl FrameTrait for AssociationRequestFrame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes
     }
 }
-impl FragmentSequenceTrait for AssociationRequestFrame {}
-impl ManagementFrameTrait for AssociationRequestFrame {}
-impl AssociationRequestFixedParametersTrait for AssociationRequestFrame {}
-impl TaggedParametersTrait for AssociationRequestFrame {
+impl FragmentSequenceTrait for AssociationRequestFrame<'_> {}
+impl ManagementFrameTrait for AssociationRequestFrame<'_> {}
+impl AssociationRequestFixedParametersTrait for AssociationRequestFrame<'_> {}
+impl TaggedParametersTrait for AssociationRequestFrame<'_> {
     const TAGGED_PARAMETERS_START: usize = Self::FIXED_PARAMETERS_END;
 }
 
 use std::fmt;
-impl fmt::Display for AssociationRequestFrame {
+impl fmt::Display for AssociationRequestFrame<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "AssociationRequest")?;
 
