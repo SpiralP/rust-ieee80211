@@ -1,6 +1,7 @@
 use super::*;
 use byteorder::{ByteOrder, LittleEndian};
 use std::collections::HashMap;
+use std::{error::Error, fmt};
 
 #[derive(Default)]
 pub struct TaggedParameters<'a> {
@@ -15,26 +16,7 @@ impl<'a> TaggedParameters<'a> {
         }
     }
 
-    pub fn add<T: Into<Cow<'a, [u8]>>>(&mut self, tag_number: u8, tag_data: T) {
-        let tag_name = match tag_number {
-            0 => TagName::SSID,
-            1 => TagName::SupportedRates,
-            3 => TagName::DSParameter,
-            5 => TagName::TrafficIndicationMap,
-            7 => TagName::CountryInformation,
-            33 => TagName::PowerCapabilities,
-            42 => TagName::ERPInformation,
-            50 => TagName::ExtendedSupportedRates,
-            48 => TagName::RSNInformation,
-            11 => TagName::QBSSLoadElement,
-            45 => TagName::HTCapabilities,
-            61 => TagName::HTInformation,
-            127 => TagName::ExtendedCapabilities,
-            191 => TagName::VHTCapabilities,
-
-            n => TagName::Other(n),
-        };
-
+    pub fn add<T: Into<Cow<'a, [u8]>>>(&mut self, tag_name: TagName, tag_data: T) {
         self.tags.insert(tag_name, tag_data.into());
     }
 
@@ -229,6 +211,7 @@ pub enum CipherSuite {
     Standard(CipherSuiteType),
     Vendor([u8; 3], u8),
 }
+
 impl CipherSuite {
     fn from(oui: [u8; 3], type_: u8) -> Self {
         match oui {
@@ -269,6 +252,7 @@ pub enum AKMSuite {
     Standard(AKMSuiteType),
     Vendor([u8; 3], u8),
 }
+
 impl AKMSuite {
     fn from(oui: [u8; 3], type_: u8) -> Self {
         match oui {
@@ -340,28 +324,79 @@ pub enum TagName {
     PowerCapabilities,
 }
 
-use std::{error::Error, fmt};
+impl From<u8> for TagName {
+    fn from(tag_number: u8) -> Self {
+        match tag_number {
+            0 => TagName::SSID,
+            1 => TagName::SupportedRates,
+            3 => TagName::DSParameter,
+            5 => TagName::TrafficIndicationMap,
+            7 => TagName::CountryInformation,
+            33 => TagName::PowerCapabilities,
+            42 => TagName::ERPInformation,
+            50 => TagName::ExtendedSupportedRates,
+            48 => TagName::RSNInformation,
+            11 => TagName::QBSSLoadElement,
+            45 => TagName::HTCapabilities,
+            61 => TagName::HTInformation,
+            127 => TagName::ExtendedCapabilities,
+            191 => TagName::VHTCapabilities,
+
+            n => TagName::Other(n),
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct OverflowError {
-    details: String,
+    required_length: usize,
+    remaining_length: usize,
 }
 
 impl OverflowError {
     #[must_use]
-    pub fn new(details: String) -> Self {
-        Self { details }
-    }
-}
-impl fmt::Display for OverflowError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "OverflowError: {}", self.details)
+    pub fn new(required_length: usize,
+               remaining_length: usize) -> Self {
+        Self {
+            required_length,
+            remaining_length,
+        }
     }
 }
 
-impl Error for OverflowError {
-    fn description(&self) -> &str {
-        &self.details
+impl fmt::Display for OverflowError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "OverflowError: Expected {} bytes but only {} are remaining",
+               self.required_length,
+               self.remaining_length)
+    }
+}
+
+impl Error for OverflowError {}
+
+pub struct TaggedParameterIterator<'a> {
+    bytes: &'a [u8],
+}
+
+impl<'a> Iterator for TaggedParameterIterator<'a> {
+    type Item = Result<(TagName, &'a [u8]), OverflowError>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.bytes.len() < 2 {
+            return None;
+        }
+
+        let tag_number = self.bytes[0];
+        let tag_length = self.bytes[1] as usize;
+        if self.bytes.len() < 2 + tag_length {
+            self.bytes = &self.bytes[self.bytes.len()..];
+            return Some(Err(OverflowError::new(tag_length, self.bytes.len())));
+        }
+
+        let tag_buffer = &self.bytes[2..(2+tag_length)];
+        self.bytes = &self.bytes[2+tag_length..];
+
+        Some(Ok((tag_number.into(), tag_buffer)))
     }
 }
 
@@ -369,36 +404,24 @@ pub trait TaggedParametersTrait: FrameTrait {
     // Tagged Parameters (36..) on Beacon
     const TAGGED_PARAMETERS_START: usize = 36;
 
+    fn iter_tagged_parameters(&self) -> TaggedParameterIterator {
+        TaggedParameterIterator {
+            bytes: self.bytes()
+        }
+    }
+
     fn tagged_parameters(&self) -> Result<TaggedParameters, OverflowError> {
         let mut tagged_parameters = TaggedParameters::new();
 
-        let mut i = Self::TAGGED_PARAMETERS_START;
-
-        let bytes = self.bytes();
-        let len = bytes.len();
-
-        while i < len {
-            let tag_number: u8 = bytes[i];
-
-            i += 1;
-            let tag_length: usize = bytes[i] as usize;
-
-            i += 1;
-
-            if (i + tag_length) > len {
-                return Err(OverflowError::new(format!("{} > {}", i + tag_length, len)));
-            }
-
-            let data = &bytes[i..(i + tag_length)];
-            i += tag_length;
-
-            tagged_parameters.add(tag_number, data);
+        for tag in self.iter_tagged_parameters() {
+            let (tag_name, tag) = tag?;
+            tagged_parameters.add(tag_name, tag);
         }
 
         Ok(tagged_parameters)
     }
 
-  fn ssid(&self) -> Option<Vec<u8>> {
-    self.tagged_parameters().ok()?.ssid().map(ToOwned::to_owned)
-  }
+    fn ssid(&self) -> Option<Vec<u8>> {
+        self.tagged_parameters().ok()?.ssid().map(ToOwned::to_owned)
+    }
 }

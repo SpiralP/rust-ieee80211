@@ -26,8 +26,12 @@ impl<'a> Frame<'a> {
             FrameType::Management => {
                 Some(FrameLayer::Management(ManagementFrame::new(self.bytes())))
             }
-            FrameType::Control => Some(FrameLayer::Control(ControlFrame::new(self.bytes()))),
-            FrameType::Data => Some(FrameLayer::Data(DataFrame::new(self.bytes()))),
+            FrameType::Control => {
+                Some(FrameLayer::Control(ControlFrame::new(self.bytes())))
+            },
+            FrameType::Data => {
+                Some(FrameLayer::Data(DataFrame::new(self.bytes())))
+            },
             _ => None,
         }
     }
