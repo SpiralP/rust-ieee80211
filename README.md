@@ -6,7 +6,7 @@ This is a library for parsing IEEE 802.11 WiFi packets into zero-cost data struc
 - Idiomatic rust: match-friendly enums for many types
 - Fast: built with speed in mind
 
-[Documentation](https://spiralp.github.io/rust-ieee80211)
+[Documentation](https://spiralp.github.io/rust-ieee80211/ieee80211/index.html)
 
 ## Example
 
