@@ -21,4 +21,6 @@ impl FrameTrait for BeaconFrame<'_> {
 impl FragmentSequenceTrait for BeaconFrame<'_> {}
 impl ManagementFrameTrait for BeaconFrame<'_> {}
 impl BeaconFixedParametersTrait for BeaconFrame<'_> {}
-impl TaggedParametersTrait for BeaconFrame<'_> {}
+impl TaggedParametersTrait for BeaconFrame<'_> {
+    const TAGGED_PARAMETERS_START: usize = 36;
+}

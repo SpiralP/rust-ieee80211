@@ -17,4 +17,7 @@ impl FrameTrait for ProbeResponseFrame<'_> {
 impl FragmentSequenceTrait for ProbeResponseFrame<'_> {}
 impl ManagementFrameTrait for ProbeResponseFrame<'_> {}
 impl BeaconFixedParametersTrait for ProbeResponseFrame<'_> {}
-impl TaggedParametersTrait for ProbeResponseFrame<'_> {}
+impl TaggedParametersTrait for ProbeResponseFrame<'_> {
+    // TODO: Check that this is correct
+    const TAGGED_PARAMETERS_START: usize = 36;
+}

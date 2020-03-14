@@ -401,12 +401,11 @@ impl<'a> Iterator for TaggedParameterIterator<'a> {
 }
 
 pub trait TaggedParametersTrait: FrameTrait {
-    // Tagged Parameters (36..) on Beacon
-    const TAGGED_PARAMETERS_START: usize = 36;
+    const TAGGED_PARAMETERS_START: usize;
 
     fn iter_tagged_parameters(&self) -> TaggedParameterIterator {
         TaggedParameterIterator {
-            bytes: self.bytes()
+            bytes: &self.bytes()[Self::TAGGED_PARAMETERS_START..]
         }
     }
 
@@ -425,3 +424,32 @@ pub trait TaggedParametersTrait: FrameTrait {
         self.tagged_parameters().ok()?.ssid().map(ToOwned::to_owned)
     }
 }
+
+pub trait OptionalTaggedParametersTrait: ManagementFrameTrait {
+    fn iter_tagged_parameters(&self) -> Option<TaggedParameterIterator> {
+        let subtype = match self.subtype() {
+            FrameSubtype::Management(subtype) => subtype,
+            _ => return None
+        };
+
+        let offset = match subtype {
+            ManagementSubtype::AssociationRequest => AssociationRequestFrame::TAGGED_PARAMETERS_START,
+            ManagementSubtype::AssociationResponse => AssociationResponseFrame::TAGGED_PARAMETERS_START,
+            ManagementSubtype::Authentication => AuthenticationFrame::TAGGED_PARAMETERS_START,
+            ManagementSubtype::Beacon => BeaconFrame::TAGGED_PARAMETERS_START,
+            ManagementSubtype::ProbeRequest => ProbeRequestFrame::TAGGED_PARAMETERS_START,
+            ManagementSubtype::ProbeResponse => ProbeResponseFrame::TAGGED_PARAMETERS_START,
+            _ => return None
+        };
+
+        if offset > self.bytes().len() {
+            return None;
+        }
+
+        Some(TaggedParameterIterator {
+            bytes: &self.bytes()[offset..]
+        })
+    }
+}
+
+impl OptionalTaggedParametersTrait for ManagementFrame<'_> {}
