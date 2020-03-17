@@ -159,7 +159,7 @@
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DeauthenticationFrame</span> {
-        <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>())
+        <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">to_vec</span>())
     }
 }
 <span class="kw">impl</span> <span class="ident">FrameBuilderTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrameBuilder</span> {
