@@ -1,7 +1,7 @@
 mod builder;
 mod fixed_parameters;
 
-pub use self::fixed_parameters::*;
+pub use self::{builder::*, fixed_parameters::*};
 use super::*;
 
 pub struct DeauthenticationFrame<'a> {
