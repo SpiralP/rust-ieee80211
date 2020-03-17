@@ -114,20 +114,20 @@
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::<span class="ident">builder</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DataFrame</span> {
-    <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DataFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bytes</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>,
 }
 
-<span class="kw">impl</span> <span class="ident">DataFrame</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">DataFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">FRAGMENT_SEQUENCE_START</span> <span class="op">+</span> <span class="number">2</span>;
 
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">protected</span>() {
@@ -145,13 +145,13 @@
             <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
         }
 
-        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">slice</span>(<span class="ident">index</span>..))
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="ident">index</span>..])
     }
 }
 
-<span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span> {
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
-        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
+<span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">as_ref</span>()
     }
 
     <span class="kw">fn</span> <span class="ident">addr1</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
@@ -167,8 +167,8 @@
         }
     }
 }
-<span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span> {}
-<span class="kw">impl</span> <span class="ident">DataFrameTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span> {}
+<span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {}
+<span class="kw">impl</span> <span class="ident">DataFrameTrait</span> <span class="kw">for</span> <span class="ident">DataFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {}
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DataFrameTrait</span>: <span class="ident">FrameTrait</span> {
     <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {

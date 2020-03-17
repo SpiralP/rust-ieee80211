@@ -136,31 +136,31 @@
     <span class="ident">tagged_parameters</span>::<span class="kw-2">*</span>,
 };
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
-<span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
+<span class="kw">use</span> <span class="ident">std</span>::<span class="ident">borrow</span>::<span class="ident">Cow</span>;
 
-<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ManagementFrame</span> {
-    <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+<span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">bytes</span>: <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span>,
 }
 
-<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ManagementFrameLayer</span> {
-    <span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span>),
-    <span class="ident">ProbeRequest</span>(<span class="ident">ProbeRequestFrame</span>),
-    <span class="ident">ProbeResponse</span>(<span class="ident">ProbeResponseFrame</span>),
-    <span class="ident">Authentication</span>(<span class="ident">AuthenticationFrame</span>),
-    <span class="ident">Deauthentication</span>(<span class="ident">DeauthenticationFrame</span>),
-    <span class="ident">Disassociate</span>(<span class="ident">DisassociateFrame</span>),
-    <span class="ident">AssociationRequest</span>(<span class="ident">AssociationRequestFrame</span>),
-    <span class="ident">AssociationResponse</span>(<span class="ident">AssociationResponseFrame</span>),
+<span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ManagementFrameLayer</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">ProbeRequest</span>(<span class="ident">ProbeRequestFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">ProbeResponse</span>(<span class="ident">ProbeResponseFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">Authentication</span>(<span class="ident">AuthenticationFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">Deauthentication</span>(<span class="ident">DeauthenticationFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">Disassociate</span>(<span class="ident">DisassociateFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">AssociationRequest</span>(<span class="ident">AssociationRequestFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
+    <span class="ident">AssociationResponse</span>(<span class="ident">AssociationResponseFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>),
 }
 
-<span class="kw">impl</span> <span class="ident">ManagementFrame</span> {
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+<span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ManagementFrameLayer</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ManagementFrameLayer</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span><span class="op">&gt;</span> {
         <span class="kw">match</span> <span class="self">self</span>.<span class="ident">subtype</span>() {
             <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">subtype</span> {
                 <span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span> <span class="op">=</span><span class="op">&gt;</span> {
@@ -200,13 +200,13 @@
     }
 }
 
-<span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {
-    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
-        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
+<span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">as_ref</span>()
     }
 }
-<span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {}
-<span class="kw">impl</span> <span class="ident">ManagementFrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {}
+<span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {}
+<span class="kw">impl</span> <span class="ident">ManagementFrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {}
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ManagementFrameTrait</span>: <span class="ident">FrameTrait</span> <span class="op">+</span> <span class="ident">FragmentSequenceTrait</span> {
     <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
