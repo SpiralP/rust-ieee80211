@@ -29,27 +29,27 @@
 <span class="kw">use</span> <span class="ident">byteorder</span>::{<span class="ident">ByteOrder</span>, <span class="ident">LittleEndian</span>};
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">AssociationResponseFixedParametersTrait</span>: <span class="ident">FrameTrait</span> {
-  <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_START</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">24</span>;
-  <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_END</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">6</span>;
+    <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_START</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">24</span>;
+    <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_END</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">6</span>;
 
-  <span class="kw">fn</span> <span class="ident">capabilities_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CapabilitiesInfo</span> {
-    <span class="ident">CapabilitiesInfo</span>::<span class="ident">from_bytes</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">2</span>)],
-    )
-  }
+    <span class="kw">fn</span> <span class="ident">capabilities_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CapabilitiesInfo</span> {
+        <span class="ident">CapabilitiesInfo</span>::<span class="ident">from_bytes</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">2</span>)],
+        )
+    }
 
-  <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
-    <span class="ident">StatusCode</span>::<span class="ident">from_u16</span>(<span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">2</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">4</span>)],
-    ))
-  }
+    <span class="kw">fn</span> <span class="ident">status_code</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">StatusCode</span> {
+        <span class="ident">StatusCode</span>::<span class="ident">from_u16</span>(<span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">2</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">4</span>)],
+        ))
+    }
 
-  <span class="kw">fn</span> <span class="ident">association_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
-    <span class="comment">// TODO skip first 2 bits?</span>
-    <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">4</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">6</span>)],
-    ) <span class="op">&amp;</span> <span class="number">0b0011_1111_1111_1111</span>
-  }
+    <span class="kw">fn</span> <span class="ident">association_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u16</span> {
+        <span class="comment">// TODO skip first 2 bits?</span>
+        <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">4</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">6</span>)],
+        ) <span class="op">&amp;</span> <span class="number">0b0011_1111_1111_1111</span>
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../../";window.currentCrate = "ieee80211";</script><script src="../../../../aliases.js"></script><script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script><script defer src="../../../../search-index.js"></script></body></html>

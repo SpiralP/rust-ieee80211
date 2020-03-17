@@ -127,125 +127,125 @@
 <span class="kw">use</span> <span class="ident">byteorder</span>::{<span class="ident">ByteOrder</span>, <span class="ident">LittleEndian</span>};
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">BeaconFixedParametersTrait</span>: <span class="ident">FrameTrait</span> {
-  <span class="comment">// Fixed Parameters (24..36) on Beacons</span>
-  <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_START</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">24</span>;
+    <span class="comment">// Fixed Parameters (24..36) on Beacons</span>
+    <span class="kw">const</span> <span class="ident">FIXED_PARAMETERS_START</span>: <span class="ident">usize</span> <span class="op">=</span> <span class="number">24</span>;
 
-  <span class="doccomment">/// microseconds it has been active</span>
-  <span class="kw">fn</span> <span class="ident">timestamp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
-    <span class="ident">LittleEndian</span>::<span class="ident">read_u64</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span>..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">8</span>)],
-    )
-  }
+    <span class="doccomment">/// microseconds it has been active</span>
+    <span class="kw">fn</span> <span class="ident">timestamp</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">u64</span> {
+        <span class="ident">LittleEndian</span>::<span class="ident">read_u64</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span>..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">8</span>)],
+        )
+    }
 
-  <span class="doccomment">/// in seconds</span>
-  <span class="kw">fn</span> <span class="ident">beacon_interval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
-    <span class="ident">f64</span>::<span class="ident">from</span>(<span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">8</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">10</span>)],
-    )) <span class="op">*</span> <span class="number">0.001_024_f64</span>
-  }
+    <span class="doccomment">/// in seconds</span>
+    <span class="kw">fn</span> <span class="ident">beacon_interval</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">f64</span> {
+        <span class="ident">f64</span>::<span class="ident">from</span>(<span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">8</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">10</span>)],
+        )) <span class="op">*</span> <span class="number">0.001_024_f64</span>
+    }
 
-  <span class="kw">fn</span> <span class="ident">capabilities_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CapabilitiesInfo</span> {
-    <span class="ident">CapabilitiesInfo</span>::<span class="ident">from_bytes</span>(
-      <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">10</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">12</span>)],
-    )
-  }
+    <span class="kw">fn</span> <span class="ident">capabilities_info</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CapabilitiesInfo</span> {
+        <span class="ident">CapabilitiesInfo</span>::<span class="ident">from_bytes</span>(
+            <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">10</span>)..(<span class="self">Self</span>::<span class="ident">FIXED_PARAMETERS_START</span> <span class="op">+</span> <span class="number">12</span>)],
+        )
+    }
 }
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">PartialEq</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CapabilitiesInfo</span> {
-  <span class="doccomment">/// 0: Transmitter is a STA</span>
-  <span class="doccomment">/// 1: Transmitter is an AP</span>
-  <span class="kw">pub</span> <span class="ident">ess_capabilities</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Transmitter is a STA</span>
+    <span class="doccomment">/// 1: Transmitter is an AP</span>
+    <span class="kw">pub</span> <span class="ident">ess_capabilities</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Transmitter belongs to a BSS</span>
-  <span class="doccomment">/// 1: Transmitter belongs to an IBSS</span>
-  <span class="kw">pub</span> <span class="ident">ibss_status</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Transmitter belongs to a BSS</span>
+    <span class="doccomment">/// 1: Transmitter belongs to an IBSS</span>
+    <span class="kw">pub</span> <span class="ident">ibss_status</span>: <span class="ident">bool</span>,
 
-  <span class="comment">// static const value_string sta_cf_pollable[] = {</span>
-  <span class="comment">//   {0x00, &quot;Station is not CF-Pollable&quot;},</span>
-  <span class="comment">//   {0x02, &quot;Station is CF-Pollable, not requesting to be placed on the  CF-polling list&quot;},</span>
-  <span class="comment">//   {0x01, &quot;Station is CF-Pollable, requesting to be placed on the CF-polling list&quot;},</span>
-  <span class="comment">//   {0x03, &quot;Station is CF-Pollable, requesting never to be polled&quot;},</span>
-  <span class="comment">//   {0x80, &quot;QSTA requesting association in QBSS&quot;},</span>
-  <span class="comment">//   {0x81, &quot;Reserved&quot;},</span>
-  <span class="comment">//   {0x82, &quot;Reserved&quot;},</span>
-  <span class="comment">//   {0x83, &quot;Reserved&quot;},</span>
-  <span class="comment">//   {0, NULL}</span>
-  <span class="comment">// };</span>
+    <span class="comment">// static const value_string sta_cf_pollable[] = {</span>
+    <span class="comment">//   {0x00, &quot;Station is not CF-Pollable&quot;},</span>
+    <span class="comment">//   {0x02, &quot;Station is CF-Pollable, not requesting to be placed on the  CF-polling list&quot;},</span>
+    <span class="comment">//   {0x01, &quot;Station is CF-Pollable, requesting to be placed on the CF-polling list&quot;},</span>
+    <span class="comment">//   {0x03, &quot;Station is CF-Pollable, requesting never to be polled&quot;},</span>
+    <span class="comment">//   {0x80, &quot;QSTA requesting association in QBSS&quot;},</span>
+    <span class="comment">//   {0x81, &quot;Reserved&quot;},</span>
+    <span class="comment">//   {0x82, &quot;Reserved&quot;},</span>
+    <span class="comment">//   {0x83, &quot;Reserved&quot;},</span>
+    <span class="comment">//   {0, NULL}</span>
+    <span class="comment">// };</span>
 
-  <span class="comment">// static const value_string ap_cf_pollable[] = {</span>
-  <span class="comment">//   {0x00, &quot;No point coordinator at AP&quot;},</span>
-  <span class="comment">//   {0x02, &quot;Point coordinator at AP for delivery only (no polling)&quot;},</span>
-  <span class="comment">//   {0x01, &quot;Point coordinator at AP for delivery and polling&quot;},</span>
-  <span class="comment">//   {0x03, &quot;Reserved&quot;},</span>
-  <span class="comment">//   {0x80, &quot;QAP (HC) does not use CFP for delivery of unicast data type frames&quot;},</span>
-  <span class="comment">//   {0x82, &quot;QAP (HC) uses CFP for delivery, but does not send CF-Polls to non-QoS STAs&quot;},</span>
-  <span class="comment">//   {0x81, &quot;QAP (HC) uses CFP for delivery, and sends CF-Polls to non-QoS STAs&quot;},</span>
-  <span class="comment">//   {0x83, &quot;Reserved&quot;},</span>
-  <span class="comment">//   {0, NULL}</span>
-  <span class="comment">// };</span>
-  <span class="kw">pub</span> <span class="ident">cfp_partitipation_capabilities</span>: <span class="ident">u8</span>,
+    <span class="comment">// static const value_string ap_cf_pollable[] = {</span>
+    <span class="comment">//   {0x00, &quot;No point coordinator at AP&quot;},</span>
+    <span class="comment">//   {0x02, &quot;Point coordinator at AP for delivery only (no polling)&quot;},</span>
+    <span class="comment">//   {0x01, &quot;Point coordinator at AP for delivery and polling&quot;},</span>
+    <span class="comment">//   {0x03, &quot;Reserved&quot;},</span>
+    <span class="comment">//   {0x80, &quot;QAP (HC) does not use CFP for delivery of unicast data type frames&quot;},</span>
+    <span class="comment">//   {0x82, &quot;QAP (HC) uses CFP for delivery, but does not send CF-Polls to non-QoS STAs&quot;},</span>
+    <span class="comment">//   {0x81, &quot;QAP (HC) uses CFP for delivery, and sends CF-Polls to non-QoS STAs&quot;},</span>
+    <span class="comment">//   {0x83, &quot;Reserved&quot;},</span>
+    <span class="comment">//   {0, NULL}</span>
+    <span class="comment">// };</span>
+    <span class="kw">pub</span> <span class="ident">cfp_partitipation_capabilities</span>: <span class="ident">u8</span>,
 
-  <span class="doccomment">/// 0: AP/STA cannot support WEP</span>
-  <span class="doccomment">/// 1: AP/STA can support WEP</span>
-  <span class="kw">pub</span> <span class="ident">privacy</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: AP/STA cannot support WEP</span>
+    <span class="doccomment">/// 1: AP/STA can support WEP</span>
+    <span class="kw">pub</span> <span class="ident">privacy</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Allowed</span>
-  <span class="kw">pub</span> <span class="ident">short_preamble</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Allowed</span>
+    <span class="kw">pub</span> <span class="ident">short_preamble</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Allowed</span>
-  <span class="kw">pub</span> <span class="ident">pbcc</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Allowed</span>
+    <span class="kw">pub</span> <span class="ident">pbcc</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not in use</span>
-  <span class="kw">pub</span> <span class="ident">channel_agility</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not in use</span>
+    <span class="kw">pub</span> <span class="ident">channel_agility</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">spectrum_management</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">spectrum_management</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 1: In use</span>
-  <span class="kw">pub</span> <span class="ident">short_slot_time</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 1: In use</span>
+    <span class="kw">pub</span> <span class="ident">short_slot_time</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">automatic_power_save_delivery</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">automatic_power_save_delivery</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">radio_measurement</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">radio_measurement</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">dsss_ofdm</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">dsss_ofdm</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">delayed_block_ack</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">delayed_block_ack</span>: <span class="ident">bool</span>,
 
-  <span class="doccomment">/// 0: Not Implemented</span>
-  <span class="kw">pub</span> <span class="ident">immediate_block_ack</span>: <span class="ident">bool</span>,
+    <span class="doccomment">/// 0: Not Implemented</span>
+    <span class="kw">pub</span> <span class="ident">immediate_block_ack</span>: <span class="ident">bool</span>,
 }
 <span class="kw">impl</span> <span class="ident">CapabilitiesInfo</span> {
-  <span class="attribute">#[<span class="ident">must_use</span>]</span>
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="kw">let</span> <span class="ident">b1</span> <span class="op">=</span> <span class="ident">bytes</span>[<span class="number">0</span>];
-    <span class="kw">let</span> <span class="ident">b2</span> <span class="op">=</span> <span class="ident">bytes</span>[<span class="number">1</span>];
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="ident">b1</span> <span class="op">=</span> <span class="ident">bytes</span>[<span class="number">0</span>];
+        <span class="kw">let</span> <span class="ident">b2</span> <span class="op">=</span> <span class="ident">bytes</span>[<span class="number">1</span>];
 
-    <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_1100</span>) <span class="op">|</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0010</span>);
-    <span class="kw">let</span> <span class="ident">cfp_partitipation_capabilities</span> <span class="op">=</span> (<span class="ident">n</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">u8</span>;
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_1100</span>) <span class="op">|</span> <span class="ident">u16</span>::<span class="ident">from</span>(<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0010</span>);
+        <span class="kw">let</span> <span class="ident">cfp_partitipation_capabilities</span> <span class="op">=</span> (<span class="ident">n</span> <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">u8</span>;
 
-    <span class="self">Self</span> {
-      <span class="ident">ess_capabilities</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">ibss_status</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_0010</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">cfp_partitipation_capabilities</span>,
-      <span class="ident">privacy</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">short_preamble</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">pbcc</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">channel_agility</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">spectrum_management</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">short_slot_time</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0100</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">automatic_power_save_delivery</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_1000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">radio_measurement</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">dsss_ofdm</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">delayed_block_ack</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-      <span class="ident">immediate_block_ack</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+        <span class="self">Self</span> {
+            <span class="ident">ess_capabilities</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">ibss_status</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0000_0010</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">cfp_partitipation_capabilities</span>,
+            <span class="ident">privacy</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">short_preamble</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">pbcc</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">channel_agility</span>: (<span class="ident">b1</span> <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">spectrum_management</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0001</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">short_slot_time</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_0100</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">automatic_power_save_delivery</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0000_1000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">radio_measurement</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">dsss_ofdm</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">delayed_block_ack</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+            <span class="ident">immediate_block_ack</span>: (<span class="ident">b2</span> <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+        }
     }
-  }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../../";window.currentCrate = "ieee80211";</script><script src="../../../../aliases.js"></script><script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script><script defer src="../../../../search-index.js"></script></body></html>

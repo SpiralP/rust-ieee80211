@@ -111,6 +111,13 @@
 <span id="111">111</span>
 <span id="112">112</span>
 <span id="113">113</span>
+<span id="114">114</span>
+<span id="115">115</span>
+<span id="116">116</span>
+<span id="117">117</span>
+<span id="118">118</span>
+<span id="119">119</span>
+<span id="120">120</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">association_request</span>;
 <span class="kw">mod</span> <span class="ident">association_response</span>;
@@ -124,106 +131,113 @@
 <span class="kw">mod</span> <span class="ident">tagged_parameters</span>;
 
 <span class="kw">pub</span> <span class="kw">use</span> <span class="self">self</span>::{
-  <span class="ident">association_request</span>::<span class="kw-2">*</span>, <span class="ident">association_response</span>::<span class="kw-2">*</span>, <span class="ident">authentication</span>::<span class="kw-2">*</span>, <span class="ident">beacon</span>::<span class="kw-2">*</span>, <span class="ident">builder</span>::<span class="kw-2">*</span>,
-  <span class="ident">deauthentication</span>::<span class="kw-2">*</span>, <span class="ident">disassociate</span>::<span class="kw-2">*</span>, <span class="ident">probe_request</span>::<span class="kw-2">*</span>, <span class="ident">probe_response</span>::<span class="kw-2">*</span>, <span class="ident">tagged_parameters</span>::<span class="kw-2">*</span>,
+    <span class="ident">association_request</span>::<span class="kw-2">*</span>, <span class="ident">association_response</span>::<span class="kw-2">*</span>, <span class="ident">authentication</span>::<span class="kw-2">*</span>, <span class="ident">beacon</span>::<span class="kw-2">*</span>, <span class="ident">builder</span>::<span class="kw-2">*</span>,
+    <span class="ident">deauthentication</span>::<span class="kw-2">*</span>, <span class="ident">disassociate</span>::<span class="kw-2">*</span>, <span class="ident">probe_request</span>::<span class="kw-2">*</span>, <span class="ident">probe_response</span>::<span class="kw-2">*</span>,
+    <span class="ident">tagged_parameters</span>::<span class="kw-2">*</span>,
 };
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">ManagementFrame</span> {
-  <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+    <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
 }
 
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">ManagementFrameLayer</span> {
-  <span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span>),
-  <span class="ident">ProbeRequest</span>(<span class="ident">ProbeRequestFrame</span>),
-  <span class="ident">ProbeResponse</span>(<span class="ident">ProbeResponseFrame</span>),
-  <span class="ident">Authentication</span>(<span class="ident">AuthenticationFrame</span>),
-  <span class="ident">Deauthentication</span>(<span class="ident">DeauthenticationFrame</span>),
-  <span class="ident">Disassociate</span>(<span class="ident">DisassociateFrame</span>),
-  <span class="ident">AssociationRequest</span>(<span class="ident">AssociationRequestFrame</span>),
-  <span class="ident">AssociationResponse</span>(<span class="ident">AssociationResponseFrame</span>),
+    <span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span>),
+    <span class="ident">ProbeRequest</span>(<span class="ident">ProbeRequestFrame</span>),
+    <span class="ident">ProbeResponse</span>(<span class="ident">ProbeResponseFrame</span>),
+    <span class="ident">Authentication</span>(<span class="ident">AuthenticationFrame</span>),
+    <span class="ident">Deauthentication</span>(<span class="ident">DeauthenticationFrame</span>),
+    <span class="ident">Disassociate</span>(<span class="ident">DisassociateFrame</span>),
+    <span class="ident">AssociationRequest</span>(<span class="ident">AssociationRequestFrame</span>),
+    <span class="ident">AssociationResponse</span>(<span class="ident">AssociationResponseFrame</span>),
 }
 
 <span class="kw">impl</span> <span class="ident">ManagementFrame</span> {
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="self">Self</span> {
-      <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
-    }
-  }
-
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ManagementFrameLayer</span><span class="op">&gt;</span> {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">subtype</span>() {
-      <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">subtype</span> {
-        <span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span> <span class="op">=</span><span class="op">&gt;</span> {
-          <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>())))
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
         }
-        <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeRequest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">ProbeRequest</span>(
-          <span class="ident">ProbeRequestFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeResponse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">ProbeResponse</span>(
-          <span class="ident">ProbeResponseFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">Authentication</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Authentication</span>(
-          <span class="ident">AuthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">Deauthentication</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Deauthentication</span>(
-          <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">Disassociate</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Disassociate</span>(
-          <span class="ident">DisassociateFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationRequest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">AssociationRequest</span>(
-          <span class="ident">AssociationRequestFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationResponse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">AssociationResponse</span>(
-          <span class="ident">AssociationResponseFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
-        )),
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
-      },
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
     }
-  }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">ManagementFrameLayer</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">subtype</span>() {
+            <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">subtype</span> {
+                <span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Beacon</span>(<span class="ident">BeaconFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>())))
+                }
+                <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeRequest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">ProbeRequest</span>(
+                    <span class="ident">ProbeRequestFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                )),
+                <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeResponse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">ProbeResponse</span>(
+                    <span class="ident">ProbeResponseFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                )),
+                <span class="ident">ManagementSubtype</span>::<span class="ident">Authentication</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Authentication</span>(
+                    <span class="ident">AuthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                )),
+                <span class="ident">ManagementSubtype</span>::<span class="ident">Deauthentication</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Deauthentication</span>(
+                        <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                    ))
+                }
+                <span class="ident">ManagementSubtype</span>::<span class="ident">Disassociate</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">Disassociate</span>(
+                    <span class="ident">DisassociateFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                )),
+                <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationRequest</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">AssociationRequest</span>(
+                        <span class="ident">AssociationRequestFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                    ))
+                }
+                <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationResponse</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="prelude-val">Some</span>(<span class="ident">ManagementFrameLayer</span>::<span class="ident">AssociationResponse</span>(
+                        <span class="ident">AssociationResponseFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()),
+                    ))
+                }
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+            },
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+        }
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
-    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
-  }
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
+    }
 }
 <span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {}
 <span class="kw">impl</span> <span class="ident">ManagementFrameTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span> {}
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">ManagementFrameTrait</span>: <span class="ident">FrameTrait</span> <span class="op">+</span> <span class="ident">FragmentSequenceTrait</span> {
-  <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
-    <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">10</span>..<span class="number">16</span>]).<span class="ident">unwrap</span>()
-  }
-  <span class="kw">fn</span> <span class="ident">addr3</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
-    <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">16</span>..<span class="number">22</span>]).<span class="ident">unwrap</span>()
-  }
+    <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+        <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">10</span>..<span class="number">16</span>]).<span class="ident">unwrap</span>()
+    }
+    <span class="kw">fn</span> <span class="ident">addr3</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+        <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">16</span>..<span class="number">22</span>]).<span class="ident">unwrap</span>()
+    }
 
-  <span class="doccomment">/// Transmitter Address</span>
-  <span class="doccomment">/// Who this packet came from wirelessly.</span>
-  <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">addr2</span>())
-  }
+    <span class="doccomment">/// Transmitter Address</span>
+    <span class="doccomment">/// Who this packet came from wirelessly.</span>
+    <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">addr2</span>())
+    }
 
-  <span class="doccomment">/// Source Address</span>
-  <span class="doccomment">/// Who the packet came from.</span>
-  <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
-    <span class="self">self</span>.<span class="ident">transmitter_address</span>()
-  }
+    <span class="doccomment">/// Source Address</span>
+    <span class="doccomment">/// Who the packet came from.</span>
+    <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">transmitter_address</span>()
+    }
 
-  <span class="doccomment">/// Basic Service Set Address (BSSID)</span>
-  <span class="doccomment">/// Basic Service Set ID for Multicast.</span>
-  <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">addr3</span>())
-  }
+    <span class="doccomment">/// Basic Service Set Address (BSSID)</span>
+    <span class="doccomment">/// Basic Service Set ID for Multicast.</span>
+    <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">addr3</span>())
+    }
 
-  <span class="doccomment">/// Station Address</span>
-  <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
-    <span class="prelude-val">None</span>
-  }
+    <span class="doccomment">/// Station Address</span>
+    <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
+        <span class="prelude-val">None</span>
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "ieee80211";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

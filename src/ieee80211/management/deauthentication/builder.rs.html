@@ -138,38 +138,38 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeauthenticationFrameBuilder</span> {
-  <span class="ident">bytes</span>: [<span class="ident">u8</span>; <span class="ident">DEAUTHENTICATION_FRAME_SIZE</span>],
+    <span class="ident">bytes</span>: [<span class="ident">u8</span>; <span class="ident">DEAUTHENTICATION_FRAME_SIZE</span>],
 }
 <span class="kw">impl</span> <span class="ident">DeauthenticationFrameBuilder</span> {
-  <span class="attribute">#[<span class="ident">must_use</span>]</span>
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="self">Self</span> {
-      <span class="ident">bytes</span>: [<span class="number">0</span>; <span class="ident">DEAUTHENTICATION_FRAME_SIZE</span>],
-    };
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="self">Self</span> {
+            <span class="ident">bytes</span>: [<span class="number">0</span>; <span class="ident">DEAUTHENTICATION_FRAME_SIZE</span>],
+        };
 
-    <span class="ident">builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Management</span>);
-    <span class="ident">builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(
-      <span class="ident">ManagementSubtype</span>::<span class="ident">Deauthentication</span>,
-    ));
+        <span class="ident">builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Management</span>);
+        <span class="ident">builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(
+            <span class="ident">ManagementSubtype</span>::<span class="ident">Deauthentication</span>,
+        ));
 
-    <span class="ident">builder</span>.<span class="ident">reason_code</span>(<span class="ident">ReasonCode</span>::<span class="ident">STALeavingIBSSOrESS</span>);
+        <span class="ident">builder</span>.<span class="ident">reason_code</span>(<span class="ident">ReasonCode</span>::<span class="ident">STALeavingIBSSOrESS</span>);
 
-    <span class="ident">builder</span>
-  }
+        <span class="ident">builder</span>
+    }
 
-  <span class="attribute">#[<span class="ident">must_use</span>]</span>
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DeauthenticationFrame</span> {
-    <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">to_vec</span>())
-  }
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DeauthenticationFrame</span> {
+        <span class="ident">DeauthenticationFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">to_vec</span>())
+    }
 }
 <span class="kw">impl</span> <span class="ident">FrameBuilderTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrameBuilder</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>
-  }
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>
+    }
 
-  <span class="kw">fn</span> <span class="ident">bytes_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>] {
-    <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">bytes</span>
-  }
+    <span class="kw">fn</span> <span class="ident">bytes_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>] {
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">bytes</span>
+    }
 }
 <span class="kw">impl</span> <span class="ident">FragmentSequenceBuilderTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrameBuilder</span> {}
 <span class="kw">impl</span> <span class="ident">ManagementFrameBuilderTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrameBuilder</span> {}
@@ -177,93 +177,93 @@
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_deauthentication_frame_builder</span>() {
-  <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">deauthentication_frame_builder</span> <span class="op">=</span> <span class="ident">DeauthenticationFrameBuilder</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">deauthentication_frame_builder</span> <span class="op">=</span> <span class="ident">DeauthenticationFrameBuilder</span>::<span class="ident">new</span>();
 
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">version</span>(<span class="ident">FrameVersion</span>::<span class="ident">Standard</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span>));
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">ds_status</span>(<span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">version</span>(<span class="ident">FrameVersion</span>::<span class="ident">Standard</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span>));
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">ds_status</span>(<span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>);
 
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">more_fragments</span>(<span class="bool-val">false</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">retry</span>(<span class="bool-val">true</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">pwr_mgt</span>(<span class="bool-val">true</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">more_data</span>(<span class="bool-val">false</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">protected</span>(<span class="bool-val">false</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">order</span>(<span class="bool-val">false</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">more_fragments</span>(<span class="bool-val">false</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">retry</span>(<span class="bool-val">true</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">pwr_mgt</span>(<span class="bool-val">true</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">more_data</span>(<span class="bool-val">false</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">protected</span>(<span class="bool-val">false</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">order</span>(<span class="bool-val">false</span>);
 
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">source_address</span>(<span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">destination_address</span>(<span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">bssid_address</span>(<span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">source_address</span>(<span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">destination_address</span>(<span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">bssid_address</span>(<span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
 
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">sequence_number</span>(<span class="number">10</span>);
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">fragment_number</span>(<span class="number">11</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">sequence_number</span>(<span class="number">10</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">fragment_number</span>(<span class="number">11</span>);
 
-  <span class="ident">deauthentication_frame_builder</span>.<span class="ident">reason_code</span>(<span class="ident">ReasonCode</span>::<span class="ident">STALeavingBSS</span>);
+    <span class="ident">deauthentication_frame_builder</span>.<span class="ident">reason_code</span>(<span class="ident">ReasonCode</span>::<span class="ident">STALeavingBSS</span>);
 
-  <span class="kw">let</span> <span class="ident">deauthentication_frame</span> <span class="op">=</span> <span class="ident">deauthentication_frame_builder</span>.<span class="ident">build</span>();
+    <span class="kw">let</span> <span class="ident">deauthentication_frame</span> <span class="op">=</span> <span class="ident">deauthentication_frame_builder</span>.<span class="ident">build</span>();
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">version</span>(),
-    <span class="ident">FrameVersion</span>::<span class="ident">Standard</span>,
-    <span class="string">&quot;version&quot;</span>
-  );
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">subtype</span>(),
-    <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span>),
-    <span class="string">&quot;subtype&quot;</span>
-  );
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">ds_status</span>(),
-    <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>,
-    <span class="string">&quot;ds_status&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">version</span>(),
+        <span class="ident">FrameVersion</span>::<span class="ident">Standard</span>,
+        <span class="string">&quot;version&quot;</span>
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">subtype</span>(),
+        <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span>),
+        <span class="string">&quot;subtype&quot;</span>
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">ds_status</span>(),
+        <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>,
+        <span class="string">&quot;ds_status&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">more_fragments</span>(),
-    <span class="bool-val">false</span>,
-    <span class="string">&quot;more_fragments&quot;</span>
-  );
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">retry</span>(), <span class="bool-val">true</span>, <span class="string">&quot;retry&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">pwr_mgt</span>(), <span class="bool-val">true</span>, <span class="string">&quot;pwr_mgt&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">more_data</span>(),
-    <span class="bool-val">false</span>,
-    <span class="string">&quot;more_deauthentication&quot;</span>
-  );
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">protected</span>(), <span class="bool-val">false</span>, <span class="string">&quot;protected&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">order</span>(), <span class="bool-val">false</span>, <span class="string">&quot;order&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">more_fragments</span>(),
+        <span class="bool-val">false</span>,
+        <span class="string">&quot;more_fragments&quot;</span>
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">retry</span>(), <span class="bool-val">true</span>, <span class="string">&quot;retry&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">pwr_mgt</span>(), <span class="bool-val">true</span>, <span class="string">&quot;pwr_mgt&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">more_data</span>(),
+        <span class="bool-val">false</span>,
+        <span class="string">&quot;more_deauthentication&quot;</span>
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">protected</span>(), <span class="bool-val">false</span>, <span class="string">&quot;protected&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">order</span>(), <span class="bool-val">false</span>, <span class="string">&quot;order&quot;</span>);
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>
-      .<span class="ident">source_address</span>()
-      .<span class="ident">expect</span>(<span class="string">&quot;source_address&quot;</span>),
-    <span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;source_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>
+            .<span class="ident">source_address</span>()
+            .<span class="ident">expect</span>(<span class="string">&quot;source_address&quot;</span>),
+        <span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;source_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>
-      .<span class="ident">destination_address</span>()
-      .<span class="ident">expect</span>(<span class="string">&quot;destination_address&quot;</span>),
-    <span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;destination_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>
+            .<span class="ident">destination_address</span>()
+            .<span class="ident">expect</span>(<span class="string">&quot;destination_address&quot;</span>),
+        <span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;destination_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>
-      .<span class="ident">bssid_address</span>()
-      .<span class="ident">expect</span>(<span class="string">&quot;bssid_address&quot;</span>),
-    <span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;bssid_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>
+            .<span class="ident">bssid_address</span>()
+            .<span class="ident">expect</span>(<span class="string">&quot;bssid_address&quot;</span>),
+        <span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;bssid_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">sequence_number</span>(), <span class="number">10</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">fragment_number</span>(), <span class="number">11</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">sequence_number</span>(), <span class="number">10</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">deauthentication_frame</span>.<span class="ident">fragment_number</span>(), <span class="number">11</span>);
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">deauthentication_frame</span>.<span class="ident">reason_code</span>(),
-    <span class="ident">ReasonCode</span>::<span class="ident">STALeavingBSS</span>,
-    <span class="string">&quot;reason_code&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">deauthentication_frame</span>.<span class="ident">reason_code</span>(),
+        <span class="ident">ReasonCode</span>::<span class="ident">STALeavingBSS</span>,
+        <span class="string">&quot;reason_code&quot;</span>
+    );
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../../";window.currentCrate = "ieee80211";</script><script src="../../../../aliases.js"></script><script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script><script defer src="../../../../search-index.js"></script></body></html>

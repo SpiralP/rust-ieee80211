@@ -144,6 +144,8 @@
 <span id="144">144</span>
 <span id="145">145</span>
 <span id="146">146</span>
+<span id="147">147</span>
+<span id="148">148</span>
 </pre><div class="example-wrap"><pre class="rust ">
 <span class="kw">mod</span> <span class="ident">builder</span>;
 
@@ -153,143 +155,145 @@
 <span class="kw">use</span> <span class="ident">bytes</span>::<span class="ident">Bytes</span>;
 
 <span class="kw">pub</span> <span class="kw">enum</span> <span class="ident">FrameLayer</span> {
-  <span class="ident">Management</span>(<span class="ident">ManagementFrame</span>),
-  <span class="ident">Control</span>(<span class="ident">ControlFrame</span>),
-  <span class="ident">Data</span>(<span class="ident">DataFrame</span>),
+    <span class="ident">Management</span>(<span class="ident">ManagementFrame</span>),
+    <span class="ident">Control</span>(<span class="ident">ControlFrame</span>),
+    <span class="ident">Data</span>(<span class="ident">DataFrame</span>),
 }
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Frame</span> {
-  <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+    <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
 }
 <span class="kw">impl</span> <span class="ident">Frame</span> {
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="self">Self</span> {
-      <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
+        }
     }
-  }
 
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FrameLayer</span><span class="op">&gt;</span> {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">type_</span>() {
-      <span class="ident">FrameType</span>::<span class="ident">Management</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Management</span>(<span class="ident">ManagementFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()))),
-      <span class="ident">FrameType</span>::<span class="ident">Control</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Control</span>(<span class="ident">ControlFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()))),
-      <span class="ident">FrameType</span>::<span class="ident">Data</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Data</span>(<span class="ident">DataFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()))),
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">FrameLayer</span><span class="op">&gt;</span> {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">type_</span>() {
+            <span class="ident">FrameType</span>::<span class="ident">Management</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Management</span>(<span class="ident">ManagementFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>())))
+            }
+            <span class="ident">FrameType</span>::<span class="ident">Control</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Control</span>(<span class="ident">ControlFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()))),
+            <span class="ident">FrameType</span>::<span class="ident">Data</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">Some</span>(<span class="ident">FrameLayer</span>::<span class="ident">Data</span>(<span class="ident">DataFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>()))),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="prelude-val">None</span>,
+        }
     }
-  }
 }
 <span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">Frame</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
-    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
-  }
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
+    }
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">FrameTrait</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>;
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span>;
 
-  <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameVersion</span> {
-    <span class="ident">FrameVersion</span>::<span class="ident">from_u8</span>(<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b0000_0011</span>)
-  }
-
-  <span class="doccomment">/// Main IEEE 802.11 Frame Type</span>
-  <span class="kw">fn</span> <span class="ident">type_</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameType</span> {
-    <span class="ident">FrameType</span>::<span class="ident">from_u8</span>((<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b0000_1100</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>)
-  }
-
-  <span class="doccomment">/// IEEE 802.11 Frame Subtype</span>
-  <span class="kw">fn</span> <span class="ident">subtype</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameSubtype</span> {
-    <span class="kw">let</span> <span class="ident">subtype</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b1111_0000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>;
-
-    <span class="ident">FrameSubtype</span>::<span class="ident">from_u8</span>(<span class="self">self</span>.<span class="ident">type_</span>(), <span class="ident">subtype</span>)
-  }
-
-  <span class="comment">// flags</span>
-
-  <span class="doccomment">/// to Distribution System</span>
-  <span class="kw">fn</span> <span class="ident">to_ds</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0001</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// from Distribution System</span>
-  <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">wrong_self_convention</span>)]</span>
-  <span class="kw">fn</span> <span class="ident">from_ds</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0010</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="kw">fn</span> <span class="ident">ds_status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DSStatus</span> {
-    <span class="ident">DSStatus</span>::<span class="ident">from_bools</span>(<span class="self">self</span>.<span class="ident">from_ds</span>(), <span class="self">self</span>.<span class="ident">to_ds</span>())
-  }
-
-  <span class="doccomment">/// 0: This is the last fragment</span>
-  <span class="doccomment">/// 1: More fragments follow</span>
-  <span class="kw">fn</span> <span class="ident">more_fragments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0100</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// 0: Frame is not being retransmitted</span>
-  <span class="doccomment">/// 1: Frame is being retransmitted</span>
-  <span class="kw">fn</span> <span class="ident">retry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_1000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// 0: STA will stay up</span>
-  <span class="doccomment">/// 1: STA will go to sleep</span>
-  <span class="kw">fn</span> <span class="ident">pwr_mgt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// 0: No data buffered</span>
-  <span class="doccomment">/// 1: Data is buffered for STA at AP</span>
-  <span class="kw">fn</span> <span class="ident">more_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// 0: Data is not protected</span>
-  <span class="doccomment">/// 1: Data is protected</span>
-  <span class="kw">fn</span> <span class="ident">protected</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// 0: Not strictly ordered</span>
-  <span class="doccomment">/// 1: Strictly ordered</span>
-  <span class="kw">fn</span> <span class="ident">order</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-    <span class="comment">// TODO also used in QoSData/Management frames for if HT Control exists</span>
-    (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
-  }
-
-  <span class="doccomment">/// Duration or Association Identifier</span>
-  <span class="kw">fn</span> <span class="ident">duration_or_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DurationID</span> {
-    <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">3</span>] <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
-      <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">2</span>..<span class="number">4</span>]) <span class="op">&amp;</span> <span class="number">0b0111_1111_1111_1111</span>;
-      <span class="ident">DurationID</span>::<span class="ident">Duration</span>(<span class="ident">n</span>)
-    } <span class="kw">else</span> {
-      <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">2</span>..<span class="number">4</span>]) <span class="op">&amp;</span> <span class="number">0b0011_1111_1111_1111</span>;
-      <span class="comment">// valid range 1-2007</span>
-      <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span> <span class="number">1</span> <span class="op">|</span><span class="op">|</span> <span class="ident">n</span> <span class="op">&gt;</span> <span class="number">2007</span> {
-        <span class="ident">DurationID</span>::<span class="ident">Reserved</span>(<span class="ident">n</span>)
-      } <span class="kw">else</span> {
-        <span class="ident">DurationID</span>::<span class="ident">AssociationID</span>(<span class="ident">n</span>)
-      }
+    <span class="kw">fn</span> <span class="ident">version</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameVersion</span> {
+        <span class="ident">FrameVersion</span>::<span class="ident">from_u8</span>(<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b0000_0011</span>)
     }
-  }
 
-  <span class="comment">// Addressing</span>
+    <span class="doccomment">/// Main IEEE 802.11 Frame Type</span>
+    <span class="kw">fn</span> <span class="ident">type_</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameType</span> {
+        <span class="ident">FrameType</span>::<span class="ident">from_u8</span>((<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b0000_1100</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>)
+    }
 
-  <span class="kw">fn</span> <span class="ident">addr1</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
-    <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">4</span>..<span class="number">10</span>]).<span class="ident">unwrap</span>()
-  }
+    <span class="doccomment">/// IEEE 802.11 Frame Subtype</span>
+    <span class="kw">fn</span> <span class="ident">subtype</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">FrameSubtype</span> {
+        <span class="kw">let</span> <span class="ident">subtype</span> <span class="op">=</span> (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">0b1111_0000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>;
 
-  <span class="doccomment">/// Receiver Address</span>
-  <span class="doccomment">/// Who this packet is destined for wirelessly.</span>
-  <span class="doccomment">/// Address 1</span>
-  <span class="kw">fn</span> <span class="ident">receiver_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
-    <span class="self">self</span>.<span class="ident">addr1</span>()
-  }
+        <span class="ident">FrameSubtype</span>::<span class="ident">from_u8</span>(<span class="self">self</span>.<span class="ident">type_</span>(), <span class="ident">subtype</span>)
+    }
 
-  <span class="doccomment">/// Destination Address</span>
-  <span class="doccomment">/// Who the packet is destined for.</span>
-  <span class="kw">fn</span> <span class="ident">destination_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
-    <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">receiver_address</span>())
-  }
+    <span class="comment">// flags</span>
+
+    <span class="doccomment">/// to Distribution System</span>
+    <span class="kw">fn</span> <span class="ident">to_ds</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0001</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// from Distribution System</span>
+    <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">clippy</span>::<span class="ident">wrong_self_convention</span>)]</span>
+    <span class="kw">fn</span> <span class="ident">from_ds</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0010</span> <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="kw">fn</span> <span class="ident">ds_status</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DSStatus</span> {
+        <span class="ident">DSStatus</span>::<span class="ident">from_bools</span>(<span class="self">self</span>.<span class="ident">from_ds</span>(), <span class="self">self</span>.<span class="ident">to_ds</span>())
+    }
+
+    <span class="doccomment">/// 0: This is the last fragment</span>
+    <span class="doccomment">/// 1: More fragments follow</span>
+    <span class="kw">fn</span> <span class="ident">more_fragments</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_0100</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// 0: Frame is not being retransmitted</span>
+    <span class="doccomment">/// 1: Frame is being retransmitted</span>
+    <span class="kw">fn</span> <span class="ident">retry</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0000_1000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// 0: STA will stay up</span>
+    <span class="doccomment">/// 1: STA will go to sleep</span>
+    <span class="kw">fn</span> <span class="ident">pwr_mgt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0001_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// 0: No data buffered</span>
+    <span class="doccomment">/// 1: Data is buffered for STA at AP</span>
+    <span class="kw">fn</span> <span class="ident">more_data</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0010_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// 0: Data is not protected</span>
+    <span class="doccomment">/// 1: Data is protected</span>
+    <span class="kw">fn</span> <span class="ident">protected</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// 0: Not strictly ordered</span>
+    <span class="doccomment">/// 1: Strictly ordered</span>
+    <span class="kw">fn</span> <span class="ident">order</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
+        <span class="comment">// TODO also used in QoSData/Management frames for if HT Control exists</span>
+        (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">1</span>] <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>
+    }
+
+    <span class="doccomment">/// Duration or Association Identifier</span>
+    <span class="kw">fn</span> <span class="ident">duration_or_id</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DurationID</span> {
+        <span class="kw">if</span> (<span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">3</span>] <span class="op">&amp;</span> <span class="number">0b1000_0000</span>) <span class="op">=</span><span class="op">=</span> <span class="number">0</span> {
+            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">2</span>..<span class="number">4</span>]) <span class="op">&amp;</span> <span class="number">0b0111_1111_1111_1111</span>;
+            <span class="ident">DurationID</span>::<span class="ident">Duration</span>(<span class="ident">n</span>)
+        } <span class="kw">else</span> {
+            <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">2</span>..<span class="number">4</span>]) <span class="op">&amp;</span> <span class="number">0b0011_1111_1111_1111</span>;
+            <span class="comment">// valid range 1-2007</span>
+            <span class="kw">if</span> <span class="ident">n</span> <span class="op">&lt;</span> <span class="number">1</span> <span class="op">|</span><span class="op">|</span> <span class="ident">n</span> <span class="op">&gt;</span> <span class="number">2007</span> {
+                <span class="ident">DurationID</span>::<span class="ident">Reserved</span>(<span class="ident">n</span>)
+            } <span class="kw">else</span> {
+                <span class="ident">DurationID</span>::<span class="ident">AssociationID</span>(<span class="ident">n</span>)
+            }
+        }
+    }
+
+    <span class="comment">// Addressing</span>
+
+    <span class="kw">fn</span> <span class="ident">addr1</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+        <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="number">4</span>..<span class="number">10</span>]).<span class="ident">unwrap</span>()
+    }
+
+    <span class="doccomment">/// Receiver Address</span>
+    <span class="doccomment">/// Who this packet is destined for wirelessly.</span>
+    <span class="doccomment">/// Address 1</span>
+    <span class="kw">fn</span> <span class="ident">receiver_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+        <span class="self">self</span>.<span class="ident">addr1</span>()
+    }
+
+    <span class="doccomment">/// Destination Address</span>
+    <span class="doccomment">/// Who the packet is destined for.</span>
+    <span class="kw">fn</span> <span class="ident">destination_address</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">MacAddress</span><span class="op">&gt;</span> {
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="ident">receiver_address</span>())
+    }
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "ieee80211";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

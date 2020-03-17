@@ -207,199 +207,199 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DataFrameBuilder</span> {
-  <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
+    <span class="ident">bytes</span>: <span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span>,
 }
 <span class="kw">impl</span> <span class="ident">DataFrameBuilder</span> {
-  <span class="attribute">#[<span class="ident">must_use</span>]</span>
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="self">Self</span> {
-      <span class="ident">bytes</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">DATA_FRAME_SIZE</span>],
-    };
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">builder</span> <span class="op">=</span> <span class="self">Self</span> {
+            <span class="ident">bytes</span>: <span class="macro">vec</span><span class="macro">!</span>[<span class="number">0</span>; <span class="ident">DATA_FRAME_SIZE</span>],
+        };
 
-    <span class="ident">builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Data</span>);
+        <span class="ident">builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Data</span>);
 
-    <span class="ident">builder</span>
-  }
-
-  <span class="attribute">#[<span class="ident">must_use</span>]</span>
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DataFrame</span> {
-    <span class="ident">DataFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">to_vec</span>())
-  }
-
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
-    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">FRAGMENT_SEQUENCE_START</span> <span class="op">+</span> <span class="number">2</span>;
-
-    <span class="kw">let</span> <span class="ident">data_frame</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build</span>();
-
-    <span class="kw">if</span> <span class="ident">data_frame</span>.<span class="ident">protected</span>() {
-      <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">8</span>; <span class="comment">// skip TKIP/CCMP parameters</span>
+        <span class="ident">builder</span>
     }
 
-    <span class="kw">match</span> <span class="ident">data_frame</span>.<span class="ident">subtype</span>() {
-      <span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="kw-2">ref</span> <span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">subtype</span> {
-        <span class="ident">DataSubtype</span>::<span class="ident">QoSData</span> <span class="op">=</span><span class="op">&gt;</span> {
-          <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>; <span class="comment">// skip Qos Control</span>
+    <span class="attribute">#[<span class="ident">must_use</span>]</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">build</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">DataFrame</span> {
+        <span class="ident">DataFrame</span>::<span class="ident">new</span>(<span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">to_vec</span>())
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">next_layer</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">data</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) {
+        <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">index</span> <span class="op">=</span> <span class="self">Self</span>::<span class="ident">FRAGMENT_SEQUENCE_START</span> <span class="op">+</span> <span class="number">2</span>;
+
+        <span class="kw">let</span> <span class="ident">data_frame</span> <span class="op">=</span> <span class="self">self</span>.<span class="ident">build</span>();
+
+        <span class="kw">if</span> <span class="ident">data_frame</span>.<span class="ident">protected</span>() {
+            <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">8</span>; <span class="comment">// skip TKIP/CCMP parameters</span>
         }
-        <span class="ident">DataSubtype</span>::<span class="ident">Data</span> <span class="op">=</span><span class="op">&gt;</span> {}
 
-        <span class="comment">// invalid type for holding data</span>
-        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span>,
-      },
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+        <span class="kw">match</span> <span class="ident">data_frame</span>.<span class="ident">subtype</span>() {
+            <span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="kw-2">ref</span> <span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="kw">match</span> <span class="ident">subtype</span> {
+                <span class="ident">DataSubtype</span>::<span class="ident">QoSData</span> <span class="op">=</span><span class="op">&gt;</span> {
+                    <span class="ident">index</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>; <span class="comment">// skip Qos Control</span>
+                }
+                <span class="ident">DataSubtype</span>::<span class="ident">Data</span> <span class="op">=</span><span class="op">&gt;</span> {}
+
+                <span class="comment">// invalid type for holding data</span>
+                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span>,
+            },
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">unreachable</span><span class="macro">!</span>(),
+        }
+
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">resize</span>(<span class="ident">index</span> <span class="op">+</span> <span class="ident">data</span>.<span class="ident">len</span>(), <span class="number">0</span>);
+        <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="ident">index</span>..].<span class="ident">copy_from_slice</span>(<span class="ident">data</span>);
     }
-
-    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">resize</span>(<span class="ident">index</span> <span class="op">+</span> <span class="ident">data</span>.<span class="ident">len</span>(), <span class="number">0</span>);
-    <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="ident">index</span>..].<span class="ident">copy_from_slice</span>(<span class="ident">data</span>);
-  }
 }
 <span class="kw">impl</span> <span class="ident">FrameBuilderTrait</span> <span class="kw">for</span> <span class="ident">DataFrameBuilder</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
-    <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>
-  }
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span>[<span class="ident">u8</span>] {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>
+    }
 
-  <span class="kw">fn</span> <span class="ident">bytes_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>] {
-    <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">bytes</span>
-  }
+    <span class="kw">fn</span> <span class="ident">bytes_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> [<span class="ident">u8</span>] {
+        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">bytes</span>
+    }
 
-  <span class="kw">fn</span> <span class="ident">addr1</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">4</span>..<span class="number">10</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
-  }
+    <span class="kw">fn</span> <span class="ident">addr1</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">4</span>..<span class="number">10</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
+    }
 
-  <span class="kw">fn</span> <span class="ident">destination_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
-      <span class="comment">// TODO</span>
-      <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">|</span> <span class="ident">DSStatus</span>::<span class="ident">WDSOrMesh</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
-      <span class="comment">// fall back to receiver</span>
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">receiver_address</span>(<span class="ident">mac_address</span>),
-    };
-  }
+    <span class="kw">fn</span> <span class="ident">destination_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
+            <span class="comment">// TODO</span>
+            <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">|</span> <span class="ident">DSStatus</span>::<span class="ident">WDSOrMesh</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
+            <span class="comment">// fall back to receiver</span>
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">receiver_address</span>(<span class="ident">mac_address</span>),
+        };
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">FragmentSequenceBuilderTrait</span> <span class="kw">for</span> <span class="ident">DataFrameBuilder</span> {}
 <span class="kw">impl</span> <span class="ident">DataFrameBuilderTrait</span> <span class="kw">for</span> <span class="ident">DataFrameBuilder</span> {
-  <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>)
-  }
-
-  <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
-      <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">WDSOrMesh</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr4</span>(<span class="ident">mac_address</span>),
-      <span class="comment">// fall back to transmitter</span>
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">transmitter_address</span>(<span class="ident">mac_address</span>),
-    };
-  }
-
-  <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
-      <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">NotLeavingDSOrADHOC</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+    <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>)
     }
-  }
 
-  <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
-      <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
-      <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
-      <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+    <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
+            <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">WDSOrMesh</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr4</span>(<span class="ident">mac_address</span>),
+            <span class="comment">// fall back to transmitter</span>
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">transmitter_address</span>(<span class="ident">mac_address</span>),
+        };
     }
-  }
+
+    <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
+            <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">NotLeavingDSOrADHOC</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr3</span>(<span class="ident">mac_address</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        }
+    }
+
+    <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="kw">match</span> <span class="self">self</span>.<span class="ident">build</span>().<span class="ident">ds_status</span>() {
+            <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr1</span>(<span class="ident">mac_address</span>),
+            <span class="ident">DSStatus</span>::<span class="ident">FromSTAToDS</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">addr2</span>(<span class="ident">mac_address</span>),
+            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> {}
+        }
+    }
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">DataFrameBuilderTrait</span>: <span class="ident">FrameBuilderTrait</span> {
-  <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">10</span>..<span class="number">16</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
-  }
+    <span class="kw">fn</span> <span class="ident">addr2</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">10</span>..<span class="number">16</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
+    }
 
-  <span class="kw">fn</span> <span class="ident">addr3</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">16</span>..<span class="number">22</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
-  }
+    <span class="kw">fn</span> <span class="ident">addr3</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">16</span>..<span class="number">22</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
+    }
 
-  <span class="kw">fn</span> <span class="ident">addr4</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
-    <span class="comment">// only on Data Mesh types</span>
-    <span class="comment">// after frag/seq numbers</span>
-    <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">24</span>..<span class="number">30</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
-  }
+    <span class="kw">fn</span> <span class="ident">addr4</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>) {
+        <span class="comment">// only on Data Mesh types</span>
+        <span class="comment">// after frag/seq numbers</span>
+        <span class="self">self</span>.<span class="ident">bytes_mut</span>()[<span class="number">24</span>..<span class="number">30</span>].<span class="ident">copy_from_slice</span>(<span class="ident">mac_address</span>.<span class="ident">as_bytes</span>());
+    }
 
-  <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
-  <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
+    <span class="kw">fn</span> <span class="ident">transmitter_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
+    <span class="kw">fn</span> <span class="ident">source_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
 
-  <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
+    <span class="kw">fn</span> <span class="ident">bssid_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
 
-  <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
+    <span class="kw">fn</span> <span class="ident">station_address</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">mac_address</span>: <span class="ident">MacAddress</span>);
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">test_data_frame_builder</span>() {
-  <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data_frame_builder</span> <span class="op">=</span> <span class="ident">DataFrameBuilder</span>::<span class="ident">new</span>();
+    <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">data_frame_builder</span> <span class="op">=</span> <span class="ident">DataFrameBuilder</span>::<span class="ident">new</span>();
 
-  <span class="ident">data_frame_builder</span>.<span class="ident">version</span>(<span class="ident">FrameVersion</span>::<span class="ident">Standard</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Data</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="ident">DataSubtype</span>::<span class="ident">QoSData</span>));
-  <span class="ident">data_frame_builder</span>.<span class="ident">ds_status</span>(<span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">version</span>(<span class="ident">FrameVersion</span>::<span class="ident">Standard</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">type_</span>(<span class="ident">FrameType</span>::<span class="ident">Data</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">subtype</span>(<span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="ident">DataSubtype</span>::<span class="ident">QoSData</span>));
+    <span class="ident">data_frame_builder</span>.<span class="ident">ds_status</span>(<span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>);
 
-  <span class="ident">data_frame_builder</span>.<span class="ident">more_fragments</span>(<span class="bool-val">false</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">retry</span>(<span class="bool-val">true</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">pwr_mgt</span>(<span class="bool-val">true</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">more_data</span>(<span class="bool-val">false</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">protected</span>(<span class="bool-val">false</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">order</span>(<span class="bool-val">false</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">more_fragments</span>(<span class="bool-val">false</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">retry</span>(<span class="bool-val">true</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">pwr_mgt</span>(<span class="bool-val">true</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">more_data</span>(<span class="bool-val">false</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">protected</span>(<span class="bool-val">false</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">order</span>(<span class="bool-val">false</span>);
 
-  <span class="ident">data_frame_builder</span>.<span class="ident">source_address</span>(<span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
-  <span class="ident">data_frame_builder</span>.<span class="ident">destination_address</span>(<span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
-  <span class="ident">data_frame_builder</span>.<span class="ident">bssid_address</span>(<span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">data_frame_builder</span>.<span class="ident">source_address</span>(<span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">data_frame_builder</span>.<span class="ident">destination_address</span>(<span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
+    <span class="ident">data_frame_builder</span>.<span class="ident">bssid_address</span>(<span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>());
 
-  <span class="ident">data_frame_builder</span>.<span class="ident">sequence_number</span>(<span class="number">10</span>);
-  <span class="ident">data_frame_builder</span>.<span class="ident">fragment_number</span>(<span class="number">11</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">sequence_number</span>(<span class="number">10</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">fragment_number</span>(<span class="number">11</span>);
 
-  <span class="ident">data_frame_builder</span>.<span class="ident">next_layer</span>(<span class="string">b&quot;hello!!&quot;</span>);
+    <span class="ident">data_frame_builder</span>.<span class="ident">next_layer</span>(<span class="string">b&quot;hello!!&quot;</span>);
 
-  <span class="kw">let</span> <span class="ident">data_frame</span> <span class="op">=</span> <span class="ident">data_frame_builder</span>.<span class="ident">build</span>();
+    <span class="kw">let</span> <span class="ident">data_frame</span> <span class="op">=</span> <span class="ident">data_frame_builder</span>.<span class="ident">build</span>();
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">version</span>(), <span class="ident">FrameVersion</span>::<span class="ident">Standard</span>, <span class="string">&quot;version&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">type_</span>(), <span class="ident">FrameType</span>::<span class="ident">Data</span>, <span class="string">&quot;type_&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">data_frame</span>.<span class="ident">subtype</span>(),
-    <span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="ident">DataSubtype</span>::<span class="ident">QoSData</span>),
-    <span class="string">&quot;subtype&quot;</span>
-  );
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">ds_status</span>(), <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>, <span class="string">&quot;ds_status&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">version</span>(), <span class="ident">FrameVersion</span>::<span class="ident">Standard</span>, <span class="string">&quot;version&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">type_</span>(), <span class="ident">FrameType</span>::<span class="ident">Data</span>, <span class="string">&quot;type_&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">data_frame</span>.<span class="ident">subtype</span>(),
+        <span class="ident">FrameSubtype</span>::<span class="ident">Data</span>(<span class="ident">DataSubtype</span>::<span class="ident">QoSData</span>),
+        <span class="string">&quot;subtype&quot;</span>
+    );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">ds_status</span>(), <span class="ident">DSStatus</span>::<span class="ident">FromDSToSTA</span>, <span class="string">&quot;ds_status&quot;</span>);
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">more_fragments</span>(), <span class="bool-val">false</span>, <span class="string">&quot;more_fragments&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">retry</span>(), <span class="bool-val">true</span>, <span class="string">&quot;retry&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">pwr_mgt</span>(), <span class="bool-val">true</span>, <span class="string">&quot;pwr_mgt&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">more_data</span>(), <span class="bool-val">false</span>, <span class="string">&quot;more_data&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">protected</span>(), <span class="bool-val">false</span>, <span class="string">&quot;protected&quot;</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">order</span>(), <span class="bool-val">false</span>, <span class="string">&quot;order&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">more_fragments</span>(), <span class="bool-val">false</span>, <span class="string">&quot;more_fragments&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">retry</span>(), <span class="bool-val">true</span>, <span class="string">&quot;retry&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">pwr_mgt</span>(), <span class="bool-val">true</span>, <span class="string">&quot;pwr_mgt&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">more_data</span>(), <span class="bool-val">false</span>, <span class="string">&quot;more_data&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">protected</span>(), <span class="bool-val">false</span>, <span class="string">&quot;protected&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">order</span>(), <span class="bool-val">false</span>, <span class="string">&quot;order&quot;</span>);
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">data_frame</span>.<span class="ident">source_address</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;source_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">data_frame</span>.<span class="ident">source_address</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;11:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;source_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">data_frame</span>
-      .<span class="ident">destination_address</span>()
-      .<span class="ident">expect</span>(<span class="string">&quot;destination_address&quot;</span>),
-    <span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;destination_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">data_frame</span>
+            .<span class="ident">destination_address</span>()
+            .<span class="ident">expect</span>(<span class="string">&quot;destination_address&quot;</span>),
+        <span class="string">&quot;22:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;destination_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(
-    <span class="ident">data_frame</span>.<span class="ident">bssid_address</span>().<span class="ident">expect</span>(<span class="string">&quot;bssid_address&quot;</span>),
-    <span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
-    <span class="string">&quot;bssid_address&quot;</span>
-  );
+    <span class="macro">assert_eq</span><span class="macro">!</span>(
+        <span class="ident">data_frame</span>.<span class="ident">bssid_address</span>().<span class="ident">expect</span>(<span class="string">&quot;bssid_address&quot;</span>),
+        <span class="string">&quot;33:22:33:44:55:66&quot;</span>.<span class="ident">parse</span>().<span class="ident">unwrap</span>(),
+        <span class="string">&quot;bssid_address&quot;</span>
+    );
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">sequence_number</span>(), <span class="number">10</span>);
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">fragment_number</span>(), <span class="number">11</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">sequence_number</span>(), <span class="number">10</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="ident">data_frame</span>.<span class="ident">fragment_number</span>(), <span class="number">11</span>);
 
-  <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">data_frame</span>.<span class="ident">next_layer</span>().<span class="ident">unwrap</span>()[..], <span class="string">b&quot;hello!!&quot;</span>);
+    <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="kw-2">&amp;</span><span class="ident">data_frame</span>.<span class="ident">next_layer</span>().<span class="ident">unwrap</span>()[..], <span class="string">b&quot;hello!!&quot;</span>);
 }
 </pre></div>
 </section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "ieee80211";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

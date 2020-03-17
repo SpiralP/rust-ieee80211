@@ -31,20 +31,20 @@
 <span class="kw">use</span> <span class="kw">super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">DeauthenticationFrame</span> {
-  <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
+    <span class="ident">bytes</span>: <span class="ident">Bytes</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">DeauthenticationFrame</span> {
-  <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
-    <span class="self">Self</span> {
-      <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Bytes</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">bytes</span>: <span class="ident">T</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+        <span class="self">Self</span> {
+            <span class="ident">bytes</span>: <span class="ident">bytes</span>.<span class="ident">into</span>(),
+        }
     }
-  }
 }
 <span class="kw">impl</span> <span class="ident">FrameTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrame</span> {
-  <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
-    <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
-  }
+    <span class="kw">fn</span> <span class="ident">bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Bytes</span> {
+        <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">clone</span>()
+    }
 }
 <span class="kw">impl</span> <span class="ident">FragmentSequenceTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrame</span> {}
 <span class="kw">impl</span> <span class="ident">ManagementFrameTrait</span> <span class="kw">for</span> <span class="ident">DeauthenticationFrame</span> {}
