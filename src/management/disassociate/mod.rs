@@ -17,7 +17,7 @@ impl<'a> DisassociateFrame<'a> {
 }
 impl FrameTrait for DisassociateFrame<'_> {
     fn bytes(&self) -> &[u8] {
-        self.bytes.clone()
+        self.bytes
     }
 }
 impl FragmentSequenceTrait for DisassociateFrame<'_> {}

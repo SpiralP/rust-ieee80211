@@ -23,7 +23,7 @@ impl DisassociateFrameBuilder {
 
     #[must_use]
     pub fn build(&self) -> DisassociateFrame {
-        DisassociateFrame::new(self.bytes().to_vec())
+        DisassociateFrame::new(self.bytes())
     }
 }
 impl FrameBuilderTrait for DisassociateFrameBuilder {

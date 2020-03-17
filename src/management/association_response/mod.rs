@@ -14,7 +14,7 @@ impl<'a> AssociationResponseFrame<'a> {
 }
 impl FrameTrait for AssociationResponseFrame<'_> {
     fn bytes(&self) -> &[u8] {
-        self.bytes.clone()
+        self.bytes
     }
 }
 impl FragmentSequenceTrait for AssociationResponseFrame<'_> {}

@@ -14,7 +14,7 @@ impl<'a> AuthenticationFrame<'a> {
 }
 impl FrameTrait for AuthenticationFrame<'_> {
     fn bytes(&self) -> &[u8] {
-        self.bytes.clone()
+        self.bytes
     }
 }
 impl FragmentSequenceTrait for AuthenticationFrame<'_> {}
