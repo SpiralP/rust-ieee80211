@@ -1,18 +1,18 @@
 use super::*;
 
 pub struct ProbeResponseFrame {
-  bytes: Bytes,
+    bytes: Bytes,
 }
 
 impl ProbeResponseFrame {
-  pub fn new(bytes: Bytes) -> Self {
-    Self { bytes }
-  }
+    pub fn new(bytes: Bytes) -> Self {
+        Self { bytes }
+    }
 }
 impl FrameTrait for ProbeResponseFrame {
-  fn bytes(&self) -> Bytes {
-    self.bytes.clone()
-  }
+    fn bytes(&self) -> Bytes {
+        self.bytes.clone()
+    }
 }
 impl FragmentSequenceTrait for ProbeResponseFrame {}
 impl ManagementFrameTrait for ProbeResponseFrame {}

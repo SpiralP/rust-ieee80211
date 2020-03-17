@@ -4,19 +4,19 @@ pub use self::fixed_parameters::*;
 use super::*;
 
 pub struct BeaconFrame {
-  bytes: Bytes,
+    bytes: Bytes,
 }
 
 impl BeaconFrame {
-  pub fn new(bytes: Bytes) -> Self {
-    Self { bytes }
-  }
+    pub fn new(bytes: Bytes) -> Self {
+        Self { bytes }
+    }
 }
 
 impl FrameTrait for BeaconFrame {
-  fn bytes(&self) -> Bytes {
-    self.bytes.clone()
-  }
+    fn bytes(&self) -> Bytes {
+        self.bytes.clone()
+    }
 }
 impl FragmentSequenceTrait for BeaconFrame {}
 impl ManagementFrameTrait for BeaconFrame {}
