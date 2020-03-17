@@ -20,7 +20,7 @@ impl FrameBuilder {
 
     #[must_use]
     pub fn build(&self) -> Frame {
-        Frame::new(self.bytes())
+        Frame::new(self.bytes().to_vec())
     }
 }
 impl FrameBuilderTrait for FrameBuilder {

@@ -25,7 +25,7 @@ impl DeauthenticationFrameBuilder {
 
     #[must_use]
     pub fn build(&self) -> DeauthenticationFrame {
-        DeauthenticationFrame::new(self.bytes())
+        DeauthenticationFrame::new(self.bytes().to_vec())
     }
 }
 impl FrameBuilderTrait for DeauthenticationFrameBuilder {

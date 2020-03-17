@@ -21,7 +21,7 @@ impl DataFrameBuilder {
 
     #[must_use]
     pub fn build(&self) -> DataFrame {
-        DataFrame::new(self.bytes())
+        DataFrame::new(self.bytes().to_vec())
     }
 
     pub fn next_layer(&mut self, data: &[u8]) {
