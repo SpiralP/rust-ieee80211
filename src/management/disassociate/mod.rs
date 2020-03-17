@@ -4,22 +4,22 @@ mod fixed_parameters;
 pub use self::{builder::*, fixed_parameters::*};
 use super::*;
 
-pub struct DisassociateFrame {
-    bytes: Bytes,
+pub struct DisassociateFrame<'a> {
+    bytes: &'a [u8],
 }
 
-impl DisassociateFrame {
-    pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+impl<'a> DisassociateFrame<'a> {
+    pub fn new<T: Into<&'a [u8]>>(bytes: T) -> Self {
         Self {
             bytes: bytes.into(),
         }
     }
 }
-impl FrameTrait for DisassociateFrame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+impl FrameTrait for DisassociateFrame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes
     }
 }
-impl FragmentSequenceTrait for DisassociateFrame {}
-impl ManagementFrameTrait for DisassociateFrame {}
-impl DisassociateFixedParametersTrait for DisassociateFrame {}
+impl FragmentSequenceTrait for DisassociateFrame<'_> {}
+impl ManagementFrameTrait for DisassociateFrame<'_> {}
+impl DisassociateFixedParametersTrait for DisassociateFrame<'_> {}

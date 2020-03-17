@@ -3,43 +3,48 @@ mod builder;
 pub use self::builder::*;
 use super::*;
 use byteorder::{ByteOrder, LittleEndian};
-use bytes::Bytes;
+use std::borrow::Cow;
 
-pub enum FrameLayer {
-    Management(ManagementFrame),
-    Control(ControlFrame),
-    Data(DataFrame),
+pub enum FrameLayer<'a> {
+    Management(ManagementFrame<'a>),
+    Control(ControlFrame<'a>),
+    Data(DataFrame<'a>),
 }
 
-pub struct Frame {
-    bytes: Bytes,
+pub struct Frame<'a> {
+    bytes: Cow<'a, [u8]>,
 }
-impl Frame {
-    pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+impl<'a> Frame<'a> {
+    pub fn new<T: Into<Cow<'a, [u8]>>>(bytes: T) -> Self {
         Self {
             bytes: bytes.into(),
         }
     }
 
-    pub fn next_layer(&self) -> Option<FrameLayer> {
+    pub fn next_layer(&self) -> Option<FrameLayer<'_>> {
         match self.type_() {
             FrameType::Management => {
                 Some(FrameLayer::Management(ManagementFrame::new(self.bytes())))
             }
-            FrameType::Control => Some(FrameLayer::Control(ControlFrame::new(self.bytes()))),
-            FrameType::Data => Some(FrameLayer::Data(DataFrame::new(self.bytes()))),
+            FrameType::Control => {
+                Some(FrameLayer::Control(ControlFrame::new(self.bytes())))
+            },
+            FrameType::Data => {
+                Some(FrameLayer::Data(DataFrame::new(self.bytes())))
+            },
             _ => None,
         }
     }
 }
-impl FrameTrait for Frame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+
+impl FrameTrait for Frame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes.as_ref()
     }
 }
 
 pub trait FrameTrait {
-    fn bytes(&self) -> Bytes;
+    fn bytes(&self) -> &[u8];
 
     fn version(&self) -> FrameVersion {
         FrameVersion::from_u8(self.bytes()[0] & 0b0000_0011)
@@ -130,6 +135,7 @@ pub trait FrameTrait {
     // Addressing
 
     fn addr1(&self) -> MacAddress {
+        // Unwrap is fine since this function only returns an error when the length is wrong.
         MacAddress::from_bytes(&self.bytes()[4..10]).unwrap()
     }
 

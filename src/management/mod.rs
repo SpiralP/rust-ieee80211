@@ -15,31 +15,31 @@ pub use self::{
     tagged_parameters::*,
 };
 use super::*;
-use bytes::Bytes;
+use std::borrow::Cow;
 
-pub struct ManagementFrame {
-    bytes: Bytes,
+pub struct ManagementFrame<'a> {
+    bytes: Cow<'a, [u8]>,
 }
 
-pub enum ManagementFrameLayer {
-    Beacon(BeaconFrame),
-    ProbeRequest(ProbeRequestFrame),
-    ProbeResponse(ProbeResponseFrame),
-    Authentication(AuthenticationFrame),
-    Deauthentication(DeauthenticationFrame),
-    Disassociate(DisassociateFrame),
-    AssociationRequest(AssociationRequestFrame),
-    AssociationResponse(AssociationResponseFrame),
+pub enum ManagementFrameLayer<'a> {
+    Beacon(BeaconFrame<'a>),
+    ProbeRequest(ProbeRequestFrame<'a>),
+    ProbeResponse(ProbeResponseFrame<'a>),
+    Authentication(AuthenticationFrame<'a>),
+    Deauthentication(DeauthenticationFrame<'a>),
+    Disassociate(DisassociateFrame<'a>),
+    AssociationRequest(AssociationRequestFrame<'a>),
+    AssociationResponse(AssociationResponseFrame<'a>),
 }
 
-impl ManagementFrame {
-    pub fn new<T: Into<Bytes>>(bytes: T) -> Self {
+impl<'a> ManagementFrame<'a> {
+    pub fn new<T: Into<Cow<'a, [u8]>>>(bytes: T) -> Self {
         Self {
             bytes: bytes.into(),
         }
     }
 
-    pub fn next_layer(&self) -> Option<ManagementFrameLayer> {
+    pub fn next_layer(&self) -> Option<ManagementFrameLayer<'_>> {
         match self.subtype() {
             FrameSubtype::Management(subtype) => match subtype {
                 ManagementSubtype::Beacon => {
@@ -79,13 +79,13 @@ impl ManagementFrame {
     }
 }
 
-impl FrameTrait for ManagementFrame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+impl FrameTrait for ManagementFrame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes.as_ref()
     }
 }
-impl FragmentSequenceTrait for ManagementFrame {}
-impl ManagementFrameTrait for ManagementFrame {}
+impl FragmentSequenceTrait for ManagementFrame<'_> {}
+impl ManagementFrameTrait for ManagementFrame<'_> {}
 
 pub trait ManagementFrameTrait: FrameTrait + FragmentSequenceTrait {
     fn addr2(&self) -> MacAddress {

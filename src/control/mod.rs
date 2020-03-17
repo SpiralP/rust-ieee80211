@@ -1,19 +1,21 @@
 use super::*;
-use bytes::Bytes;
+use std::borrow::Cow;
 
-pub struct ControlFrame {
-    bytes: Bytes,
+pub struct ControlFrame<'a> {
+    bytes: Cow<'a, [u8]>,
 }
 
-impl ControlFrame {
-    pub fn new(bytes: Bytes) -> Self {
-        Self { bytes }
+impl<'a> ControlFrame<'a> {
+    pub fn new<T: Into<Cow<'a, [u8]>>>(bytes: T) -> Self {
+        Self {
+            bytes: bytes.into(),
+        }
     }
 }
 
-impl FrameTrait for ControlFrame {
-    fn bytes(&self) -> Bytes {
-        self.bytes.clone()
+impl FrameTrait for ControlFrame<'_> {
+    fn bytes(&self) -> &[u8] {
+        self.bytes.as_ref()
     }
 
     fn addr1(&self) -> MacAddress {
@@ -24,7 +26,7 @@ impl FrameTrait for ControlFrame {
         None
     }
 }
-impl ControlFrameTrait for ControlFrame {}
+impl ControlFrameTrait for ControlFrame<'_> {}
 
 pub trait ControlFrameTrait: FrameTrait {
     fn addr2(&self) -> MacAddress {
