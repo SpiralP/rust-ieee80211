@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/management/tagged_parameters.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tagged_parameters.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css"><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../ieee80211/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `src/management/tagged_parameters.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>tagged_parameters.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled ><script src="../../../storage.js"></script><noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="shortcut icon" href="../../../favicon.ico"><style type="text/css">#crate-search{background-image:url("../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../../ieee80211/index.html'><div class='logo-container'><img src='../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../../settings.html"><img src="../../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -461,39 +461,39 @@
 
 <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Default</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">TaggedParameters</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
-    <span class="ident">tags</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TagName</span>, <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span>,
+    <span class="ident">tags</span>: <span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TagName</span>, <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;&gt;</span>,
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">TaggedParameters</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>() <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">tags</span>: <span class="ident">HashMap</span>::<span class="ident">new</span>(),
         }
     }
 
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tag_name</span>: <span class="ident">TagName</span>, <span class="ident">tag_data</span>: <span class="ident">T</span>) {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">add</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Into</span><span class="op">&lt;</span><span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;&gt;</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">tag_name</span>: <span class="ident">TagName</span>, <span class="ident">tag_data</span>: <span class="ident">T</span>) {
         <span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">insert</span>(<span class="ident">tag_name</span>, <span class="ident">tag_data</span>.<span class="ident">into</span>());
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TagName</span>, <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_all</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">HashMap</span><span class="op">&lt;</span><span class="ident">TagName</span>, <span class="ident">Cow</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, [<span class="ident">u8</span>]<span class="op">&gt;&gt;</span> {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">tags</span>
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tag_name</span>: <span class="ident">TagName</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_bytes</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">tag_name</span>: <span class="ident">TagName</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">tag_name</span>).<span class="ident">map</span>(<span class="ident">AsRef</span>::<span class="ident">as_ref</span>)
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ssid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ssid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="kw-2">&amp;</span>[<span class="ident">u8</span>]<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">get_bytes</span>(<span class="ident">TagName</span>::<span class="ident">SSID</span>).<span class="ident">map</span>(<span class="ident">AsRef</span>::<span class="ident">as_ref</span>)
     }
 
     <span class="doccomment">/// in Mbit/sec</span>
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">supported_rates</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">supported_rates</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">f64</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">tags</span>
             .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TagName</span>::<span class="ident">SupportedRates</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">supported_rates</span><span class="op">|</span> {
@@ -510,36 +510,36 @@
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">channel</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">tags</span>
             .<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TagName</span>::<span class="ident">DSParameter</span>)
             .<span class="ident">map</span>(<span class="op">|</span><span class="ident">bytes</span><span class="op">|</span> <span class="ident">bytes</span>[<span class="number">0</span>])
             <span class="comment">// 5GHz</span>
-            .<span class="ident">or_else</span>(<span class="op">|</span><span class="op">|</span> <span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TagName</span>::<span class="ident">HTInformation</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">bytes</span><span class="op">|</span> <span class="ident">bytes</span>[<span class="number">0</span>]))
+            .<span class="ident">or_else</span>(<span class="op">||</span> <span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TagName</span>::<span class="ident">HTInformation</span>).<span class="ident">map</span>(<span class="op">|</span><span class="ident">bytes</span><span class="op">|</span> <span class="ident">bytes</span>[<span class="number">0</span>]))
     }
 
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rsn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RSNVersion</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">rsn</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">RSNVersion</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">tags</span>.<span class="ident">get</span>(<span class="kw-2">&amp;</span><span class="ident">TagName</span>::<span class="ident">RSNInformation</span>).<span class="ident">and_then</span>(<span class="op">|</span><span class="ident">bytes</span><span class="op">|</span> {
             <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">0</span>;
             <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">len</span>();
 
-            <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&gt;</span><span class="op">=</span> <span class="ident">len</span> {
+            <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>) <span class="op">&gt;=</span> <span class="ident">len</span> {
                 <span class="kw">return</span> <span class="prelude-val">None</span>;
             }
             <span class="kw">let</span> <span class="ident">version</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..<span class="op">=</span>(<span class="ident">i</span> <span class="op">+</span> <span class="number">1</span>)]);
             <span class="prelude-val">Some</span>(<span class="kw">match</span> <span class="ident">version</span> {
-                <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> {
-                    <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
+                <span class="number">1</span> <span class="op">=&gt;</span> {
+                    <span class="ident">i</span> <span class="op">+=</span> <span class="number">2</span>;
                     <span class="ident">RSNVersion</span>::<span class="ident">Standard</span>(<span class="ident">make_std_rsn</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..]))
                 }
-                <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">RSNVersion</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
+                <span class="ident">other</span> <span class="op">=&gt;</span> <span class="ident">RSNVersion</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
             })
         })
     }
 }
 
-<span class="kw">fn</span> <span class="ident">make_std_rsn</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">RSN</span> {
+<span class="kw">fn</span> <span class="ident">make_std_rsn</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">RSN</span> {
     <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">i</span> <span class="op">=</span> <span class="number">0</span>;
     <span class="kw">let</span> <span class="ident">len</span> <span class="op">=</span> <span class="ident">bytes</span>.<span class="ident">len</span>();
 
@@ -550,13 +550,13 @@
     }
     <span class="kw">let</span> <span class="ident">group_cipher_suite</span> <span class="op">=</span> <span class="ident">RSN</span>::<span class="ident">read_cipher_suite</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">4</span>)]);
     <span class="ident">rsn</span>.<span class="ident">group_cipher_suite</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">group_cipher_suite</span>);
-    <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span>;
+    <span class="ident">i</span> <span class="op">+=</span> <span class="number">4</span>;
 
     <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">&gt;</span> <span class="ident">len</span> {
         <span class="kw">return</span> <span class="ident">rsn</span>;
     }
     <span class="kw">let</span> <span class="ident">pairwise_cipher_suite_count</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>)]);
-    <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
+    <span class="ident">i</span> <span class="op">+=</span> <span class="number">2</span>;
 
     <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">pairwise_cipher_suite_count</span> {
         <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">4</span>) <span class="op">&gt;</span> <span class="ident">len</span> {
@@ -564,14 +564,14 @@
         }
         <span class="kw">let</span> <span class="ident">pairwise_cipher_suite</span> <span class="op">=</span> <span class="ident">RSN</span>::<span class="ident">read_cipher_suite</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">4</span>)]);
         <span class="ident">rsn</span>.<span class="ident">pairwise_cipher_suites</span>.<span class="ident">push</span>(<span class="ident">pairwise_cipher_suite</span>);
-        <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span>;
+        <span class="ident">i</span> <span class="op">+=</span> <span class="number">4</span>;
     }
 
     <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">&gt;</span> <span class="ident">len</span> {
         <span class="kw">return</span> <span class="ident">rsn</span>;
     }
     <span class="kw">let</span> <span class="ident">akm_suite_count</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>)]);
-    <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">2</span>;
+    <span class="ident">i</span> <span class="op">+=</span> <span class="number">2</span>;
 
     <span class="kw">for</span> <span class="kw">_</span> <span class="kw">in</span> <span class="number">0</span>..<span class="ident">akm_suite_count</span> {
         <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">4</span>) <span class="op">&gt;</span> <span class="ident">len</span> {
@@ -579,7 +579,7 @@
         }
         <span class="kw">let</span> <span class="ident">akm_suite</span> <span class="op">=</span> <span class="ident">RSN</span>::<span class="ident">read_akm_suite</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">4</span>)]);
         <span class="ident">rsn</span>.<span class="ident">akm_suites</span>.<span class="ident">push</span>(<span class="ident">akm_suite</span>);
-        <span class="ident">i</span> <span class="op">+</span><span class="op">=</span> <span class="number">4</span>;
+        <span class="ident">i</span> <span class="op">+=</span> <span class="number">4</span>;
     }
 
     <span class="kw">if</span> (<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>) <span class="op">&gt;</span> <span class="ident">len</span> {
@@ -587,14 +587,14 @@
     }
     <span class="kw">let</span> <span class="ident">b</span> <span class="op">=</span> <span class="ident">LittleEndian</span>::<span class="ident">read_u16</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="ident">i</span>..(<span class="ident">i</span> <span class="op">+</span> <span class="number">2</span>)]);
     <span class="ident">rsn</span>.<span class="ident">capabilities</span> <span class="op">=</span> <span class="prelude-val">Some</span>(<span class="ident">RSNCapabilities</span> {
-        <span class="ident">pre_auth</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_0001</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-        <span class="ident">pairwise</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_0010</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-        <span class="ident">ptksa_replay_counter_value</span>: ((<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_1100</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">u8</span>,
-        <span class="ident">gtksa_replay_counter_value</span>: ((<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0011_0000</span>) <span class="op">&gt;</span><span class="op">&gt;</span> <span class="number">4</span>) <span class="kw">as</span> <span class="ident">u8</span>,
-        <span class="ident">management_frame_protection_required</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0100_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-        <span class="ident">management_frame_protection_capable</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_1000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-        <span class="ident">joint_multi_band_rsna</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0001_0000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
-        <span class="ident">peerkey</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0010_0000_0000</span>) <span class="op">!</span><span class="op">=</span> <span class="number">0</span>,
+        <span class="ident">pre_auth</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_0001</span>) <span class="op">!=</span> <span class="number">0</span>,
+        <span class="ident">pairwise</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_0010</span>) <span class="op">!=</span> <span class="number">0</span>,
+        <span class="ident">ptksa_replay_counter_value</span>: ((<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0000_1100</span>) <span class="op">&gt;&gt;</span> <span class="number">2</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+        <span class="ident">gtksa_replay_counter_value</span>: ((<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0011_0000</span>) <span class="op">&gt;&gt;</span> <span class="number">4</span>) <span class="kw">as</span> <span class="ident">u8</span>,
+        <span class="ident">management_frame_protection_required</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_0100_0000</span>) <span class="op">!=</span> <span class="number">0</span>,
+        <span class="ident">management_frame_protection_capable</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0000_1000_0000</span>) <span class="op">!=</span> <span class="number">0</span>,
+        <span class="ident">joint_multi_band_rsna</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0001_0000_0000</span>) <span class="op">!=</span> <span class="number">0</span>,
+        <span class="ident">peerkey</span>: (<span class="ident">b</span> <span class="op">&amp;</span> <span class="number">0b0000_0010_0000_0000</span>) <span class="op">!=</span> <span class="number">0</span>,
     });
 
     <span class="ident">rsn</span>
@@ -642,20 +642,20 @@
 }
 
 <span class="kw">impl</span> <span class="ident">RSN</span> {
-    <span class="kw">fn</span> <span class="ident">read_suite_oui_and_type</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> ([<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">u8</span>) {
+    <span class="kw">fn</span> <span class="ident">read_suite_oui_and_type</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> ([<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">u8</span>) {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">suite_oui</span> <span class="op">=</span> [<span class="number">0</span>; <span class="number">3</span>];
         <span class="ident">suite_oui</span>.<span class="ident">clone_from_slice</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>[<span class="number">0</span>..<span class="number">3</span>]);
         <span class="kw">let</span> <span class="ident">suite_type</span> <span class="op">=</span> <span class="ident">bytes</span>[<span class="number">3</span>];
         (<span class="ident">suite_oui</span>, <span class="ident">suite_type</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">read_cipher_suite</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">CipherSuite</span> {
+    <span class="kw">fn</span> <span class="ident">read_cipher_suite</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">CipherSuite</span> {
         <span class="kw">let</span> (<span class="ident">oui</span>, <span class="ident">type_</span>) <span class="op">=</span> <span class="self">Self</span>::<span class="ident">read_suite_oui_and_type</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
         <span class="ident">CipherSuite</span>::<span class="ident">from</span>(<span class="ident">oui</span>, <span class="ident">type_</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">read_akm_suite</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">AKMSuite</span> {
+    <span class="kw">fn</span> <span class="ident">read_akm_suite</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="ident">AKMSuite</span> {
         <span class="kw">let</span> (<span class="ident">oui</span>, <span class="ident">type_</span>) <span class="op">=</span> <span class="self">Self</span>::<span class="ident">read_suite_oui_and_type</span>(<span class="kw-2">&amp;</span><span class="ident">bytes</span>);
 
         <span class="ident">AKMSuite</span>::<span class="ident">from</span>(<span class="ident">oui</span>, <span class="ident">type_</span>)
@@ -669,10 +669,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">CipherSuite</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">oui</span>: [<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">oui</span>: [<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">oui</span> {
-            [<span class="number">0x00</span>, <span class="number">0x0f</span>, <span class="number">0xac</span>] <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Standard</span>(<span class="ident">CipherSuiteType</span>::<span class="ident">from</span>(<span class="ident">type_</span>)),
-            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Vendor</span>(<span class="ident">other</span>, <span class="ident">type_</span>),
+            [<span class="number">0x00</span>, <span class="number">0x0f</span>, <span class="number">0xac</span>] <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Standard</span>(<span class="ident">CipherSuiteType</span>::<span class="ident">from</span>(<span class="ident">type_</span>)),
+            <span class="ident">other</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Vendor</span>(<span class="ident">other</span>, <span class="ident">type_</span>),
         }
     }
 }
@@ -690,15 +690,15 @@
                           * 8-255 Reserved */</span>
 }
 <span class="kw">impl</span> <span class="ident">CipherSuiteType</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">type_</span> {
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">WEP40</span>,
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">TKIP</span>,
-            <span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">CCMP</span>,
-            <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">WEP104</span>,
-            <span class="number">6</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">BIP</span>,
-            <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">GroupAddressedTrafficNotAllowed</span>,
-            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">WEP40</span>,
+            <span class="number">2</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">TKIP</span>,
+            <span class="number">4</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">CCMP</span>,
+            <span class="number">5</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">WEP104</span>,
+            <span class="number">6</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">BIP</span>,
+            <span class="number">7</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">GroupAddressedTrafficNotAllowed</span>,
+            <span class="ident">other</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
         }
     }
 }
@@ -710,10 +710,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">AKMSuite</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">oui</span>: [<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">oui</span>: [<span class="ident">u8</span>; <span class="number">3</span>], <span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">oui</span> {
-            [<span class="number">0x00</span>, <span class="number">0x0f</span>, <span class="number">0xac</span>] <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Standard</span>(<span class="ident">AKMSuiteType</span>::<span class="ident">from</span>(<span class="ident">type_</span>)),
-            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Vendor</span>(<span class="ident">other</span>, <span class="ident">type_</span>),
+            [<span class="number">0x00</span>, <span class="number">0x0f</span>, <span class="number">0xac</span>] <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Standard</span>(<span class="ident">AKMSuiteType</span>::<span class="ident">from</span>(<span class="ident">type_</span>)),
+            <span class="ident">other</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Vendor</span>(<span class="ident">other</span>, <span class="ident">type_</span>),
         }
     }
 }
@@ -745,18 +745,18 @@
     <span class="ident">FTOverSAE</span>, <span class="comment">// 9</span>
 }
 <span class="kw">impl</span> <span class="ident">AKMSuiteType</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">type_</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">type_</span> {
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">IEEE802_1X</span>,
-            <span class="number">2</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">PSK</span>,
-            <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FTOver802_1X</span>,
-            <span class="number">4</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FTPSK</span>,
-            <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">IEEE802_1XSHA</span>,
-            <span class="number">6</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">PSKSHA</span>,
-            <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">TDLS</span>,
-            <span class="number">8</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">SAE</span>,
-            <span class="number">9</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">FTOverSAE</span>,
-            <span class="ident">other</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">Self</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">IEEE802_1X</span>,
+            <span class="number">2</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">PSK</span>,
+            <span class="number">3</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">FTOver802_1X</span>,
+            <span class="number">4</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">FTPSK</span>,
+            <span class="number">5</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">IEEE802_1XSHA</span>,
+            <span class="number">6</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">PSKSHA</span>,
+            <span class="number">7</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">TDLS</span>,
+            <span class="number">8</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">SAE</span>,
+            <span class="number">9</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">FTOverSAE</span>,
+            <span class="ident">other</span> <span class="op">=&gt;</span> <span class="self">Self</span>::<span class="ident">Reserved</span>(<span class="ident">other</span>),
         }
     }
 }
@@ -781,24 +781,24 @@
 }
 
 <span class="kw">impl</span> <span class="ident">From</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">TagName</span> {
-    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">tag_number</span>: <span class="ident">u8</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+    <span class="kw">fn</span> <span class="ident">from</span>(<span class="ident">tag_number</span>: <span class="ident">u8</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="kw">match</span> <span class="ident">tag_number</span> {
-            <span class="number">0</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">SSID</span>,
-            <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">SupportedRates</span>,
-            <span class="number">3</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">DSParameter</span>,
-            <span class="number">5</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">TrafficIndicationMap</span>,
-            <span class="number">7</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">CountryInformation</span>,
-            <span class="number">33</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">PowerCapabilities</span>,
-            <span class="number">42</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">ERPInformation</span>,
-            <span class="number">50</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">ExtendedSupportedRates</span>,
-            <span class="number">48</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">RSNInformation</span>,
-            <span class="number">11</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">QBSSLoadElement</span>,
-            <span class="number">45</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">HTCapabilities</span>,
-            <span class="number">61</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">HTInformation</span>,
-            <span class="number">127</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">ExtendedCapabilities</span>,
-            <span class="number">191</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">VHTCapabilities</span>,
+            <span class="number">0</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">SSID</span>,
+            <span class="number">1</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">SupportedRates</span>,
+            <span class="number">3</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">DSParameter</span>,
+            <span class="number">5</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">TrafficIndicationMap</span>,
+            <span class="number">7</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">CountryInformation</span>,
+            <span class="number">33</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">PowerCapabilities</span>,
+            <span class="number">42</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">ERPInformation</span>,
+            <span class="number">50</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">ExtendedSupportedRates</span>,
+            <span class="number">48</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">RSNInformation</span>,
+            <span class="number">11</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">QBSSLoadElement</span>,
+            <span class="number">45</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">HTCapabilities</span>,
+            <span class="number">61</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">HTInformation</span>,
+            <span class="number">127</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">ExtendedCapabilities</span>,
+            <span class="number">191</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">VHTCapabilities</span>,
 
-            <span class="ident">n</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">TagName</span>::<span class="ident">Other</span>(<span class="ident">n</span>),
+            <span class="ident">n</span> <span class="op">=&gt;</span> <span class="ident">TagName</span>::<span class="ident">Other</span>(<span class="ident">n</span>),
         }
     }
 }
@@ -812,7 +812,7 @@
 <span class="kw">impl</span> <span class="ident">OverflowError</span> {
     <span class="attribute">#[<span class="ident">must_use</span>]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">required_length</span>: <span class="ident">usize</span>,
-               <span class="ident">remaining_length</span>: <span class="ident">usize</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="self">Self</span> {
+               <span class="ident">remaining_length</span>: <span class="ident">usize</span>) <span class="op">-&gt;</span> <span class="self">Self</span> {
         <span class="self">Self</span> {
             <span class="ident">required_length</span>,
             <span class="ident">remaining_length</span>,
@@ -821,7 +821,7 @@
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">OverflowError</span> {
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;OverflowError: Expected {} bytes but only {} are remaining&quot;</span>,
                <span class="self">self</span>.<span class="ident">required_length</span>,
                <span class="self">self</span>.<span class="ident">remaining_length</span>)
@@ -837,7 +837,7 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> <span class="ident">Iterator</span> <span class="kw">for</span> <span class="ident">TaggedParameterIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span> {
     <span class="kw">type</span> <span class="ident">Item</span> <span class="op">=</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(<span class="ident">TagName</span>, <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>]), <span class="ident">OverflowError</span><span class="op">&gt;</span>;
 
-    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">next</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="self">Self</span>::<span class="ident">Item</span><span class="op">&gt;</span> {
         <span class="kw">if</span> <span class="self">self</span>.<span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">&lt;</span> <span class="number">2</span> {
             <span class="kw">return</span> <span class="prelude-val">None</span>;
         }
@@ -859,13 +859,13 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">TaggedParametersTrait</span>: <span class="ident">FrameTrait</span> {
     <span class="kw">const</span> <span class="ident">TAGGED_PARAMETERS_START</span>: <span class="ident">usize</span>;
 
-    <span class="kw">fn</span> <span class="ident">iter_tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">TaggedParameterIterator</span> {
+    <span class="kw">fn</span> <span class="ident">iter_tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">TaggedParameterIterator</span> {
         <span class="ident">TaggedParameterIterator</span> {
             <span class="ident">bytes</span>: <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">bytes</span>()[<span class="self">Self</span>::<span class="ident">TAGGED_PARAMETERS_START</span>..]
         }
     }
 
-    <span class="kw">fn</span> <span class="ident">tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TaggedParameters</span>, <span class="ident">OverflowError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">TaggedParameters</span>, <span class="ident">OverflowError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">tagged_parameters</span> <span class="op">=</span> <span class="ident">TaggedParameters</span>::<span class="ident">new</span>();
 
         <span class="kw">for</span> <span class="ident">tag</span> <span class="kw">in</span> <span class="self">self</span>.<span class="ident">iter_tagged_parameters</span>() {
@@ -876,26 +876,26 @@
         <span class="prelude-val">Ok</span>(<span class="ident">tagged_parameters</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">ssid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">ssid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">Vec</span><span class="op">&lt;</span><span class="ident">u8</span><span class="op">&gt;&gt;</span> {
         <span class="self">self</span>.<span class="ident">tagged_parameters</span>().<span class="ident">ok</span>()<span class="question-mark">?</span>.<span class="ident">ssid</span>().<span class="ident">map</span>(<span class="ident">ToOwned</span>::<span class="ident">to_owned</span>)
     }
 }
 
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">OptionalTaggedParametersTrait</span>: <span class="ident">ManagementFrameTrait</span> {
-    <span class="kw">fn</span> <span class="ident">iter_tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TaggedParameterIterator</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">iter_tagged_parameters</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">TaggedParameterIterator</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">subtype</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">subtype</span>() {
-            <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">subtype</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="ident">subtype</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>
+            <span class="ident">FrameSubtype</span>::<span class="ident">Management</span>(<span class="ident">subtype</span>) <span class="op">=&gt;</span> <span class="ident">subtype</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>
         };
 
         <span class="kw">let</span> <span class="ident">offset</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">subtype</span> {
-            <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationRequest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">AssociationRequestFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationResponse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">AssociationResponseFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="ident">ManagementSubtype</span>::<span class="ident">Authentication</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">AuthenticationFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">BeaconFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeRequest</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ProbeRequestFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeResponse</span> <span class="op">=</span><span class="op">&gt;</span> <span class="ident">ProbeResponseFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>
+            <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationRequest</span> <span class="op">=&gt;</span> <span class="ident">AssociationRequestFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="ident">ManagementSubtype</span>::<span class="ident">AssociationResponse</span> <span class="op">=&gt;</span> <span class="ident">AssociationResponseFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="ident">ManagementSubtype</span>::<span class="ident">Authentication</span> <span class="op">=&gt;</span> <span class="ident">AuthenticationFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="ident">ManagementSubtype</span>::<span class="ident">Beacon</span> <span class="op">=&gt;</span> <span class="ident">BeaconFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeRequest</span> <span class="op">=&gt;</span> <span class="ident">ProbeRequestFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="ident">ManagementSubtype</span>::<span class="ident">ProbeResponse</span> <span class="op">=&gt;</span> <span class="ident">ProbeResponseFrame</span>::<span class="ident">TAGGED_PARAMETERS_START</span>,
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">None</span>
         };
 
         <span class="kw">if</span> <span class="ident">offset</span> <span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">bytes</span>().<span class="ident">len</span>() {
@@ -910,4 +910,4 @@
 
 <span class="kw">impl</span> <span class="ident">OptionalTaggedParametersTrait</span> <span class="kw">for</span> <span class="ident">ManagementFrame</span><span class="op">&lt;</span><span class="lifetime">&#39;_</span><span class="op">&gt;</span> {}
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "ieee80211";</script><script src="../../../aliases.js"></script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../../";window.currentCrate = "ieee80211";</script><script src="../../../main.js"></script><script src="../../../source-script.js"></script><script src="../../../source-files.js"></script><script defer src="../../../search-index.js"></script></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/eui48-0.4.6/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css"><link rel="stylesheet" type="text/css" href="../../light.css" id="themeStyle"><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://www.rust-lang.org/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../eui48/index.html'><div class='logo-container'><img src='https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source to the Rust file `/home/runner/.cargo/registry/src/github.com-1ecc6299db9ec823/eui48-0.4.6/src/lib.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>lib.rs.html -- source</title><link rel="stylesheet" type="text/css" href="../../normalize.css"><link rel="stylesheet" type="text/css" href="../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../ayu.css" disabled ><script src="../../storage.js"></script><noscript><link rel="stylesheet" href="../../noscript.css"></noscript><link rel="shortcut icon" href="https://www.rust-lang.org/favicon.ico"><style type="text/css">#crate-search{background-image:url("../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 8]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu">&#9776;</div><a href='../../eui48/index.html'><div class='logo-container'><img src='https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!"><img src="../../brush.svg" width="18" alt="Pick another theme!"></button><div id="theme-choices"></div></div><script src="../../theme.js"></script><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><a id="settings-menu" href="../../settings.html"><img src="../../wheel.svg" width="18" alt="Change settings"></a></div></form></nav><section id="main" class="content"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -854,15 +854,15 @@
 
 <span class="kw">impl</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Create a new MacAddress from `[u8; 6]`.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">eui</span>: <span class="ident">Eui48</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">new</span>(<span class="ident">eui</span>: <span class="ident">Eui48</span>) <span class="op">-&gt;</span> <span class="ident">MacAddress</span> {
         <span class="ident">MacAddress</span> { <span class="ident">eui</span>: <span class="ident">eui</span> }
     }
 
     <span class="doccomment">/// Create a new MacAddress from a byte slice.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// Returns an error (without any description) if the slice doesn&#39;t have the proper length.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ()<span class="op">&gt;</span> {
-        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!</span><span class="op">=</span> <span class="ident">EUI48LEN</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">from_bytes</span>(<span class="ident">bytes</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, ()<span class="op">&gt;</span> {
+        <span class="kw">if</span> <span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">!=</span> <span class="ident">EUI48LEN</span> {
             <span class="kw">return</span> <span class="prelude-val">Err</span>(());
         }
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">input</span>: [<span class="ident">u8</span>; <span class="ident">EUI48LEN</span>] <span class="op">=</span> <span class="ident">Default</span>::<span class="ident">default</span>();
@@ -873,49 +873,49 @@
     }
 
     <span class="doccomment">/// Returns empty EUI-48 address</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nil</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">nil</span>() <span class="op">-&gt;</span> <span class="ident">MacAddress</span> {
         <span class="ident">MacAddress</span> { <span class="ident">eui</span>: [<span class="number">0</span>; <span class="ident">EUI48LEN</span>] }
     }
 
     <span class="doccomment">/// Returns &#39;ff:ff:ff:ff:ff:ff&#39;, a MAC broadcast address</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">broadcast</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">broadcast</span>() <span class="op">-&gt;</span> <span class="ident">MacAddress</span> {
         <span class="ident">MacAddress</span> {
             <span class="ident">eui</span>: [<span class="number">0xFF</span>; <span class="ident">EUI48LEN</span>],
         }
     }
 
     <span class="doccomment">/// Returns true if the address is &#39;00:00:00:00:00:00&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_nil</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_nil</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0</span>)
     }
 
     <span class="doccomment">/// Returns true if the address is &#39;ff:ff:ff:ff:ff:ff&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_broadcast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">=</span><span class="op">=</span> <span class="number">0xFF</span>)
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_broadcast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0xFF</span>)
     }
 
     <span class="doccomment">/// Returns true if bit 1 of Y is 0 in address &#39;xY:xx:xx:xx:xx:xx&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unicast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_unicast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span>
     }
 
     <span class="doccomment">/// Returns true if bit 1 of Y is 1 in address &#39;xY:xx:xx:xx:xx:xx&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_multicast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">1</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_multicast</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">1</span>
     }
 
     <span class="doccomment">/// Returns true if bit 2 of Y is 0 in address &#39;xY:xx:xx:xx:xx:xx&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_universal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">0</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_universal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">0</span>
     }
 
     <span class="doccomment">/// Returns true if bit 2 of Y is 1 in address &#39;xY:xx:xx:xx:xx:xx&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_local</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">bool</span> {
-        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">1</span> <span class="op">=</span><span class="op">=</span> <span class="number">2</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">is_local</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">&amp;</span> <span class="number">1</span> <span class="op">&lt;&lt;</span> <span class="number">1</span> <span class="op">==</span> <span class="number">2</span>
     }
 
     <span class="doccomment">/// Returns a String representation in the format &#39;00-00-00-00-00-00&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_canonical</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_canonical</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;{:02x}-{:02x}-{:02x}-{:02x}-{:02x}-{:02x}&quot;</span>,
             <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">1</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">2</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">3</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">4</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">5</span>]
@@ -923,7 +923,7 @@
     }
 
     <span class="doccomment">/// Returns a String representation in the format &#39;00:00:00:00:00:00&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_hex_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_hex_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;{:02x}:{:02x}:{:02x}:{:02x}:{:02x}:{:02x}&quot;</span>,
             <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">1</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">2</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">3</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">4</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">5</span>]
@@ -931,7 +931,7 @@
     }
 
     <span class="doccomment">/// Returns a String representation in the format &#39;0000.0000.0000&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_dot_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_dot_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;{:02x}{:02x}.{:02x}{:02x}.{:02x}{:02x}&quot;</span>,
             <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">1</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">2</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">3</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">4</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">5</span>]
@@ -939,7 +939,7 @@
     }
 
     <span class="doccomment">/// Returns a String representation in the format &#39;0x000000000000&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_hexadecimal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_hexadecimal</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;0x{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}&quot;</span>,
             <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">1</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">2</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">3</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">4</span>], <span class="self">self</span>.<span class="ident">eui</span>[<span class="number">5</span>]
@@ -947,7 +947,7 @@
     }
 
     <span class="doccomment">/// Returns a String representation in the EUI-64 interface ID format &#39;0000:00ff:fe00:0000&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_interfaceid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_interfaceid</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;{:02x}{:02x}:{:02x}ff:fe{:02x}:{:02x}{:02x}&quot;</span>,
             (<span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">^</span> <span class="number">0x02</span>),
@@ -960,7 +960,7 @@
     }
 
     <span class="doccomment">/// Returns a String representation in the IPv6 link local format &#39;ff80::0000:00ff:fe00:0000&#39;</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_link_local</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_link_local</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="macro">format</span><span class="macro">!</span>(
             <span class="string">&quot;ff80::{:02x}{:02x}:{:02x}ff:fe{:02x}:{:02x}{:02x}&quot;</span>,
             (<span class="self">self</span>.<span class="ident">eui</span>[<span class="number">0</span>] <span class="op">^</span> <span class="number">0x02</span>),
@@ -973,64 +973,64 @@
     }
 
     <span class="doccomment">/// Returns a String in the format selected by fmt</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="ident">MacAddressFormat</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">String</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_string</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">fmt</span>: <span class="ident">MacAddressFormat</span>) <span class="op">-&gt;</span> <span class="ident">String</span> {
         <span class="kw">match</span> <span class="ident">fmt</span> {
-            <span class="ident">MacAddressFormat</span>::<span class="ident">Canonical</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">to_canonical</span>(),
-            <span class="ident">MacAddressFormat</span>::<span class="ident">HexString</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">to_hex_string</span>(),
-            <span class="ident">MacAddressFormat</span>::<span class="ident">DotNotation</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">to_dot_string</span>(),
-            <span class="ident">MacAddressFormat</span>::<span class="ident">Hexadecimal</span> <span class="op">=</span><span class="op">&gt;</span> <span class="self">self</span>.<span class="ident">to_hexadecimal</span>(),
+            <span class="ident">MacAddressFormat</span>::<span class="ident">Canonical</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">to_canonical</span>(),
+            <span class="ident">MacAddressFormat</span>::<span class="ident">HexString</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">to_hex_string</span>(),
+            <span class="ident">MacAddressFormat</span>::<span class="ident">DotNotation</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">to_dot_string</span>(),
+            <span class="ident">MacAddressFormat</span>::<span class="ident">Hexadecimal</span> <span class="op">=&gt;</span> <span class="self">self</span>.<span class="ident">to_hexadecimal</span>(),
         }
     }
 
     <span class="doccomment">/// Parses a String representation from any format supported</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">ParseError</span><span class="op">&gt;</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">parse_str</span>(<span class="ident">s</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>; <span class="comment">// Offset into the u8 Eui48 vector</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">hn</span>: <span class="ident">bool</span> <span class="op">=</span> <span class="bool-val">false</span>; <span class="comment">// Have we seen the high nibble yet?</span>
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">eui</span>: <span class="ident">Eui48</span> <span class="op">=</span> [<span class="number">0</span>; <span class="ident">EUI48LEN</span>];
 
         <span class="kw">match</span> <span class="ident">s</span>.<span class="ident">len</span>() {
-            <span class="number">14</span> <span class="op">|</span> <span class="number">17</span> <span class="op">=</span><span class="op">&gt;</span> {} <span class="comment">// The formats are all 12 characters with 2 or 5 delims</span>
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidLength</span>(<span class="ident">s</span>.<span class="ident">len</span>())),
+            <span class="number">14</span> <span class="op">|</span> <span class="number">17</span> <span class="op">=&gt;</span> {} <span class="comment">// The formats are all 12 characters with 2 or 5 delims</span>
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidLength</span>(<span class="ident">s</span>.<span class="ident">len</span>())),
         }
 
         <span class="kw">for</span> (<span class="ident">idx</span>, <span class="ident">c</span>) <span class="kw">in</span> <span class="ident">s</span>.<span class="ident">chars</span>().<span class="ident">enumerate</span>() {
-            <span class="kw">if</span> <span class="ident">offset</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">EUI48LEN</span> {
+            <span class="kw">if</span> <span class="ident">offset</span> <span class="op">&gt;=</span> <span class="ident">EUI48LEN</span> {
                 <span class="comment">// We shouln&#39;t still be parsing</span>
                 <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidLength</span>(<span class="ident">s</span>.<span class="ident">len</span>()));
             }
 
             <span class="kw">match</span> <span class="ident">c</span> {
-                <span class="string">&#39;0&#39;</span>...<span class="string">&#39;9&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>...<span class="string">&#39;f&#39;</span> <span class="op">|</span> <span class="string">&#39;A&#39;</span>...<span class="string">&#39;F&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="string">&#39;0&#39;</span>...<span class="string">&#39;9&#39;</span> <span class="op">|</span> <span class="string">&#39;a&#39;</span>...<span class="string">&#39;f&#39;</span> <span class="op">|</span> <span class="string">&#39;A&#39;</span>...<span class="string">&#39;F&#39;</span> <span class="op">=&gt;</span> {
                     <span class="kw">match</span> <span class="ident">hn</span> {
-                        <span class="bool-val">false</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="bool-val">false</span> <span class="op">=&gt;</span> {
                             <span class="comment">// We will match &#39;0&#39; and run this even if the format is 0x</span>
                             <span class="ident">hn</span> <span class="op">=</span> <span class="bool-val">true</span>; <span class="comment">// Parsed the high nibble</span>
-                            <span class="ident">eui</span>[<span class="ident">offset</span>] <span class="op">=</span> (<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">16</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;</span><span class="op">&lt;</span> <span class="number">4</span>;
+                            <span class="ident">eui</span>[<span class="ident">offset</span>] <span class="op">=</span> (<span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">16</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>) <span class="op">&lt;&lt;</span> <span class="number">4</span>;
                         }
-                        <span class="bool-val">true</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="bool-val">true</span> <span class="op">=&gt;</span> {
                             <span class="ident">hn</span> <span class="op">=</span> <span class="bool-val">false</span>; <span class="comment">// Parsed the low nibble</span>
-                            <span class="ident">eui</span>[<span class="ident">offset</span>] <span class="op">+</span><span class="op">=</span> <span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">16</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>;
-                            <span class="ident">offset</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
+                            <span class="ident">eui</span>[<span class="ident">offset</span>] <span class="op">+=</span> <span class="ident">c</span>.<span class="ident">to_digit</span>(<span class="number">16</span>).<span class="ident">unwrap</span>() <span class="kw">as</span> <span class="ident">u8</span>;
+                            <span class="ident">offset</span> <span class="op">+=</span> <span class="number">1</span>;
                         }
                     }
                 }
-                <span class="string">&#39;-&#39;</span> <span class="op">|</span> <span class="string">&#39;:&#39;</span> <span class="op">|</span> <span class="string">&#39;.&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {}
-                <span class="string">&#39;x&#39;</span> <span class="op">|</span> <span class="string">&#39;X&#39;</span> <span class="op">=</span><span class="op">&gt;</span> {
+                <span class="string">&#39;-&#39;</span> <span class="op">|</span> <span class="string">&#39;:&#39;</span> <span class="op">|</span> <span class="string">&#39;.&#39;</span> <span class="op">=&gt;</span> {}
+                <span class="string">&#39;x&#39;</span> <span class="op">|</span> <span class="string">&#39;X&#39;</span> <span class="op">=&gt;</span> {
                     <span class="kw">match</span> <span class="ident">idx</span> {
-                        <span class="number">1</span> <span class="op">=</span><span class="op">&gt;</span> {
+                        <span class="number">1</span> <span class="op">=&gt;</span> {
                             <span class="comment">// If idx = 1, we are possibly parsing 0x1234567890ab format</span>
                             <span class="comment">// Reset the offset to zero to ignore the first two characters</span>
                             <span class="ident">offset</span> <span class="op">=</span> <span class="number">0</span>;
                             <span class="ident">hn</span> <span class="op">=</span> <span class="bool-val">false</span>;
                         }
-                        <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">c</span>, <span class="ident">idx</span>)),
+                        <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">c</span>, <span class="ident">idx</span>)),
                     }
                 }
-                <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">c</span>, <span class="ident">idx</span>)),
+                <span class="kw">_</span> <span class="op">=&gt;</span> <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">c</span>, <span class="ident">idx</span>)),
             }
         }
 
-        <span class="kw">if</span> <span class="ident">offset</span> <span class="op">=</span><span class="op">=</span> <span class="ident">EUI48LEN</span> {
+        <span class="kw">if</span> <span class="ident">offset</span> <span class="op">==</span> <span class="ident">EUI48LEN</span> {
             <span class="comment">// A correctly parsed value is exactly 6 u8s</span>
             <span class="prelude-val">Ok</span>(<span class="ident">MacAddress</span>::<span class="ident">new</span>(<span class="ident">eui</span>))
         } <span class="kw">else</span> {
@@ -1039,17 +1039,17 @@
     }
 
     <span class="doccomment">/// Return the internal structure as a slice of bytes</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_bytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">as_bytes</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> <span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="lifetime">&#39;a</span> [<span class="ident">u8</span>] {
         <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">eui</span>
     }
 
     <span class="doccomment">/// Returns an array in Eui48. Works as an inverse function of new()</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_array</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">Eui48</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">to_array</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="ident">Eui48</span> {
         <span class="self">self</span>.<span class="ident">eui</span>
     }
 
     <span class="doccomment">/// Returns Display MacAddressFormat, determined at compile time.</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_display_format</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddressFormat</span> {
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">get_display_format</span>() <span class="op">-&gt;</span> <span class="ident">MacAddressFormat</span> {
         <span class="kw">if</span> <span class="macro">cfg</span><span class="macro">!</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;disp_hexstring&quot;</span>) {
             <span class="ident">MacAddressFormat</span>::<span class="ident">HexString</span>
         } <span class="kw">else</span> {
@@ -1061,21 +1061,21 @@
 <span class="kw">impl</span> <span class="ident">FromStr</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="kw">type</span> <span class="prelude-val">Err</span> <span class="op">=</span> <span class="ident">ParseError</span>;
     <span class="doccomment">/// Create a MacAddress from String</span>
-    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">us</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">ParseError</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">from_str</span>(<span class="ident">us</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">ParseError</span><span class="op">&gt;</span> {
         <span class="ident">MacAddress</span>::<span class="ident">parse_str</span>(<span class="ident">us</span>)
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Default</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Create a Default MacAddress (00-00-00-00-00-00)</span>
-    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-</span><span class="op">&gt;</span> <span class="ident">MacAddress</span> {
+    <span class="kw">fn</span> <span class="ident">default</span>() <span class="op">-&gt;</span> <span class="ident">MacAddress</span> {
         <span class="ident">MacAddress</span>::<span class="ident">nil</span>()
     }
 }
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Debug</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Debug format for MacAddress is HexString notation</span>
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="macro">write</span><span class="macro">!</span>(
             <span class="ident">f</span>,
             <span class="string">&quot;MacAddress(\&quot;{}\&quot;)&quot;</span>,
@@ -1086,7 +1086,7 @@
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Display format is canonical format (00-00-00-00-00-00)</span>
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">let</span> <span class="ident">disp_fmt</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">get_display_format</span>();
         <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;{}&quot;</span>, <span class="self">self</span>.<span class="ident">to_string</span>(<span class="ident">disp_fmt</span>))
     }
@@ -1094,14 +1094,14 @@
 
 <span class="kw">impl</span> <span class="ident">fmt</span>::<span class="ident">Display</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
     <span class="doccomment">/// Human readable error strings for ParseError enum</span>
-    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+    <span class="kw">fn</span> <span class="ident">fmt</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">f</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
         <span class="kw">match</span> <span class="kw-2">*</span><span class="self">self</span> {
-            <span class="ident">ParseError</span>::<span class="ident">InvalidLength</span>(<span class="ident">found</span>) <span class="op">=</span><span class="op">&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
+            <span class="ident">ParseError</span>::<span class="ident">InvalidLength</span>(<span class="ident">found</span>) <span class="op">=&gt;</span> <span class="macro">write</span><span class="macro">!</span>(
                 <span class="ident">f</span>,
                 <span class="string">&quot;Invalid length; expecting 14 or 17 chars, found {}&quot;</span>,
                 <span class="ident">found</span>
             ),
-            <span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">found</span>, <span class="ident">pos</span>) <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">ParseError</span>::<span class="ident">InvalidCharacter</span>(<span class="ident">found</span>, <span class="ident">pos</span>) <span class="op">=&gt;</span> {
                 <span class="macro">write</span><span class="macro">!</span>(<span class="ident">f</span>, <span class="string">&quot;Invalid character; found `{}` at offset {}&quot;</span>, <span class="ident">found</span>, <span class="ident">pos</span>)
             }
         }
@@ -1110,21 +1110,21 @@
 
 <span class="kw">impl</span> <span class="ident">Error</span> <span class="kw">for</span> <span class="ident">ParseError</span> {
     <span class="doccomment">/// Human readable description for ParseError enum</span>
-    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
+    <span class="kw">fn</span> <span class="ident">description</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) <span class="op">-&gt;</span> <span class="kw-2">&amp;</span><span class="ident">str</span> {
         <span class="string">&quot;MacAddress parse error&quot;</span>
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Encodable</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Encode a MacAddress as canonical form</span>
-    <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Encoder</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">e</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">E</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">encode</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">Encoder</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">e</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">E</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span>(), <span class="ident">E</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">e</span>.<span class="ident">emit_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">to_canonical</span>())
     }
 }
 
 <span class="kw">impl</span> <span class="ident">Decodable</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Decode a MacAddress from a string in canonical form</span>
-    <span class="kw">fn</span> <span class="ident">decode</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Decoder</span><span class="op">&gt;</span>(<span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">decode</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Decoder</span><span class="op">&gt;</span>(<span class="ident">d</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">let</span> <span class="ident">string</span> <span class="op">=</span> <span class="ident">d</span>.<span class="ident">read_str</span>()<span class="question-mark">?</span>;
         <span class="ident">string</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">error</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">err</span>)))
     }
@@ -1133,7 +1133,7 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident">Serialize</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Serialize a MacAddress as canonical form using the serde crate</span>
-    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">serialize</span><span class="op">&lt;</span><span class="ident">S</span>: <span class="ident">Serializer</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">serializer</span>: <span class="ident">S</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">S</span>::<span class="prelude-val">Ok</span>, <span class="ident">S</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="ident">serializer</span>.<span class="ident">serialize_str</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">to_canonical</span>())
     }
 }
@@ -1141,20 +1141,20 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde&quot;</span>)]</span>
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">Deserialize</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">MacAddress</span> {
     <span class="doccomment">/// Deserialize a MacAddress from canonical form using the serde crate</span>
-    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span><span class="op">&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">deserialize</span><span class="op">&lt;</span><span class="ident">D</span>: <span class="ident">Deserializer</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;&gt;</span>(<span class="ident">deserializer</span>: <span class="ident">D</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">D</span>::<span class="ident">Error</span><span class="op">&gt;</span> {
         <span class="kw">struct</span> <span class="ident">MacAddressVisitor</span>;
         <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="ident">de</span>::<span class="ident">Visitor</span><span class="op">&lt;</span><span class="lifetime">&#39;de</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">MacAddressVisitor</span> {
             <span class="kw">type</span> <span class="ident">Value</span> <span class="op">=</span> <span class="ident">MacAddress</span>;
 
-            <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">visit_str</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">E</span><span class="op">&gt;</span> {
                 <span class="ident">value</span>.<span class="ident">parse</span>().<span class="ident">map_err</span>(<span class="op">|</span><span class="ident">err</span><span class="op">|</span> <span class="ident">E</span>::<span class="ident">custom</span>(<span class="kw-2">&amp;</span><span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">err</span>)))
             }
 
-            <span class="kw">fn</span> <span class="ident">visit_bytes</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-</span><span class="op">&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">E</span><span class="op">&gt;</span> {
+            <span class="kw">fn</span> <span class="ident">visit_bytes</span><span class="op">&lt;</span><span class="ident">E</span>: <span class="ident">de</span>::<span class="ident">Error</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">value</span>: <span class="kw-2">&amp;</span>[<span class="ident">u8</span>]) <span class="op">-&gt;</span> <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">MacAddress</span>, <span class="ident">E</span><span class="op">&gt;</span> {
                 <span class="ident">MacAddress</span>::<span class="ident">from_bytes</span>(<span class="ident">value</span>).<span class="ident">map_err</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> <span class="ident">E</span>::<span class="ident">invalid_length</span>(<span class="ident">value</span>.<span class="ident">len</span>(), <span class="kw-2">&amp;</span><span class="self">self</span>))
             }
 
-            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-</span><span class="op">&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
+            <span class="kw">fn</span> <span class="ident">expecting</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">formatter</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">fmt</span>::<span class="ident">Formatter</span>) <span class="op">-&gt;</span> <span class="ident">fmt</span>::<span class="prelude-ty">Result</span> {
                 <span class="macro">write</span><span class="macro">!</span>(
                     <span class="ident">formatter</span>,
                     <span class="string">&quot;either a string representation of a MAC address or 6-element byte array&quot;</span>
@@ -1175,7 +1175,7 @@
         <span class="kw">let</span> <span class="ident">eui</span>: <span class="ident">Eui48</span> <span class="op">=</span> [<span class="number">0x12</span>, <span class="number">0x34</span>, <span class="number">0x56</span>, <span class="number">0xAB</span>, <span class="number">0xCD</span>, <span class="number">0xEF</span>];
         <span class="kw">let</span> <span class="ident">mac</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">new</span>(<span class="ident">eui</span>);
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">mac</span>.<span class="ident">eui</span>[<span class="number">0</span>..<span class="number">5</span>] <span class="op">=</span><span class="op">=</span> <span class="ident">eui</span>[<span class="number">0</span>..<span class="number">5</span>]);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">mac</span>.<span class="ident">eui</span>[<span class="number">0</span>..<span class="number">5</span>] <span class="op">==</span> <span class="ident">eui</span>[<span class="number">0</span>..<span class="number">5</span>]);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1429,28 +1429,28 @@
         <span class="kw">let</span> <span class="ident">mac</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">broadcast</span>();
         <span class="kw">let</span> <span class="ident">bytes</span> <span class="op">=</span> <span class="ident">mac</span>.<span class="ident">as_bytes</span>();
 
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">=</span><span class="op">=</span> <span class="number">6</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bytes</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">=</span><span class="op">=</span> <span class="number">0xFF</span>));
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bytes</span>.<span class="ident">len</span>() <span class="op">==</span> <span class="number">6</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">bytes</span>.<span class="ident">iter</span>().<span class="ident">all</span>(<span class="op">|</span><span class="kw-2">&amp;</span><span class="ident">b</span><span class="op">|</span> <span class="ident">b</span> <span class="op">==</span> <span class="number">0xFF</span>));
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_compare</span>() {
         <span class="kw">let</span> <span class="ident">m1</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">nil</span>();
         <span class="kw">let</span> <span class="ident">m2</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">broadcast</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m1</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m2</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">!</span><span class="op">=</span> <span class="ident">m2</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">!</span><span class="op">=</span> <span class="ident">m1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">==</span> <span class="ident">m1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">==</span> <span class="ident">m2</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">!=</span> <span class="ident">m2</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">!=</span> <span class="ident">m1</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">test_clone</span>() {
         <span class="kw">let</span> <span class="ident">m1</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">parse_str</span>(<span class="string">&quot;12:34:56:AB:CD:EF&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">m2</span> <span class="op">=</span> <span class="ident">m1</span>.<span class="ident">clone</span>();
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m1</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m2</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m2</span>);
-        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">=</span><span class="op">=</span> <span class="ident">m1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">==</span> <span class="ident">m1</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">==</span> <span class="ident">m2</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m1</span> <span class="op">==</span> <span class="ident">m2</span>);
+        <span class="macro">assert</span><span class="macro">!</span>(<span class="ident">m2</span> <span class="op">==</span> <span class="ident">m1</span>);
     }
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
@@ -1493,10 +1493,10 @@
     <span class="kw">fn</span> <span class="ident">test_fmt</span>() {
         <span class="kw">let</span> <span class="ident">mac</span> <span class="op">=</span> <span class="ident">MacAddress</span>::<span class="ident">parse_str</span>(<span class="string">&quot;12:34:56:AB:CD:EF&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">match</span> <span class="ident">MacAddress</span>::<span class="ident">get_display_format</span>() {
-            <span class="ident">MacAddressFormat</span>::<span class="ident">HexString</span> <span class="op">=</span><span class="op">&gt;</span> {
+            <span class="ident">MacAddressFormat</span>::<span class="ident">HexString</span> <span class="op">=&gt;</span> {
                 <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;12:34:56:ab:cd:ef&quot;</span>.<span class="ident">to_owned</span>(), <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">mac</span>))
             }
-            <span class="kw">_</span> <span class="op">=</span><span class="op">&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;12-34-56-ab-cd-ef&quot;</span>.<span class="ident">to_owned</span>(), <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">mac</span>)),
+            <span class="kw">_</span> <span class="op">=&gt;</span> <span class="macro">assert_eq</span><span class="macro">!</span>(<span class="string">&quot;12-34-56-ab-cd-ef&quot;</span>.<span class="ident">to_owned</span>(), <span class="macro">format</span><span class="macro">!</span>(<span class="string">&quot;{}&quot;</span>, <span class="ident">mac</span>)),
         };
     }
 
@@ -1562,4 +1562,4 @@
     }
 }
 </pre></div>
-</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "eui48";</script><script src="../../aliases.js"></script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
+</section><section id="search" class="content hidden"></section><section class="footer"></section><script>window.rootPath = "../../";window.currentCrate = "eui48";</script><script src="../../main.js"></script><script src="../../source-script.js"></script><script src="../../source-files.js"></script><script defer src="../../search-index.js"></script></body></html>
