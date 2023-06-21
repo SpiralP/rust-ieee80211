@@ -6,7 +6,7 @@ edition = "2021"
 
 
 [dependencies]
-eui48 = "1"
+eui48 = { version = "1", default-features = false }
 byteorder = "1"
 
 [dev-dependencies]
